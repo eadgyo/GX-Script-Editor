@@ -1,6 +1,7 @@
 package org.eadge.controler;
 
-import org.eadge.view.Frame;
+import org.eadge.controler.draw.SceneControler;
+import org.eadge.view.MyFrame;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
@@ -11,10 +12,18 @@ import javax.swing.event.ListDataListener;
 public class Application
 {
     // View
-    private Frame frame;
+    private MyFrame myFrame;
 
     // Model
     private String testGroup[] = {"group1", "group2"};
+
+    private AddControler      addControler;
+    private ConsoleControler  consoleControler;
+    private ElementsControler elementsControler;
+    private TestsControler testsControler;
+    private SceneControler    sceneControler;
+
+    private MainControler
 
     private ComboBoxModel<String> comboGroupModel = new DefaultComboBoxModel<>(testGroup);
     private ListModel<String> listElementsModel = new ListModel<String>()
@@ -42,12 +51,16 @@ public class Application
 
     public Application()
     {
-        frame = new Frame();
+        myFrame = new MyFrame();
 
-        frame.addView.groupList.setModel(comboGroupModel);
-        frame.addView.elementsList.setModel(listElementsModel);
+        myFrame.addView.groupList.setModel(comboGroupModel);
+        myFrame.addView.elementsList.setModel(listElementsModel);
 
-        frame.pack();
-        frame.setVisible(true);
+        // Create other contoler
+        addControler = new AddControler(myFrame);
+        consoleControler = new ConsoleControler()
+
+        myFrame.pack();
+        myFrame.setVisible(true);
     }
 }

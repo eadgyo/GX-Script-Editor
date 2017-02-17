@@ -8,7 +8,7 @@ import java.awt.*;
 /**
  * Created by ronan-j on 15/02/17.
  */
-public class Frame extends JFrame
+public class MyFrame extends JFrame
 {
     // Menu components
     // --> File
@@ -31,7 +31,12 @@ public class Frame extends JFrame
     public JMenuItem runScriptItem = new JMenuItem();
 
 
-    // Frame components
+    // MyFrame components
+
+    // --> Top part
+    public JButton runButton = new JButton();
+    public JButton validateButton = new JButton();
+
     // --> Left Part
     public AddView addView;
     public ElementsView elementsView;
@@ -45,7 +50,7 @@ public class Frame extends JFrame
     public TestsView testsView;
 
 
-    public Frame()
+    public MyFrame()
     {
         super(ConstantsView.MAIN_WINDOW_TITLE);
         setLocationRelativeTo(null);
@@ -82,6 +87,12 @@ public class Frame extends JFrame
 
 
         // Add components
+        // Top part
+        JPanel buttonsPart = new JPanel();
+        buttonsPart.setLayout(new BoxLayout(buttonsPart, BoxLayout.LINE_AXIS));
+        buttonsPart.add(runButton);
+        buttonsPart.add(validateButton);
+
         // --> left part
         addView = new AddView();
         elementsView = new ElementsView();
