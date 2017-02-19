@@ -1,4 +1,4 @@
-package org.eadge.controller;
+package org.eadge.controller.frame;
 
 import org.eadge.view.MyFrame;
 
@@ -9,5 +9,6 @@ public class ElementsController
 {
     public ElementsController(MyFrame myFrame)
     {
+        // MyLayer selection
     }
 }

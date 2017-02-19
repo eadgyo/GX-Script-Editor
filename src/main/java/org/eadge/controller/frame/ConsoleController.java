@@ -1,4 +1,4 @@
-package org.eadge.controller;
+package org.eadge.controller.frame;
 
 import org.eadge.view.MyFrame;
 

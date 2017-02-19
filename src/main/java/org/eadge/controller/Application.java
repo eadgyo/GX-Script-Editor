@@ -1,6 +1,6 @@
 package org.eadge.controller;
 
-import org.eadge.controller.draw.SceneController;
+import org.eadge.controller.frame.*;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package org.eadge.controller.draw;
+package org.eadge.controller.frame;
 
 import org.eadge.view.MyFrame;
 
@@ -9,6 +9,8 @@ public class SceneController
 {
     public SceneController(MyFrame myFrame)
     {
-
+        // Selection
+        // Moving
+        // Connection
     }
 }

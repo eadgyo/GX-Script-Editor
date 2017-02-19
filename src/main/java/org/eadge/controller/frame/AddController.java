@@ -1,4 +1,4 @@
-package org.eadge.controller;
+package org.eadge.controller.frame;
 
 import org.eadge.view.MyFrame;
 
@@ -9,6 +9,8 @@ public class AddController
 {
     public AddController(MyFrame myFrame)
     {
+        // Add list controller
+        // Group change controller
 
     }
 }
