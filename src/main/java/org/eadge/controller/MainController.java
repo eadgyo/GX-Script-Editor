@@ -6,7 +6,7 @@ import org.eadge.controller.sub.ScriptController;
 import org.eadge.view.MyFrame;
 
 /**
- * Created by ronan-j on 17/02/17.
+ * Created by eadgyo on 17/02/17.
  */
 public class MainController
 {

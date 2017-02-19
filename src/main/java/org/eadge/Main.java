@@ -3,7 +3,7 @@ package org.eadge;
 import org.eadge.controller.Application;
 
 /**
- * Created by ronan-j on 15/02/17.
+ * Created by eadgyo on 15/02/17.
  */
 public class Main
 {

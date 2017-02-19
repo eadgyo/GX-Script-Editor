@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by ronan-j on 19/02/17.
+ * Created by eadgyo on 19/02/17.
  */
 public class LayerPropertiesDialog extends JDialog
 {

@@ -1,7 +1,7 @@
 package org.eadge;
 
 /**
- * Created by ronan-j on 16/02/17.
+ * Created by eadgyo on 16/02/17.
  */
 public interface ConstantsView
 {

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by ronan-j on 15/02/17.
+ * Created by eadgyo on 15/02/17.
  */
 public class AddView extends JPanel
 {
