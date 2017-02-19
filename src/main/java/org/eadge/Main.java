@@ -1,6 +1,6 @@
 package org.eadge;
 
-import org.eadge.controler.Application;
+import org.eadge.controller.Application;
 
 /**
  * Created by ronan-j on 15/02/17.

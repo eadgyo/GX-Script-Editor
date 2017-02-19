@@ -95,7 +95,7 @@ public class MyFrame extends JFrame
 
         // --> left part
         addView = new AddView();
-        elementsView = new ElementsView();
+        elementsView = new ElementsView(this);
         JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, addView, elementsView);
 
         // --> right part
@@ -106,12 +106,12 @@ public class MyFrame extends JFrame
         consoleView = new ConsoleView();
         testsView = new TestsView();
 
-        JPanel bottomRigthPane = new JPanel(new CardLayout());
-        bottomRigthPane.add(consoleView, ConstantsView.TAB_CONSOLE);
-        bottomRigthPane.add(testsView, ConstantsView.TAB_TESTS);
+        JPanel bottomRightPane = new JPanel(new CardLayout());
+        bottomRightPane.add(consoleView, ConstantsView.TAB_CONSOLE);
+        bottomRightPane.add(testsView, ConstantsView.TAB_TESTS);
 
         // --> Finalize
-        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawView, bottomRigthPane);
+        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawView, bottomRightPane);
 
         // Finalize
         JSplitPane mainPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightPane);

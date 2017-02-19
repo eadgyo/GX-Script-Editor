@@ -5,7 +5,8 @@ package org.eadge;
  */
 public interface ConstantsView
 {
-    String MAIN_WINDOW_TITLE = "MyScriptEditor";
+    String MAIN_WINDOW_TITLE = "Mon éditeur de script";
+    String PROPERTIES_DIALOG_TITLE = "Propriétés";
 
     String NAME_LAUNCH_SCRIPT = "Lancement";
     String DESC_LAUNCH_SCRIPT = "Lancement du script";
@@ -37,6 +38,18 @@ public interface ConstantsView
     String NAME_REDO = "Annuler revenir en arrière";
     String DESC_REDO = "Annule l'effet d'une annulation de l'action passée";
 
+    String NAME_ADD_LAYER = "Ajouter";
+    String DESC_ADD_LAYER = "Ajout d'une nouvelle couche";
+
+    String NAME_REMOVE_LAYER = "Supprimer";
+    String DESC_REMOVE_LAYER = "Suppression des couches selectionnées";
+
+    String NAME_HIDE_LAYER = "Cacher";
+    String DESC_HIDE_LAYER = "Affichage de la couche";
+
+    String NAME_PROPERTY_LAYER = "Propriétés";
+    String DESC_PROPERTY_LAYER = "Propriétés de la couche";
+
     String MENU_FILE              = "Fichier";
     String NAME_NEW_FILE          = "Nouveau script";
     String DESC_NEW_FILE          = "Création d'un nouveau script";
@@ -51,7 +64,10 @@ public interface ConstantsView
     String TAB_CONSOLE = "Console";
     String TAB_TESTS = "Tests";
 
+    String TEXT_COLOR = "Couleurs: ";
 
+    String NAME_OK = "Ok";
+    String NAME_CANCEL = "Annuler";
 
 
     int PREFERRED_DRAW_SIZE_WIDTH = 600;

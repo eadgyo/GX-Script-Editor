@@ -1,6 +1,6 @@
-package org.eadge.controler;
+package org.eadge.controller;
 
-import org.eadge.controler.draw.SceneControler;
+import org.eadge.controller.draw.SceneController;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
@@ -17,13 +17,13 @@ public class Application
     // Model
     private String testGroup[] = {"group1", "group2"};
 
-    private AddControler      addControler;
-    private ConsoleControler  consoleControler;
-    private ElementsControler elementsControler;
-    private TestsControler testsControler;
-    private SceneControler    sceneControler;
+    private AddController      addController;
+    private ConsoleController  consoleController;
+    private ElementsController elementsController;
+    private TestsController    testsController;
+    private SceneController    sceneController;
 
-    private MainControler
+    private MainController mainController;
 
     private ComboBoxModel<String> comboGroupModel = new DefaultComboBoxModel<>(testGroup);
     private ListModel<String> listElementsModel = new ListModel<String>()
@@ -56,9 +56,14 @@ public class Application
         myFrame.addView.groupList.setModel(comboGroupModel);
         myFrame.addView.elementsList.setModel(listElementsModel);
 
-        // Create other contoler
-        addControler = new AddControler(myFrame);
-        consoleControler = new ConsoleControler()
+        // Create other controller
+        addController = new AddController(myFrame);
+        consoleController = new ConsoleController(myFrame);
+        elementsController = new ElementsController(myFrame);
+        testsController = new TestsController(myFrame);
+        sceneController = new SceneController(myFrame);
+
+        mainController = new MainController(myFrame);
 
         myFrame.pack();
         myFrame.setVisible(true);
