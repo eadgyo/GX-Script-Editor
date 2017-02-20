@@ -1,6 +1,8 @@
 package org.eadge.view;
 
 import org.eadge.ConstantsView;
+import org.eadge.renderer.ElementRenderer;
+import org.eadge.renderer.frame.AddListRenderer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +12,11 @@ import java.awt.*;
  */
 public class MyFrame extends JFrame
 {
+    // Renderer
+    public ElementRenderer elementRenderer = new ElementRenderer(20, 7, 5, 2, Color.white, Color.black, Color.black, Color.black);
+    public AddListRenderer addListRenderer = new AddListRenderer(100, Color.white, new Color(127, 0, 0), elementRenderer);
+
+
     // Menu components
     // --> File
     public JMenuItem newFileItem = new JMenuItem();
@@ -43,7 +50,7 @@ public class MyFrame extends JFrame
 
     // --> Right Part
     // -- --> Top part
-    public DrawView drawView;
+    public SceneView sceneView;
 
     // -- --> Bottom part
     public ConsoleView consoleView;
@@ -95,12 +102,14 @@ public class MyFrame extends JFrame
 
         // --> left part
         addView = new AddView();
+        addView.addListPanel.setCellRenderer(addListRenderer);
+
         elementsView = new ElementsView(this);
         JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, addView, elementsView);
 
         // --> right part
         // -- --> top part
-        drawView = new DrawView();
+        sceneView = new SceneView();
 
         // -- --> bottom part
         consoleView = new ConsoleView();
@@ -111,7 +120,7 @@ public class MyFrame extends JFrame
         bottomRightPane.add(testsView, ConstantsView.TAB_TESTS);
 
         // --> Finalize
-        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, drawView, bottomRightPane);
+        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sceneView, bottomRightPane);
 
         // Finalize
         JSplitPane mainPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightPane);

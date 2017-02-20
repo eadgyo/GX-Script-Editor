@@ -1,77 +1,90 @@
 package org.eadge.view;
 
+import org.eadge.model.frame.AddListModel;
+import org.eadge.renderer.frame.AddListRenderer;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by eadgyo on 15/02/17.
+ *
+ * Adding elements view
  */
 public class AddView extends JPanel
 {
-    class ElementsPreviewRenderer extends JLabel implements ListCellRenderer<Object>
+    public class AddListPanel extends JPanel
     {
-        public ElementsPreviewRenderer()
+        private AddListRenderer addListRenderer;
+        private AddListModel    addListModel;
+
+        public AddListPanel()
         {
-            setOpaque(true);
         }
 
-        public Component getListCellRendererComponent(JList<?> list,
-                                                      Object value,
-                                                      int index,
-                                                      boolean isSelected,
-                                                      boolean cellHasFocus)
+        /**
+         * Change list renderer
+         * @param addListRenderer used list renderer
+         */
+        public void setCellRenderer(AddListRenderer addListRenderer)
         {
+            this.addListRenderer = addListRenderer;
+        }
 
-            setText(value.toString());
+        /**
+         * Change list model
+         * @param addListModel used list model
+         */
+        public void setAddListModel(AddListModel addListModel)
+        {
+            this.addListModel = addListModel;
+        }
 
-            Color background;
-            Color foreground;
+        public AddListRenderer getAddListRenderer()
+        {
+            return addListRenderer;
+        }
 
-            // check if this cell represents the current DnD drop location
-            JList.DropLocation dropLocation = list.getDropLocation();
-            if (dropLocation != null
-                    && !dropLocation.isInsert()
-                    && dropLocation.getIndex() == index)
-            {
+        public AddListModel getAddListModel()
+        {
+            return addListModel;
+        }
 
-                background = Color.BLUE;
-                foreground = Color.WHITE;
+        @Override
+        public void paint(Graphics graphics)
+        {
+            super.paint(graphics);
 
-                // check if this cell is selected
-            }
-            else if (isSelected)
-            {
-                background = Color.RED;
-                foreground = Color.WHITE;
+            addListRenderer.paint((Graphics2D) graphics, getWidth(), getHeight(), addListModel);
+        }
 
-                // unselected, and not the DnD drop location
-            }
-            else
-            {
-                background = Color.WHITE;
-                foreground = Color.BLACK;
-            }
-            ;
+        /**
+         * Set width and height for the panel
+         * @param width desired width
+         * @param height desired height
+         */
+        public void setLength(int width, int height)
+        {
+            // Set desired length
+            setPreferredSize(new Dimension(width, height));
 
-            setBackground(background);
-            setForeground(foreground);
-
-            return this;
+            // Revalidate panel
+            addScrollingPane.add(this);
+            addScrollingPane.revalidate();
         }
     }
 
-
     public JComboBox<String> groupList    = new JComboBox<>();
-    public JList<String>     elementsList = new JList<String>();
+    public AddListPanel addListPanel = new AddListPanel();
+    public JScrollPane addScrollingPane = new JScrollPane();
 
     public AddView()
     {
-        // Change cell renderer to display preview of script's element
-        elementsList.setCellRenderer(new ElementsPreviewRenderer());
-
         // Add all elements in the container
         setLayout(new BorderLayout());
         add(groupList, BorderLayout.PAGE_START);
-        add(elementsList, BorderLayout.CENTER);
+
+        addScrollingPane.add(addListPanel);
+        add(addScrollingPane, BorderLayout.CENTER);
     }
 }

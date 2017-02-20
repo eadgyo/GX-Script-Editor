@@ -8,9 +8,9 @@ import java.awt.*;
 /**
  * Created by eadgyo on 15/02/17.
  */
-public class DrawView extends JPanel
+public class SceneView extends JPanel
 {
-    public DrawView()
+    public SceneView()
     {
         setPreferredSize(new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH, ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT));
     }

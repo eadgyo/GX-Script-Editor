@@ -39,6 +39,11 @@ public class AddListModel extends Observable implements ListModel
     private int selectedGroup = -1;
     private int selectedElement = -1;
 
+    public int getNumberOfGroups()
+    {
+        return myGroupsOfElements.size();
+    }
+
     @Override
     public int getSize()
     {

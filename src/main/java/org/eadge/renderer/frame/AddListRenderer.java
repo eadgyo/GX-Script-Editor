@@ -19,9 +19,7 @@ public class AddListRenderer
 
     private ElementRenderer elementRenderer;
 
-    public AddListRenderer(int textHeight,
-                           int blockHeight,
-                           int betweenSize,
+    public AddListRenderer(int blockHeight,
                            Color backgroundColor, Color selectedColor,
                            ElementRenderer elementRenderer)
     {
@@ -62,5 +60,46 @@ public class AddListRenderer
 
         // Reset matrix transformation
         g.setTransform(savedMatrix);
+    }
+
+    public void setBlockHeight(int blockHeight)
+    {
+        this.blockHeight = blockHeight;
+    }
+
+    public void setBackgroundColor(Color backgroundColor)
+    {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setSelectedColor(Color selectedColor)
+    {
+        this.selectedColor = selectedColor;
+    }
+
+    public void setElementRenderer(ElementRenderer elementRenderer)
+    {
+        this.elementRenderer = elementRenderer;
+    }
+
+    public int getBlockHeight()
+    {
+
+        return blockHeight;
+    }
+
+    public Color getBackgroundColor()
+    {
+        return backgroundColor;
+    }
+
+    public Color getSelectedColor()
+    {
+        return selectedColor;
+    }
+
+    public ElementRenderer getElementRenderer()
+    {
+        return elementRenderer;
     }
 }
