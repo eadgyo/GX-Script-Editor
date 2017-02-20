@@ -1,6 +1,7 @@
 package org.eadge.view;
 
 import org.eadge.ConstantsView;
+import org.eadge.model.frame.SceneModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +11,22 @@ import java.awt.*;
  */
 public class SceneView extends JPanel
 {
+    private SceneModel sceneModel;
+
     public SceneView()
     {
+        sceneModel = new SceneModel();
         setPreferredSize(new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH, ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT));
+    }
+
+    public SceneModel getSceneModel()
+    {
+        return sceneModel;
+    }
+
+    public void setSceneModel(SceneModel sceneModel)
+    {
+        this.sceneModel = sceneModel;
     }
 
     @Override

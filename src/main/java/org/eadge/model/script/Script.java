@@ -104,6 +104,18 @@ public class Script extends Observable
         callObservers();
     }
 
+    /**
+     * Detach GXLayer from parent without removing subelements
+     *
+     * @param gxLayer removed GXLayer
+     */
+    public void detachLayer(GXLayer gxLayer)
+    {
+        gxLayer.removeFromParent();
+
+        callObservers();
+    }
+
     public Collection<Entity> getEntities()
     {
         return rawGXScript.getEntities();

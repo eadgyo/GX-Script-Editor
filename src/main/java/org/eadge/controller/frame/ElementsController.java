@@ -1,6 +1,8 @@
 package org.eadge.controller.frame;
 
 import org.eadge.ConstantsView;
+import org.eadge.model.frame.global.MyTransferableElement;
+import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
 import org.eadge.view.ElementsView;
@@ -10,7 +12,15 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -25,9 +35,13 @@ public class ElementsController
     private AddLayerAction addLayerAction;
     private ElementsView elementsView;
     private Script script;
+    private MyFrame myFrame;
+
+    private TreePath savedSelectedAtPress = null;
 
     public ElementsController(MyFrame myFrame, Script script)
     {
+        this.myFrame = myFrame;
         elementsView = myFrame.elementsView;
 
         // Set the right model
@@ -48,6 +62,11 @@ public class ElementsController
         SelectedElementAction selectedElementAction = new SelectedElementAction();
         elementsView.elementsTree.addTreeSelectionListener(selectedElementAction);
 
+        elementsView.elementsTree.addMouseListener(new MouseElementsListener());
+        elementsView.elementsTree.addMouseMotionListener(new MouseMotionElementsListener());
+
+        // Add drop support
+        elementsView.setTransferHandler(new ElementTransferHandler());
 
         createLayerProperties();
     }
@@ -176,4 +195,134 @@ public class ElementsController
             elementsView.layerPropertiesDialog.setVisible(false);
         }
     }
+
+
+    private class ElementTransferHandler extends TransferHandler
+    {
+        @Override
+        public boolean importData(TransferSupport transferSupport)
+        {
+            if (!canImport(transferSupport))
+                return false;
+
+            GXElement element;
+            try
+            {
+                element = (GXElement) transferSupport.getTransferable().getTransferData(MyTransferableElement.myElementFlavor);
+            }
+            catch (UnsupportedFlavorException | IOException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+
+            // Add the element to the scene
+            GXLayer selectedLayer = elementsView.getSelectedLayer();
+            GXElement cloned    = (GXElement) element.clone();
+
+            double elementX = myFrame.sceneView.getSceneModel().computeXInScene(0);
+            double elementY = myFrame.sceneView.getSceneModel().computeYInScene(0);
+
+            cloned.setX(elementX);
+            cloned.setY(elementY);
+
+            // Get selected node
+            script.addEntity(cloned, selectedLayer);
+
+            return true;
+        }
+
+        @Override
+        public boolean canImport(TransferSupport transferSupport)
+        {
+            return transferSupport.isDataFlavorSupported(MyTransferableElement.myElementFlavor);
+        }
+
+        @Override
+        public int getSourceActions(JComponent jComponent)
+        {
+            return COPY_OR_MOVE;
+        }
+
+        @Override
+        protected Transferable createTransferable(JComponent jComponent)
+        {
+            return super.createTransferable(jComponent);
+        }
+    }
+
+    private class MouseElementsListener implements MouseListener
+    {
+
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent mouseEvent)
+        {
+            if (mouseEvent.getButton() == 1)
+            {
+                savedSelectedAtPress = elementsView.elementsTree.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
+            }
+            else
+            {
+                savedSelectedAtPress = null;
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent)
+        {
+            if (savedSelectedAtPress != null && mouseEvent.getSource() == elementsView.elementsTree)
+            {
+                // Get the inserted GXLayer
+                GXLayer insertedLayer = elementsView.getSelectedLayer();
+
+                // Get the last saved path
+                MutableTreeNode movedNode = (MutableTreeNode) savedSelectedAtPress.getLastPathComponent();
+                movedNode.removeFromParent();
+                insertedLayer.add(movedNode);
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent mouseEvent)
+        {
+
+        }
+    }
+
+    private class MouseMotionElementsListener implements MouseMotionListener
+    {
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent)
+        {
+            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+            {
+                int x = mouseEvent.getX();
+                int y = mouseEvent.getY();
+
+                // Update selected layer
+                TreePath pathForLocation = elementsView.elementsTree.getPathForLocation(x, y);
+                elementsView.elementsTree.setSelectionPath(pathForLocation);
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent)
+        {
+
+        }
+    }
+
+
 }

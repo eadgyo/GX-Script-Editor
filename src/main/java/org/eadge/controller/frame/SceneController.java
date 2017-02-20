@@ -1,6 +1,5 @@
 package org.eadge.controller.frame;
 
-import org.eadge.model.frame.SceneModel;
 import org.eadge.model.frame.global.MyTransferableElement;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
@@ -24,13 +23,11 @@ public class SceneController
     private Script script;
     private MyFrame    myFrame;
     private SceneView  sceneView;
-    private SceneModel sceneModel;
 
-    public SceneController(MyFrame myFrame, SceneModel sceneModel, Script script)
+    public SceneController(MyFrame myFrame, Script script)
     {
         this.myFrame = myFrame;
         this.sceneView = myFrame.sceneView;
-        this.sceneModel = sceneModel;
         this.script = script;
 
         // Add drag and drop from view
@@ -60,8 +57,8 @@ public class SceneController
             Point     dropPoint = transferSupport.getDropLocation().getDropPoint();
             GXElement cloned    = (GXElement) element.clone();
 
-            double elementX = sceneModel.computeXInScene(dropPoint.getX());
-            double elementY = sceneModel.computeYInScene(dropPoint.getY());
+            double elementX = sceneView.getSceneModel().computeXInScene(dropPoint.getX());
+            double elementY = sceneView.getSceneModel().computeYInScene(dropPoint.getY());
 
             cloned.setX(elementX);
             cloned.setY(elementY);

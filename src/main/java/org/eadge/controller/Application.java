@@ -30,7 +30,6 @@ public class Application
     private GXLayerModel gxLayerModel;
     private Script       script;
     private AddListModel addListModel;
-    private SceneModel   sceneModel;
 
 
     // Controller
@@ -88,7 +87,6 @@ public class Application
         rawGXScript = new RawGXScript();
         gxLayerModel = new GXLayerModel(new GXLayer());
         script = new Script(rawGXScript, gxLayerModel);
-        sceneModel = new SceneModel();
         addListModel = new AddListModel();
     }
 
@@ -98,7 +96,7 @@ public class Application
         consoleController = new ConsoleController(myFrame);
         elementsController = new ElementsController(myFrame, script);
         testsController = new TestsController(myFrame);
-        sceneController = new SceneController(myFrame, sceneModel, script);
+        sceneController = new SceneController(myFrame, script);
 
         mainController = new MainController(myFrame);
     }
