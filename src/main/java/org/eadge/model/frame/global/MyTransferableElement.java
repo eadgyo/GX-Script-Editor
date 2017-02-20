@@ -1,6 +1,6 @@
 package org.eadge.model.frame.global;
 
-import org.eadge.model.script.MyElement;
+import org.eadge.model.script.GXElement;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -10,20 +10,20 @@ import java.io.IOException;
 /**
  * Created by eadgyo on 20/02/17.
  *
- * Handle myElement transfer for drag and drop support
+ * Handle GXElement transfer for drag and drop support
  */
 public class MyTransferableElement  implements Transferable
 {
-    private MyElement myElement;
+    private GXElement GXElement;
 
     // Transferable
-    public static DataFlavor   myElementFlavor  = new DataFlavor(MyElement.class, "MyElement Object");
+    public static DataFlavor   myElementFlavor  = new DataFlavor(GXElement.class, "GXElement Object");
     public static DataFlavor[] supportedFlavors = {myElementFlavor};
 
 
-    public MyTransferableElement(MyElement myElement)
+    public MyTransferableElement(GXElement GXElement)
     {
-        this.myElement = myElement;
+        this.GXElement = GXElement;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MyTransferableElement  implements Transferable
     public Object getTransferData(DataFlavor dataFlavor) throws UnsupportedFlavorException, IOException
     {
         if (dataFlavor.equals(myElementFlavor))
-            return myElement;
+            return GXElement;
 
         throw new UnsupportedFlavorException(dataFlavor);
     }

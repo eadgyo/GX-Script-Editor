@@ -1,16 +1,23 @@
 package org.eadge.controller;
 
 import org.eadge.controller.frame.*;
+import org.eadge.gxscript.data.script.RawGXScript;
 import org.eadge.model.frame.AddListModel;
 import org.eadge.model.frame.SceneModel;
+import org.eadge.model.script.GXLayer;
+import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by eadgyo on 16/02/17.
+ *
+ * Holds models view and controller creation
  */
 public class Application
 {
@@ -19,6 +26,8 @@ public class Application
 
 
     // Model
+    private RawGXScript rawGXScript;
+    private GXLayerModel gxLayerModel;
     private Script       script;
     private AddListModel addListModel;
     private SceneModel   sceneModel;
@@ -59,24 +68,57 @@ public class Application
 
     public Application()
     {
-        // View
-        myFrame = new MyFrame();
+        createView();
+        createModels();
+        createControllers();
+        createAction();
+        createObserver();
 
-        // Models
-        script = new Script();
+        myFrame.pack();
+        myFrame.setVisible(true);
+    }
+
+    private void createView()
+    {
+        myFrame = new MyFrame();
+    }
+
+    private void createModels()
+    {
+        rawGXScript = new RawGXScript();
+        gxLayerModel = new GXLayerModel(new GXLayer());
+        script = new Script(rawGXScript, gxLayerModel);
         sceneModel = new SceneModel();
         addListModel = new AddListModel();
+    }
 
-        // Controllers
+    private void createControllers()
+    {
         addController = new AddController(myFrame, addListModel);
         consoleController = new ConsoleController(myFrame);
-        elementsController = new ElementsController(myFrame);
+        elementsController = new ElementsController(myFrame, script);
         testsController = new TestsController(myFrame);
         sceneController = new SceneController(myFrame, sceneModel, script);
 
         mainController = new MainController(myFrame);
+    }
 
-        myFrame.pack();
-        myFrame.setVisible(true);
+    private void createAction()
+    {
+    }
+
+    private void createObserver()
+    {
+        script.addObserver(new ScriptChangeAction());
+    }
+
+    private class ScriptChangeAction implements Observer
+    {
+        @Override
+        public void update(Observable observable, Object o)
+        {
+            // Redraw scene
+            myFrame.sceneView.repaint();
+        }
     }
 }

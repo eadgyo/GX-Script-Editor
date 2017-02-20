@@ -41,8 +41,8 @@ public interface ConstantsView
     String NAME_ADD_LAYER = "Ajouter";
     String DESC_ADD_LAYER = "Ajout d'une nouvelle couche";
 
-    String NAME_REMOVE_LAYER = "Supprimer";
-    String DESC_REMOVE_LAYER = "Suppression des couches selectionnées";
+    String NAME_REMOVE_NODE = "Supprimer";
+    String DESC_REMOVE_NODE = "Suppression des elements selectionnées";
 
     String NAME_HIDE_LAYER = "Cacher";
     String DESC_HIDE_LAYER = "Affichage de la couche";

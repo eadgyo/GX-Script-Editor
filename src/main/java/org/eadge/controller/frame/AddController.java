@@ -5,6 +5,8 @@ import org.eadge.view.AddView;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Observable;
@@ -31,7 +33,10 @@ public class AddController implements MouseListener, Observer
         addView.addListPanel.setAddListModel(addListModel);
 
         // Add drag and drop support
-        addView.addListPanel.setTransferHandler(new TransferHandler("MyElement Object"));
+        addView.addListPanel.setTransferHandler(new TransferHandler("GXElement Object"));
+
+        // Add listener on group change
+        this.addView.groupList.addActionListener(new ActionGroupChange());
     }
 
     /**
@@ -115,7 +120,27 @@ public class AddController implements MouseListener, Observer
     @Override
     public void update(Observable observable, Object o)
     {
-        // Redraw add list
+        addView.addListPanel.repaint();
+    }
 
+    private class ActionGroupChange implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent)
+        {
+            // Get selected group
+            int selectedGroupIndex = addView.groupList.getSelectedIndex();
+
+            if (selectedGroupIndex == -1)
+                return;
+
+            // Update selected group
+            addListModel.setSelectedGroup(selectedGroupIndex);
+            addListModel.setSelectedElement(0);
+
+            // Update panel size
+            addView.addListPanel.updateLength();
+            addView.addListPanel.repaint();
+        }
     }
 }

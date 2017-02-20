@@ -8,8 +8,11 @@ import org.eadge.gxscript.data.script.address.FuncDataAddresses;
 import org.eadge.gxscript.data.script.address.OutputAddresses;
 import org.eadge.renderer.Rect2D;
 
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -17,19 +20,19 @@ import java.util.Map;
  *
  * Holds entity and graphics for element representation
  */
-public class MyElement extends Rect2D implements Cloneable, Entity
+public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeNode
 {
     private DefaultEntity entity;
 
-    public MyElement(DefaultEntity entity)
+    public GXElement(DefaultEntity entity)
     {
 
     }
 
     @Override
-    public MyElement clone()
+    public GXElement clone()
     {
-        MyElement clone = (MyElement) super.clone();
+        GXElement clone = (GXElement) super.clone();
         clone.entity = (DefaultEntity) entity.clone();
         return clone;
     }
@@ -117,6 +120,12 @@ public class MyElement extends Rect2D implements Cloneable, Entity
     public boolean inputContains(int inputIndex, Entity entity)
     {
         return this.entity.inputContains(inputIndex, entity);
+    }
+
+    @Override
+    public String toString()
+    {
+        return getName();
     }
 
     public boolean outputContains(int outputIndex, Entity entity)
@@ -384,5 +393,83 @@ public class MyElement extends Rect2D implements Cloneable, Entity
     public Func getFunc()
     {
         return entity.getFunc();
+    }
+
+    @Override
+    public TreeNode getChildAt(int i)
+    {
+        return null;
+    }
+
+    @Override
+    public int getChildCount()
+    {
+        return 0;
+    }
+
+    @Override
+    public TreeNode getParent()
+    {
+        return null;
+    }
+
+    @Override
+    public int getIndex(TreeNode treeNode)
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isLeaf()
+    {
+        return false;
+    }
+
+    @Override
+    public Enumeration children()
+    {
+        return null;
+    }
+
+    @Override
+    public void insert(MutableTreeNode mutableTreeNode, int i)
+    {
+
+    }
+
+    @Override
+    public void remove(int i)
+    {
+
+    }
+
+    @Override
+    public void remove(MutableTreeNode mutableTreeNode)
+    {
+
+    }
+
+    @Override
+    public void setUserObject(Object o)
+    {
+
+    }
+
+    @Override
+    public void removeFromParent()
+    {
+
+    }
+
+    @Override
+    public void setParent(MutableTreeNode mutableTreeNode)
+    {
+
     }
 }

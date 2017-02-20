@@ -2,7 +2,8 @@ package org.eadge.controller.frame;
 
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.frame.global.MyTransferableElement;
-import org.eadge.model.script.MyElement;
+import org.eadge.model.script.GXElement;
+import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
 import org.eadge.view.MyFrame;
 import org.eadge.view.SceneView;
@@ -25,6 +26,17 @@ public class SceneController
     private SceneView  sceneView;
     private SceneModel sceneModel;
 
+    public SceneController(MyFrame myFrame, SceneModel sceneModel, Script script)
+    {
+        this.myFrame = myFrame;
+        this.sceneView = myFrame.sceneView;
+        this.sceneModel = sceneModel;
+        this.script = script;
+
+        // Add drag and drop from view
+        sceneView.setTransferHandler(new SceneTransferHandler());
+    }
+
     private class SceneTransferHandler extends TransferHandler
     {
         @Override
@@ -33,10 +45,10 @@ public class SceneController
             if (!canImport(transferSupport))
                 return false;
 
-            MyElement element;
+            GXElement element;
             try
             {
-                element = (MyElement) transferSupport.getTransferable().getTransferData(MyTransferableElement.myElementFlavor);
+                element = (GXElement) transferSupport.getTransferable().getTransferData(MyTransferableElement.myElementFlavor);
             }
             catch (UnsupportedFlavorException | IOException e)
             {
@@ -45,8 +57,8 @@ public class SceneController
             }
 
             // Add the element to the scene
-            Point dropPoint = transferSupport.getDropLocation().getDropPoint();
-            MyElement cloned = (MyElement) element.clone();
+            Point     dropPoint = transferSupport.getDropLocation().getDropPoint();
+            GXElement cloned    = (GXElement) element.clone();
 
             double elementX = sceneModel.computeXInScene(dropPoint.getX());
             double elementY = sceneModel.computeYInScene(dropPoint.getY());
@@ -54,7 +66,9 @@ public class SceneController
             cloned.setX(elementX);
             cloned.setY(elementY);
 
-            script.addEntity(cloned);
+            // Get selected node
+            GXLayer selectedLayer = myFrame.elementsView.getSelectedLayer();
+            script.addEntity(cloned, selectedLayer);
 
             return true;
         }
@@ -77,18 +91,4 @@ public class SceneController
             return super.createTransferable(jComponent);
         }
     }
-
-    public SceneController(MyFrame myFrame, SceneModel sceneModel, Script script)
-    {
-        this.myFrame = myFrame;
-        this.sceneView = myFrame.sceneView;
-        this.sceneModel = sceneModel;
-        this.script = script;
-
-        // Add drag and drop from view
-        sceneView.setTransferHandler(new SceneTransferHandler());
-
-    }
-
-
 }

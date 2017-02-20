@@ -13,6 +13,20 @@ import java.awt.*;
  */
 public class AddView extends JPanel
 {
+    public JComboBox<String> groupList    = new JComboBox<>();
+    public AddListPanel addListPanel = new AddListPanel();
+    public JScrollPane addScrollingPane = new JScrollPane();
+
+    public AddView()
+    {
+        // Add all elements in the container
+        setLayout(new BorderLayout());
+        add(groupList, BorderLayout.PAGE_START);
+
+        addScrollingPane.add(addListPanel);
+        add(addScrollingPane, BorderLayout.CENTER);
+    }
+
     public class AddListPanel extends JPanel
     {
         private AddListRenderer addListRenderer;
@@ -72,19 +86,12 @@ public class AddView extends JPanel
             addScrollingPane.add(this);
             addScrollingPane.revalidate();
         }
-    }
 
-    public JComboBox<String> groupList    = new JComboBox<>();
-    public AddListPanel addListPanel = new AddListPanel();
-    public JScrollPane addScrollingPane = new JScrollPane();
-
-    public AddView()
-    {
-        // Add all elements in the container
-        setLayout(new BorderLayout());
-        add(groupList, BorderLayout.PAGE_START);
-
-        addScrollingPane.add(addListPanel);
-        add(addScrollingPane, BorderLayout.CENTER);
+        public void updateLength()
+        {
+            int width = getWidth();
+            int height = addListModel.getNumberOfElements() * addListRenderer.getBlockHeight();
+            setLength(width, height);
+        }
     }
 }

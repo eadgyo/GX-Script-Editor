@@ -1,6 +1,6 @@
 package org.eadge.renderer;
 
-import org.eadge.model.script.MyElement;
+import org.eadge.model.script.GXElement;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -42,7 +42,7 @@ public class ElementRenderer
         this.textInsideColor = textInsideColor;
     }
 
-    public void paint(Graphics2D g, int width, int height, MyElement element)
+    public void paint(Graphics2D g, int width, int height, GXElement element)
     {
         // Draw name of element
         g.setColor(textNameColor);

@@ -1,7 +1,7 @@
 package org.eadge.renderer.frame;
 
 import org.eadge.model.frame.AddListModel;
-import org.eadge.model.script.MyElement;
+import org.eadge.model.script.GXElement;
 import org.eadge.renderer.ElementRenderer;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ public class AddListRenderer
 
         for (int elIndex = 0; elIndex < numberOfElements; elIndex++)
         {
-            MyElement element = selectedGroup.get(elIndex);
+            GXElement element = selectedGroup.get(elIndex);
 
             // Render element
             elementRenderer.paint(g, width, blockHeight, element);

@@ -1,6 +1,6 @@
 package org.eadge.model.frame;
 
-import org.eadge.model.script.MyElement;
+import org.eadge.model.script.GXElement;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
@@ -12,29 +12,6 @@ import java.util.Vector;
  */
 public class AddListModel extends Observable implements ListModel
 {
-    public class MyGroup extends Vector<MyElement>
-    {
-        String name;
-
-        public MyGroup(String name)
-        {
-            this.name = name;
-        }
-    }
-
-    public class MyGroupsOfElements extends Vector<MyGroup>
-    {
-        public int size(int groupIndex)
-        {
-            return get(groupIndex).size();
-        }
-
-        public MyElement get(int groupIndex, int elementIndex)
-        {
-            return get(groupIndex).get(elementIndex);
-        }
-    }
-
     private MyGroupsOfElements myGroupsOfElements;
     private int selectedGroup = -1;
     private int selectedElement = -1;
@@ -43,6 +20,10 @@ public class AddListModel extends Observable implements ListModel
     {
         return myGroupsOfElements.size();
     }
+
+    public int getNumberOfElements(int groupIndex) { return myGroupsOfElements.size(groupIndex); }
+
+    public int getNumberOfElements() { return getSize(); }
 
     @Override
     public int getSize()
@@ -68,7 +49,7 @@ public class AddListModel extends Observable implements ListModel
 
     }
 
-    public MyElement getSelectedElement()
+    public GXElement getSelectedElement()
     {
         return myGroupsOfElements.get(selectedGroup, selectedElement);
     }
@@ -107,5 +88,29 @@ public class AddListModel extends Observable implements ListModel
     public void clearSelection()
     {
         setSelectedElement(-1);
+    }
+
+
+    public class MyGroup extends Vector<GXElement>
+    {
+        String name;
+
+        public MyGroup(String name)
+        {
+            this.name = name;
+        }
+    }
+
+    public class MyGroupsOfElements extends Vector<MyGroup>
+    {
+        public int size(int groupIndex)
+        {
+            return get(groupIndex).size();
+        }
+
+        public GXElement get(int groupIndex, int elementIndex)
+        {
+            return get(groupIndex).get(elementIndex);
+        }
     }
 }
