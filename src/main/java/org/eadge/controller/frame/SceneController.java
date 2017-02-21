@@ -1,6 +1,8 @@
 package org.eadge.controller.frame;
 
 import org.eadge.model.frame.global.MyTransferableElement;
+import org.eadge.model.frame.global.ConnectionModel;
+import org.eadge.model.frame.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
@@ -11,6 +13,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 /**
@@ -24,6 +29,9 @@ public class SceneController
     private MyFrame    myFrame;
     private SceneView  sceneView;
 
+    private SelectionModel selectionModel;
+    private ConnectionModel connectionModel;
+
     public SceneController(MyFrame myFrame, Script script)
     {
         this.myFrame = myFrame;
@@ -32,6 +40,9 @@ public class SceneController
 
         // Add drag and drop from view
         sceneView.setTransferHandler(new SceneTransferHandler());
+
+        // Add mouse listener to this painter
+
     }
 
     private class SceneTransferHandler extends TransferHandler
@@ -86,6 +97,51 @@ public class SceneController
         protected Transferable createTransferable(JComponent jComponent)
         {
             return super.createTransferable(jComponent);
+        }
+    }
+
+    private class SceneMouseListener implements MouseMotionListener, MouseListener
+    {
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent)
+        {
+
         }
     }
 }

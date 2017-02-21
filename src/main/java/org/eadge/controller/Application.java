@@ -3,7 +3,8 @@ package org.eadge.controller;
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.script.RawGXScript;
 import org.eadge.model.frame.AddListModel;
-import org.eadge.model.frame.SceneModel;
+import org.eadge.model.frame.global.ConnectionModel;
+import org.eadge.model.frame.global.SelectionModel;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
@@ -30,7 +31,8 @@ public class Application
     private GXLayerModel gxLayerModel;
     private Script       script;
     private AddListModel addListModel;
-
+    private SelectionModel selectionModel;
+    private ConnectionModel connectionModel;
 
     // Controller
     private MainController mainController;
@@ -88,13 +90,15 @@ public class Application
         gxLayerModel = new GXLayerModel(new GXLayer());
         script = new Script(rawGXScript, gxLayerModel);
         addListModel = new AddListModel();
+        connectionModel = new ConnectionModel();
+        selectionModel = new SelectionModel(connectionModel);
     }
 
     private void createControllers()
     {
         addController = new AddController(myFrame, addListModel);
         consoleController = new ConsoleController(myFrame);
-        elementsController = new ElementsController(myFrame, script);
+        elementsController = new ElementsController(myFrame, script, selectionModel);
         testsController = new TestsController(myFrame);
         sceneController = new SceneController(myFrame, script);
 

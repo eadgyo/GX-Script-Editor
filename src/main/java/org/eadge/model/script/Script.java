@@ -105,7 +105,7 @@ public class Script extends Observable
     }
 
     /**
-     * Detach GXLayer from parent without removing subelements
+     * Detach GXLayer from parent without removing subElements
      *
      * @param gxLayer removed GXLayer
      */

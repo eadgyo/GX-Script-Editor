@@ -2,6 +2,7 @@ package org.eadge.controller.frame;
 
 import org.eadge.ConstantsView;
 import org.eadge.model.frame.global.MyTransferableElement;
+import org.eadge.model.frame.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
@@ -21,6 +22,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -34,15 +37,17 @@ public class ElementsController
     private RemoveNodeAction removeNodeAction;
     private AddLayerAction addLayerAction;
     private ElementsView elementsView;
+
+    private SelectionModel selectionModel;
     private Script script;
     private MyFrame myFrame;
 
-    private TreePath savedSelectedAtPress = null;
 
-    public ElementsController(MyFrame myFrame, Script script)
+    public ElementsController(MyFrame myFrame, Script script, SelectionModel selectionModel)
     {
         this.myFrame = myFrame;
-        elementsView = myFrame.elementsView;
+        this.elementsView = myFrame.elementsView;
+        this.selectionModel = selectionModel;
 
         // Set the right model
         elementsView.elementsTree.setModel(script.getLayeredScript());
@@ -251,7 +256,7 @@ public class ElementsController
         }
     }
 
-    private class MouseElementsListener implements MouseListener
+    private class MouseElementsListener implements MouseListener, MouseMotionListener
     {
 
         @Override
@@ -263,28 +268,57 @@ public class ElementsController
         @Override
         public void mousePressed(MouseEvent mouseEvent)
         {
-            if (mouseEvent.getButton() == 1)
+            // Update selection
+            selectionModel.setSelectedElements(getSelectedNodes());
+        }
+
+        public Collection<MutableTreeNode> getSelectedNodes()
+        {
+            TreePath[] selectionPaths = elementsView.elementsTree.getSelectionPaths();
+            HashSet<MutableTreeNode> mutableTreeNodes = new HashSet<>();
+
+            if (selectionPaths == null)
+                return mutableTreeNodes;
+
+            start: for (TreePath treePath : selectionPaths)
             {
-                savedSelectedAtPress = elementsView.elementsTree.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
+                // Check if parent is selected
+                for (TreePath isParentPath : selectionPaths)
+                {
+                    if (isParentPath != treePath)
+                    {
+                        if (treePath.isDescendant(isParentPath))
+                        {
+                            continue start;
+                        }
+                    }
+                }
+
+                mutableTreeNodes.add((MutableTreeNode) treePath.getLastPathComponent());
             }
-            else
-            {
-                savedSelectedAtPress = null;
-            }
+
+            return mutableTreeNodes;
         }
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
         {
-            if (savedSelectedAtPress != null && mouseEvent.getSource() == elementsView.elementsTree)
+            if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
             {
                 // Get the inserted GXLayer
                 GXLayer insertedLayer = elementsView.getSelectedLayer();
 
-                // Get the last saved path
-                MutableTreeNode movedNode = (MutableTreeNode) savedSelectedAtPress.getLastPathComponent();
-                movedNode.removeFromParent();
-                insertedLayer.add(movedNode);
+                // Get the last saved path and move to this
+                Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
+                for (MutableTreeNode selectedElement : selectedElements)
+                {
+                    // If is not trying to move on parent in child node
+                    if (!selectionModel.isParentOrEqual(selectedElement, insertedLayer))
+                    {
+                        selectedElement.removeFromParent();
+                        insertedLayer.add(selectedElement);
+                    }
+                }
             }
         }
 
@@ -296,6 +330,23 @@ public class ElementsController
 
         @Override
         public void mouseExited(MouseEvent mouseEvent)
+        {
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent)
+        {
+            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+            {
+                // Update selected element
+                TreePath pathForLocation = elementsView.elementsTree.getPathForLocation(mouseEvent.getX(),
+                                                                                        mouseEvent.getY());
+                selectionModel.setSelectionPath(pathForLocation);
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent)
         {
 
         }
