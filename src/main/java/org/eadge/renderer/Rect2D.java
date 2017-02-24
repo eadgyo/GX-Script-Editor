@@ -7,6 +7,15 @@ import java.awt.geom.Rectangle2D;
  */
 public class Rect2D extends Rectangle2D.Double implements Rect2DInter
 {
+    public Rect2D()
+    {
+    }
+
+    public Rect2D(double v, double v1, double v2, double v3)
+    {
+        super(v, v1, v2, v3);
+    }
+
     public void setX(double x)
     {
         this.x = x;

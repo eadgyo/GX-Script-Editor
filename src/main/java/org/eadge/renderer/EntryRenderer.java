@@ -39,7 +39,7 @@ public class EntryRenderer
         this.sizeBetween = sizeBetween;
     }
 
-    public void paintInputs(Graphics graphics, int inputHeight, GXElement gxElement)
+    public void paintInputs(Graphics graphics, double inputHeight, GXElement gxElement)
     {
         Graphics2D g = (Graphics2D) graphics;
 
@@ -71,7 +71,7 @@ public class EntryRenderer
         g.setTransform(savedMatrix);
     }
 
-    public void paintOutputs(Graphics graphics, int outputHeight, GXElement gxElement)
+    public void paintOutputs(Graphics graphics, double outputHeight, GXElement gxElement)
     {
         Graphics2D g = (Graphics2D) graphics;
 
@@ -113,7 +113,7 @@ public class EntryRenderer
      * @param gxElement used element
      * @return relative y
      */
-    public double getRelativeInputY(int heightOfInput, int inputIndex, GXElement gxElement)
+    public double getRelativeInputY(double heightOfInput, int inputIndex, GXElement gxElement)
     {
         return heightOfInput * (inputIndex + 0.5);
     }
@@ -135,7 +135,7 @@ public class EntryRenderer
      * @param gxElement used element
      * @return relative y
      */
-    public double getRelativeOutputY(int heightOfOutput, int outputIndex, GXElement gxElement)
+    public double getRelativeOutputY(double heightOfOutput, int outputIndex, GXElement gxElement)
     {
         return heightOfOutput * (outputIndex + 0.5);
     }

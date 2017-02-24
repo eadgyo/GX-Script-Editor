@@ -12,7 +12,7 @@ import java.util.Set;
  *
  * Select elements using a square
  */
-public class ElementSelecter
+public class ElementFinder
 {
     private Collection<MutableTreeNode> elements;
 

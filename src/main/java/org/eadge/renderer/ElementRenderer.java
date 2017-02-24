@@ -76,7 +76,7 @@ public class ElementRenderer
 
 
         // Get height of input rect
-        int heightOfEntry = getHeightOfEntry(element);
+        double heightOfEntry = getHeightOfEntry(element);
 
         // Draw inputs
         entryRenderer.paintInputs(g, heightOfEntry, element);
@@ -91,16 +91,16 @@ public class ElementRenderer
      * @param element used element
      * @return height of one entry block
      */
-    public int getHeightOfEntry(GXElement element)
+    public double getHeightOfEntry(GXElement element)
     {
         // Compute input/output element size
         int numberOfInputs = element.getNumberOfInputs();
         int numberOfOutputs = element.getNumberOfOutputs();
 
         // Get max to align input and outputs
-        int maxOfInputsOutputs = (numberOfInputs > numberOfOutputs) ? numberOfInputs : numberOfOutputs;
+        double maxOfInputsOutputs = (numberOfInputs > numberOfOutputs) ? numberOfInputs : numberOfOutputs;
 
-        return (int) ((element.getHeight() - entryRenderer.getSizeBetween() * 2)/maxOfInputsOutputs);
+        return (element.getHeight() - entryRenderer.getSizeBetween() * 2)/maxOfInputsOutputs;
     }
 
     public double getRelativeInputX(GXElement gxElement)
@@ -131,5 +131,95 @@ public class ElementRenderer
     public double getRelativeEntryY(int entryIndex, GXElement gxElement, boolean isInput)
     {
         return (isInput) ? getRelativeInputY(entryIndex, gxElement) : getRelativeOutputY(entryIndex, gxElement);
+    }
+
+    public int getTextHeight()
+    {
+        return textHeight;
+    }
+
+    public void setTextHeight(int textHeight)
+    {
+        this.textHeight = textHeight;
+    }
+
+    public int getBetweenSize()
+    {
+        return betweenSize;
+    }
+
+    public void setBetweenSize(int betweenSize)
+    {
+        this.betweenSize = betweenSize;
+    }
+
+    public EntryRenderer getEntryRenderer()
+    {
+        return entryRenderer;
+    }
+
+    public void setEntryRenderer(EntryRenderer entryRenderer)
+    {
+        this.entryRenderer = entryRenderer;
+    }
+
+    public Color getBackgroundColor()
+    {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor)
+    {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public Color getRectColor()
+    {
+        return rectColor;
+    }
+
+    public void setRectColor(Color rectColor)
+    {
+        this.rectColor = rectColor;
+    }
+
+    public Color getTextNameColor()
+    {
+        return textNameColor;
+    }
+
+    public void setTextNameColor(Color textNameColor)
+    {
+        this.textNameColor = textNameColor;
+    }
+
+    public Rect2D createInputZoneRect(GXElement gxElement)
+    {
+        double entryWidth = entryRenderer.getRectSize() + entryRenderer.getSizeBetween();
+        return new Rect2D(gxElement.getX(), gxElement.getY(), entryWidth, gxElement.getHeight());
+    }
+
+    public Rect2D createOutputZoneRect(GXElement gxElement)
+    {
+        double entryWidth = entryRenderer.getRectSize() + entryRenderer.getSizeBetween();
+        return new Rect2D(gxElement.getX() - entryWidth, gxElement.getY(), entryWidth, gxElement.getHeight());
+    }
+
+    public Rect2D createInputRec(GXElement gxElement, int inputIndex)
+    {
+        double absoluteX = entryRenderer.getRelativeInputX(gxElement);
+        double absoluteY = entryRenderer.getRelativeInputY(getHeightOfEntry(gxElement), inputIndex, gxElement);
+
+        double rectSize = entryRenderer.getRectSize();
+        return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);
+    }
+
+    public Rect2D createOutputRec(GXElement gxElement, int outputIndex)
+    {
+        double absoluteX = entryRenderer.getRelativeOutputX(gxElement);
+        double absoluteY = entryRenderer.getRelativeOutputY(getHeightOfEntry(gxElement), outputIndex, gxElement);
+
+        double rectSize = entryRenderer.getRectSize();
+        return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);
     }
 }
