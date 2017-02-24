@@ -111,10 +111,21 @@ public class Application
 
     private void createObserver()
     {
+        selectionModel.addObserver(new SelectionChangeAction());
         script.addObserver(new ScriptChangeAction());
     }
 
     private class ScriptChangeAction implements Observer
+    {
+        @Override
+        public void update(Observable observable, Object o)
+        {
+            // Redraw scene
+            myFrame.sceneView.repaint();
+        }
+    }
+
+    private class SelectionChangeAction implements Observer
     {
         @Override
         public void update(Observable observable, Object o)

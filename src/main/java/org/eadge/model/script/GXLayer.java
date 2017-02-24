@@ -1,6 +1,7 @@
 package org.eadge.model.script;
 
 import org.eadge.renderer.Rect2D;
+import org.eadge.renderer.Rect2DInter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
@@ -9,9 +10,9 @@ import java.awt.geom.Rectangle2D;
 /**
  * Created by eadgyo on 20/02/17.
  *
- * Holds elements
+ * Holds GXElements
  */
-public class GXLayer extends DefaultMutableTreeNode
+public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 {
     private Rect2D rect2D;
     private Color backgroundColor;

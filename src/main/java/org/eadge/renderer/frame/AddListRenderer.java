@@ -9,6 +9,8 @@ import java.awt.geom.AffineTransform;
 
 /**
  * Created by eadgyo on 19/02/17.
+ *
+ * Add list elements renderer
  */
 public class AddListRenderer
 {
@@ -52,7 +54,7 @@ public class AddListRenderer
             GXElement element = selectedGroup.get(elIndex);
 
             // Render element
-            elementRenderer.paint(g, width, blockHeight, element);
+            elementRenderer.paint(g, element);
 
             // Translate to start of next element
             g.translate(0, blockHeight);

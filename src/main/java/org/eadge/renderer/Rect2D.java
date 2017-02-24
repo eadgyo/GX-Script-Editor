@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * Created by eadgyo on 19/02/17.
  */
-public class Rect2D extends Rectangle2D.Double
+public class Rect2D extends Rectangle2D.Double implements Rect2DInter
 {
     public void setX(double x)
     {
@@ -53,5 +53,11 @@ public class Rect2D extends Rectangle2D.Double
     {
         setWidth(width);
         setHeight(height);
+    }
+
+    @Override
+    public Rect2D getRect2D()
+    {
+        return this;
     }
 }

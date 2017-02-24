@@ -3,63 +3,96 @@ package org.eadge.renderer;
 import org.eadge.model.script.GXElement;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 /**
  * Created by eadgyo on 19/02/17.
+ *
+ * Element renderer
  */
 public class ElementRenderer
 {
+    /**
+     * Height reserved to the text naming the element
+     */
     private int textHeight;
+
+    /**
+     * Size between text and rect
+     */
     private int betweenSize;
-    private int insideBetweenSize;
-    private int rectInputOutputSize;
 
 
+    private EntryRenderer entryRenderer;
+
+    /**
+     * Background element color
+     */
     private Color backgroundColor;
+
+    /**
+     * Rect color
+     */
     private Color rectColor;
+
+    /**
+     * Color of element name
+     */
     private Color textNameColor;
-    private Color textInsideColor;
 
 
     public ElementRenderer(int textHeight,
                            int betweenSize,
-                           int insideBetweenSize,
-                           int rectInputOutputSize,
                            Color backgroundColor,
                            Color rectColor,
                            Color textNameColor,
-                           Color textInsideColor)
+                           EntryRenderer entryRenderer)
     {
         this.textHeight = textHeight;
         this.betweenSize = betweenSize;
-        this.insideBetweenSize = insideBetweenSize;
-        this.rectInputOutputSize = rectInputOutputSize;
 
         this.backgroundColor = backgroundColor;
         this.rectColor = rectColor;
         this.textNameColor = textNameColor;
-        this.textInsideColor = textInsideColor;
+
+        this.entryRenderer = entryRenderer;
     }
 
-    public void paint(Graphics2D g, int width, int height, GXElement element)
+    public void paint(Graphics2D g, GXElement element)
     {
+        // Get element width
+        int elementWidth = (int) element.getWidth();
+        int elementHeight = (int) element.getHeight();
+
         // Draw name of element
         g.setColor(textNameColor);
         int fontHeight = g.getFontMetrics().getHeight();
-        g.drawString(element.getName(), betweenSize, (height - fontHeight) * 0.5f);
+        g.drawString(element.getName(), betweenSize, (elementHeight - fontHeight) * 0.5f);
 
         // Render background element
         g.setColor(backgroundColor);
-        g.fillRect(0, textHeight + betweenSize, width, height);
+        g.fillRect(0, textHeight + betweenSize, elementWidth, elementHeight);
         g.setColor(rectColor);
-        g.drawRect(0, textHeight + betweenSize, width, height);
-
-        // Save transformation matrix
-        AffineTransform savedMatrix = g.getTransform();
+        g.drawRect(0, textHeight + betweenSize, elementWidth, elementHeight);
 
 
-        // -- Compute input/output height --
+        // Get height of input rect
+        int heightOfEntry = getHeightOfEntry(element);
+
+        // Draw inputs
+        entryRenderer.paintInputs(g, heightOfEntry, element);
+
+        // Draw outputs
+        entryRenderer.paintOutputs(g, heightOfEntry, element);
+
+    }
+
+    /**
+     * Get the height of entry block
+     * @param element used element
+     * @return height of one entry block
+     */
+    public int getHeightOfEntry(GXElement element)
+    {
         // Compute input/output element size
         int numberOfInputs = element.getNumberOfInputs();
         int numberOfOutputs = element.getNumberOfOutputs();
@@ -67,51 +100,36 @@ public class ElementRenderer
         // Get max to align input and outputs
         int maxOfInputsOutputs = (numberOfInputs > numberOfOutputs) ? numberOfInputs : numberOfOutputs;
 
-        // Compute height
-        int heightOfInputOrInput = (height - insideBetweenSize * 2)/maxOfInputsOutputs;
+        return (int) ((element.getHeight() - entryRenderer.getSizeBetween() * 2)/maxOfInputsOutputs);
+    }
 
+    public double getRelativeInputX(GXElement gxElement)
+    {
+        return entryRenderer.getRelativeInputX(gxElement);
+    }
 
-        // -- Draw inputs --
-        g.setColor(textInsideColor);
-        for (int inputIndex = 0; inputIndex < numberOfInputs; inputIndex++)
-        {
-            // Fill connexion rect
-            g.fillRect(insideBetweenSize,
-                       (heightOfInputOrInput - rectInputOutputSize) / 2,
-                       insideBetweenSize + rectInputOutputSize,
-                       (heightOfInputOrInput + rectInputOutputSize) / 2);
+    public double getRelativeInputY(int inputIndex, GXElement gxElement)
+    {
+        return entryRenderer.getRelativeInputY(getHeightOfEntry(gxElement), inputIndex, gxElement);
+    }
 
-            // Draw text
-            String text = element.getInputName(inputIndex);
-            g.drawString(text, insideBetweenSize + rectInputOutputSize * 3, insideBetweenSize);
+    public double getRelativeOutputX(GXElement gxElement)
+    {
+        return entryRenderer.getRelativeOutputX(gxElement);
+    }
 
-            // Translate for the next inputs
-            g.translate(0, heightOfInputOrInput);
-        }
+    public double getRelativeOutputY(int outputIndex, GXElement gxElement)
+    {
+        return entryRenderer.getRelativeOutputY(getHeightOfEntry(gxElement), outputIndex, gxElement);
+    }
 
-        // Reset matrix transformation
-        g.setTransform(savedMatrix);
+    public double getRelativeEntryX(GXElement gxElement, boolean isInput)
+    {
+        return (isInput) ? getRelativeInputX(gxElement) : getRelativeOutputX(gxElement);
+    }
 
-
-        // -- Draw inputs --
-        g.setColor(textInsideColor);
-        for (int outputIndex = 0; outputIndex < numberOfOutputs; outputIndex++)
-        {
-            // Fill connexion rect
-            g.fillRect(width - insideBetweenSize - rectInputOutputSize,
-                       (heightOfInputOrInput - rectInputOutputSize) / 2,
-                       width - insideBetweenSize,
-                       (heightOfInputOrInput + rectInputOutputSize) / 2);
-
-            String text = element.getOutputName(outputIndex);
-            int textWidth = g.getFontMetrics().stringWidth(text);
-            g.drawString(text, width - insideBetweenSize - rectInputOutputSize * 2 - textWidth, insideBetweenSize);
-
-            // Translate for the next inputs
-            g.translate(0, heightOfInputOrInput);
-        }
-
-        // Reset matrix transformation
-        g.setTransform(savedMatrix);
+    public double getRelativeEntryY(int entryIndex, GXElement gxElement, boolean isInput)
+    {
+        return (isInput) ? getRelativeInputY(entryIndex, gxElement) : getRelativeOutputY(entryIndex, gxElement);
     }
 }

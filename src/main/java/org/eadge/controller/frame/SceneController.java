@@ -13,9 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.io.IOException;
 
 /**
@@ -100,7 +98,7 @@ public class SceneController
         }
     }
 
-    private class SceneMouseListener implements MouseMotionListener, MouseListener
+    private class SceneMouseListener implements MouseMotionListener, MouseListener, MouseWheelListener
     {
         @Override
         public void mouseClicked(MouseEvent mouseEvent)
@@ -140,6 +138,12 @@ public class SceneController
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent)
         {
 
         }

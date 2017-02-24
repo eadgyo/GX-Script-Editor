@@ -1,9 +1,12 @@
 package org.eadge.model.frame.global;
 
+import org.eadge.model.frame.global.project.SelectionObservable;
+
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Observer;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -18,6 +21,11 @@ public class SelectionModel extends DefaultTreeSelectionModel
         MOVING,
         CONNECTING
     };
+
+    /**
+     * Make this selectionModel observable
+     */
+    private SelectionObservable selectionObservable = new SelectionObservable();
 
     /**
      * Holds selected elements
@@ -44,9 +52,18 @@ public class SelectionModel extends DefaultTreeSelectionModel
      */
     private boolean isActionValid = true;
 
+    public void addObserver(Observer observer) { selectionObservable.addObserver(observer); }
+
+    public void callObservers() { selectionObservable.callObservers(); }
+
     public SelectionModel(ConnectionModel connectionModel)
     {
-        this.connectionModel = connectionModel;
+        this.setConnectionModel(connectionModel);
+    }
+
+    public MutableTreeNode getFirstSelectedElement()
+    {
+        return selectedElements.iterator().next();
     }
 
     public Collection<MutableTreeNode> getSelectedElements()
@@ -131,6 +148,7 @@ public class SelectionModel extends DefaultTreeSelectionModel
     public void setConnectionModel(ConnectionModel connectionModel)
     {
         this.connectionModel = connectionModel;
+        this.connectionModel.setSelectionObservable(selectionObservable);
     }
 
     public boolean isActionValid()
@@ -143,5 +161,14 @@ public class SelectionModel extends DefaultTreeSelectionModel
         isActionValid = actionValid;
     }
 
+    /**
+     * Check if a node is used in selection process
+     * @param node checked node
+     * @return true if the node is selected, false otherwise
+     */
+    public boolean contains(MutableTreeNode node)
+    {
+        return selectedElements.contains(node) || onDragElement == node;
+    }
 
 }

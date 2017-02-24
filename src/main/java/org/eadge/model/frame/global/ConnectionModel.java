@@ -1,5 +1,7 @@
 package org.eadge.model.frame.global;
 
+import org.eadge.model.frame.global.project.SelectionObservable;
+
 /**
  * Created by eadgyo on 19/02/17.
  *
@@ -26,6 +28,21 @@ public class ConnectionModel
      * True if the end connection is on output entries, False on output entries
      */
     private boolean isEndInput = true;
+
+    /**
+     * Keeps selection observable
+     */
+    private SelectionObservable selectionObservable;
+
+    public void setSelectionObservable(SelectionObservable selectionObservable)
+    {
+        this.selectionObservable = selectionObservable;
+    }
+
+    public void callObservers()
+    {
+        selectionObservable.callObservers();
+    }
 
     public void clearAll()
     {
