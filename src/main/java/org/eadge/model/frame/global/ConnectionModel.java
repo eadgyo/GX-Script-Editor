@@ -34,6 +34,21 @@ public class ConnectionModel
      */
     private SelectionObservable selectionObservable;
 
+    /**
+     * Keeps the desired Point on dragged X coordinate
+     */
+    private double desiredX;
+
+    /**
+     * Keeps the desired Point on dragged Y coordinate
+     */
+    private double desiredY;
+
+    /**
+     * Keeps state of desiring point
+     */
+    private boolean isDesiring;
+
     public void setSelectionObservable(SelectionObservable selectionObservable)
     {
         this.selectionObservable = selectionObservable;
@@ -70,6 +85,12 @@ public class ConnectionModel
         this.startIndex = startIndex;
     }
 
+    public void setStartIndex(int startIndex, boolean isStartInput)
+    {
+        this.startIndex = startIndex;
+        this.isStartInput = isStartInput;
+    }
+
     public boolean isStartInput()
     {
         return isStartInput;
@@ -98,5 +119,47 @@ public class ConnectionModel
     public void setEndInput(boolean endInput)
     {
         isEndInput = endInput;
+    }
+
+    public void setEndIndex(int endIndex, boolean isEndInput)
+    {
+        this.endIndex = endIndex;
+        this.isEndInput = isEndInput;
+    }
+
+    public double getDesiredX()
+    {
+        return desiredX;
+    }
+
+    public void setDesiredX(double desiredX)
+    {
+        this.desiredX = desiredX;
+    }
+
+    public double getDesiredY()
+    {
+        return desiredY;
+    }
+
+    public void setDesiredY(double desiredY)
+    {
+        this.desiredY = desiredY;
+    }
+
+    public void setDesiredPos(double x, double y)
+    {
+        this.desiredX = x;
+        this.desiredY = y;
+    }
+
+    public void setDesiring(boolean isDesiring)
+    {
+        this.isDesiring = isDesiring;
+    }
+
+    public boolean isDesiring()
+    {
+        return isDesiring;
     }
 }

@@ -136,4 +136,36 @@ public class Script extends Observable
         setChanged();
         notifyObservers();
     }
+
+    public void connectEntities(GXElement onOutputEntity, int outputIndex, GXElement onInputEntity, int inputIndex)
+    {
+        onInputEntity.addLinkInput(inputIndex, outputIndex, onInputEntity);
+
+        callObservers();
+    }
+
+    public void connectEntities(GXElement selected,
+                                boolean startInput,
+                                int startIndex,
+                                GXElement onDragged,
+                                int endIndex)
+    {
+        if (startInput)
+        {
+            connectEntities(onDragged, endIndex, selected, startIndex);
+        }
+        else
+        {
+            connectEntities(selected, startIndex, onDragged, endIndex);
+        }
+    }
+
+    public void disconnectEntities(GXElement onOutput)
+    {
+
+
+        callObservers();
+    }
+
+
 }

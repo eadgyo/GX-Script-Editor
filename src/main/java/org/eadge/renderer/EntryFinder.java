@@ -5,11 +5,23 @@ import org.eadge.model.script.GXElement;
 /**
  * Created by eadgyo on 24/02/17.
  *
- * Find the corresponding connection
+ * Find the corresponding entry
  */
 public class EntryFinder
 {
     private ElementRenderer elementRenderer;
+
+    public class EntryResult
+    {
+        public int entryIndex;
+        public boolean isInput;
+
+        public EntryResult(int entryIndex, boolean isInput)
+        {
+            this.entryIndex = entryIndex;
+            this.isInput = isInput;
+        }
+    }
 
     public EntryFinder(ElementRenderer elementRenderer)
     {
@@ -73,6 +85,45 @@ public class EntryFinder
             return -1;
 
         return blockOutputIndex;
+    }
+
+    public EntryResult getEntryBlockIndex(GXElement gxElement, Rect2D rect2D)
+    {
+        int inputIndex = getBlockInputIndex(gxElement, rect2D);
+        if (inputIndex != -1)
+        {
+            return new EntryResult(inputIndex, true);
+        }
+        else
+        {
+            // Check if it's connecting on output
+            int outputIndex = getBlockOutputIndex(gxElement, rect2D);
+            if (outputIndex != -1)
+            {
+                return new EntryResult(outputIndex, false);
+            }
+        }
+        return new EntryResult(-1, false);
+    }
+
+
+    public EntryResult getEntryIndex(GXElement gxElement, Rect2D rect2D)
+    {
+        int inputIndex = getInputIndex(gxElement, rect2D);
+        if (inputIndex != -1)
+        {
+            return new EntryResult(inputIndex, true);
+        }
+        else
+        {
+            // Check if it's connecting on output
+            int outputIndex = getOutputIndex(gxElement, rect2D);
+            if (outputIndex != -1)
+            {
+                return new EntryResult(outputIndex, false);
+            }
+        }
+        return new EntryResult(-1, false);
     }
 
     public ElementRenderer getElementRenderer()

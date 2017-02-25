@@ -102,4 +102,22 @@ public class SceneModel
     {
         return sceneSize * scale;
     }
+
+    /**
+     * Translate the scene on x axis
+     * @param x translated value on x axis
+     */
+    public void translateX(int x)
+    {
+        translateX += x;
+    }
+
+    /**
+     * Translate the scene on y axis
+     * @param y translated value on y axis
+     */
+    public void translateY(int y)
+    {
+        translateY += y;
+    }
 }

@@ -19,22 +19,28 @@ import java.util.HashSet;
  */
 public class SceneRenderer
 {
-    private Color backgroundColor;
-    private Color selectedColor;
-    private ElementRenderer elementRenderer;
-    private SelectionRenderer selectionRenderer;
+    private Color                       backgroundColor;
+    private Color                       selectedColor;
+    private ElementRenderer             elementRenderer;
+    private SelectionRenderer           selectionRenderer;
     private ConnectionRenderer connectionRenderer;
+    private ConnectionSelectionRenderer connectionSelectionRenderer;
 
     private float LAYER_ALPHA_FACTOR = 0.7f;
 
-    public SceneRenderer(Color backgroundColor, Color selectedColor,
-                           ElementRenderer elementRenderer,
-                         SelectionRenderer selectionRenderer)
+    public SceneRenderer(Color backgroundColor,
+                         Color selectedColor,
+                         ElementRenderer elementRenderer,
+                         SelectionRenderer selectionRenderer,
+                         ConnectionRenderer connectionRenderer,
+                         ConnectionSelectionRenderer connectionSelectionRenderer)
     {
         this.backgroundColor = backgroundColor;
         this.selectedColor = selectedColor;
         this.elementRenderer = elementRenderer;
         this.selectionRenderer = selectionRenderer;
+        this.connectionRenderer = connectionRenderer;
+        this.connectionSelectionRenderer = connectionSelectionRenderer;
     }
 
     /**
@@ -74,7 +80,7 @@ public class SceneRenderer
         paintSelectionElements(g, selectionModel);
 
         // Paint connection
-        paintConnection(g, selectionModel);
+        paintConnectionSelection(g, selectionModel);
 
         // Reset graphics settings
         g.setTransform(transform);
@@ -125,6 +131,7 @@ public class SceneRenderer
         for (GXElement gxElement : entities)
         {
             elementRenderer.paint(g, gxElement);
+            connectionRenderer.paint(g, gxElement);
         }
     }
 
@@ -153,13 +160,14 @@ public class SceneRenderer
             {
                 GXElement gxElement = (GXElement) node;
                 selectionRenderer.paint(g, gxElement, selectionModel);
+                connectionRenderer.paint(g, gxElement);
             }
         }
     }
 
-    private void paintConnection(Graphics2D g, SelectionModel selectionModel)
+    private void paintConnectionSelection(Graphics2D g, SelectionModel selectionModel)
     {
-        connectionRenderer.paint(g, selectionModel);
+        connectionSelectionRenderer.paint(g, selectionModel);
     }
 
     public Color getBackgroundColor()

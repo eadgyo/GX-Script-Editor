@@ -29,7 +29,7 @@ public class SelectionRenderer
 
     public void paint(Graphics2D g, GXElement gxElement, SelectionModel selectionModel)
     {
-        if (selectionModel.getSelectionState() == SelectionModel.SelectionState.MOVING)
+        if (selectionModel.isSelectionStateEquals(SelectionModel.SelectionState.MOVING))
         {
             if (selectionModel.isActionValid())
             {

@@ -62,4 +62,25 @@ public class ElementFinder
             addElementRec(child, nodes);
         }
     }
+
+    /**
+     * Get first element in the selection square
+     *
+     * @param selectionSquare square selecting elements
+     */
+    public MutableTreeNode retrieveFirstElement(Rect2D selectionSquare)
+    {
+        // Find all elements in this square
+        for (MutableTreeNode node : elements)
+        {
+            Rect2DInter element = (Rect2DInter) node;
+
+            if (selectionSquare.intersects(element.getRect2D()))
+            {
+                return node;
+            }
+        }
+
+        return null;
+    }
 }

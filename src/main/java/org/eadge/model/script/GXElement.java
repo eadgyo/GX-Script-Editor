@@ -6,14 +6,12 @@ import org.eadge.gxscript.data.script.Func;
 import org.eadge.gxscript.data.script.address.DataAddress;
 import org.eadge.gxscript.data.script.address.FuncDataAddresses;
 import org.eadge.gxscript.data.script.address.OutputAddresses;
+import org.eadge.gxscript.tools.check.GXLiaisonChecker;
 import org.eadge.renderer.Rect2D;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -26,7 +24,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
 
     public GXElement(DefaultEntity entity)
     {
-
+        this.entity = entity;
     }
 
     @Override
@@ -35,6 +33,11 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         GXElement clone = (GXElement) super.clone();
         clone.entity = (DefaultEntity) entity.clone();
         return clone;
+    }
+
+    public DefaultEntity getEntity()
+    {
+        return entity;
     }
 
     public String getName()
@@ -471,5 +474,29 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
     public void setParent(MutableTreeNode mutableTreeNode)
     {
 
+    }
+
+    /**
+     * Check if a connection can be made between this element and another
+     * @param isInput  is connecting element on input
+     * @param entryIndex used entry index
+     * @param otherElement element to connect to
+     * @param isOtherInput is connecting other element on input
+     * @param otherEntryIndex used entry index
+     * @return true if a connection can be made, false otherwise
+     */
+    public boolean canConnectOnEntry(boolean isInput, int entryIndex, GXElement otherElement, boolean isOtherInput, int otherEntryIndex)
+    {
+        if (isInput == isOtherInput)
+            return false;
+
+        if (isInput)
+        {
+            return GXLiaisonChecker.canConnect(otherElement, otherEntryIndex, this, entryIndex);
+        }
+        else
+        {
+            return GXLiaisonChecker.canConnect(this, entryIndex, otherElement, otherEntryIndex);
+        }
     }
 }

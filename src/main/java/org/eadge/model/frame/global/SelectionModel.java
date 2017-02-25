@@ -52,6 +52,16 @@ public class SelectionModel extends DefaultTreeSelectionModel
      */
     private boolean isActionValid = true;
 
+    public void addSelectedElement(MutableTreeNode node)
+    {
+        selectedElements.add(node);
+    }
+
+    public void removeSelectedElement(MutableTreeNode node)
+    {
+        selectedElements.remove(node);
+    }
+
     public void addObserver(Observer observer) { selectionObservable.addObserver(observer); }
 
     public void callObservers() { selectionObservable.callObservers(); }
@@ -73,7 +83,13 @@ public class SelectionModel extends DefaultTreeSelectionModel
 
     public void setSelectedElements(Collection<MutableTreeNode> selectedElements)
     {
-        this.selectedElements = selectedElements;
+        this.selectedElements.clear();
+        this.selectedElements.addAll(selectedElements);
+    }
+
+    public void setSelectedElements(MutableTreeNode selectedElement)
+    {
+        this.selectedElements.add(selectedElement);
     }
 
     public void clearSelectedElements()
@@ -84,12 +100,6 @@ public class SelectionModel extends DefaultTreeSelectionModel
     public boolean hasSelectedElements()
     {
         return !this.selectedElements.isEmpty();
-    }
-
-    public void clearAndAddSelectedElements(Collection<MutableTreeNode> selectedElements)
-    {
-        this.selectedElements.clear();
-        this.selectedElements.addAll(selectedElements);
     }
 
     public MutableTreeNode getOnDragElement()
@@ -133,6 +143,11 @@ public class SelectionModel extends DefaultTreeSelectionModel
     public SelectionState getSelectionState()
     {
         return selectionState;
+    }
+
+    public boolean isSelectionStateEquals(SelectionState selectionState)
+    {
+        return this.selectionState.equals(selectionState);
     }
 
     public void setSelectionState(SelectionState selectionState)
