@@ -134,4 +134,22 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
     {
         isRectDisplayed = rectDisplayed;
     }
+
+    @Override
+    public void translateX(double x)
+    {
+        rect2D.translateX(x);
+    }
+
+    @Override
+    public void translateY(double y)
+    {
+        rect2D.translateY(y);
+    }
+
+    @Override
+    public void translate(double x, double y)
+    {
+        rect2D.translate(x, y);
+    }
 }

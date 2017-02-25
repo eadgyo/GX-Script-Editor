@@ -3,11 +3,14 @@ package org.eadge.controller;
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.script.RawGXScript;
 import org.eadge.model.frame.AddListModel;
+import org.eadge.model.frame.SceneModel;
 import org.eadge.model.frame.global.ConnectionModel;
 import org.eadge.model.frame.global.SelectionModel;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
+import org.eadge.renderer.ElementFinder;
+import org.eadge.renderer.EntryFinder;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
@@ -24,7 +27,6 @@ public class Application
 {
     // View
     private MyFrame myFrame;
-
 
     // Model
     private RawGXScript rawGXScript;
@@ -43,6 +45,8 @@ public class Application
     private TestsController    testsController;
     private SceneController    sceneController;
 
+    private EntryFinder entryFinder;
+    private ElementFinder elementFinder;
 
     private ListModel<String> listElementsModel = new ListModel<String>()
     {
@@ -100,7 +104,7 @@ public class Application
         consoleController = new ConsoleController(myFrame);
         elementsController = new ElementsController(myFrame, script, selectionModel);
         testsController = new TestsController(myFrame);
-        sceneController = new SceneController(myFrame, script);
+        sceneController = new SceneController(script, myFrame, selectionModel, elementFinder, entryFinder);
 
         mainController = new MainController(myFrame);
     }

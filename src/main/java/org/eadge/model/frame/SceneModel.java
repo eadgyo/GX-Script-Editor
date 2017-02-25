@@ -1,5 +1,11 @@
 package org.eadge.model.frame;
 
+import org.eadge.renderer.ElementFinder;
+import org.eadge.renderer.Rect2D;
+
+import javax.swing.tree.MutableTreeNode;
+import java.util.Collection;
+
 /**
  * Created by eadgyo on 20/02/17.
  *
@@ -11,6 +17,37 @@ public class SceneModel
     private int translateY;
 
     private float scale;
+
+    private ElementFinder elementFinder;
+
+    public SceneModel(ElementFinder elementFinder)
+    {
+        this.elementFinder = elementFinder;
+    }
+
+    public ElementFinder getElementFinder()
+    {
+        return elementFinder;
+    }
+
+    public void setElementFinder(ElementFinder elementFinder)
+    {
+        this.elementFinder = elementFinder;
+    }
+
+    public Collection<MutableTreeNode> findElementsInScene(double paneWidth, double paneHeight)
+    {
+        return elementFinder.retrieveElements(createRect(paneWidth, paneHeight));
+    }
+
+    public Rect2D createRect(double width, double height)
+    {
+        double paneX = computeXInScene(0);
+        double paneY = computeYInScene(0);
+        double paneWidth = computeHeightInScene(width);
+        double paneHeight = computeHeightInScene(height);
+        return new Rect2D(paneX, paneY, paneWidth, paneHeight);
+    }
 
     public int getTranslateX()
     {
@@ -107,7 +144,7 @@ public class SceneModel
      * Translate the scene on x axis
      * @param x translated value on x axis
      */
-    public void translateX(int x)
+    public void translateX(double x)
     {
         translateX += x;
     }
@@ -116,7 +153,7 @@ public class SceneModel
      * Translate the scene on y axis
      * @param y translated value on y axis
      */
-    public void translateY(int y)
+    public void translateY(double y)
     {
         translateY += y;
     }

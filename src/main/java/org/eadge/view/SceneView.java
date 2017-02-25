@@ -2,9 +2,13 @@ package org.eadge.view;
 
 import org.eadge.ConstantsView;
 import org.eadge.model.frame.SceneModel;
+import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.renderer.frame.SceneRenderer;
 
 import javax.swing.*;
+import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
+import java.util.Collection;
 
 /**
  * Created by eadgyo on 15/02/17.
@@ -12,10 +16,11 @@ import java.awt.*;
 public class SceneView extends JPanel
 {
     private SceneModel sceneModel;
+    private SceneRenderer sceneRenderer;
+    private SelectionModel selectionModel;
 
     public SceneView()
     {
-        sceneModel = new SceneModel();
         setPreferredSize(new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH, ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT));
     }
 
@@ -29,14 +34,21 @@ public class SceneView extends JPanel
         this.sceneModel = sceneModel;
     }
 
+    public void setSceneRenderer(SceneRenderer sceneRenderer)
+    {
+        this.sceneRenderer = sceneRenderer;
+    }
+
+    public void setSelectionModel(SelectionModel selectionModel)
+    {
+        this.selectionModel = selectionModel;
+    }
+
     @Override
     protected void paintComponent(Graphics graphics)
     {
-        super.paintComponent(graphics);
-        Graphics2D g = (Graphics2D) graphics;
-
-        // Clear background
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        Collection<MutableTreeNode> elementsInScene = sceneModel.findElementsInScene(getWidth(), getHeight());
+        sceneRenderer.paint((Graphics2D) graphics, getWidth(), getHeight(), elementsInScene, sceneModel, selectionModel);
     }
+
 }

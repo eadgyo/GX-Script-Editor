@@ -8,4 +8,10 @@ package org.eadge.renderer;
 public interface Rect2DInter
 {
     Rect2D getRect2D();
+
+    void translateX(double x);
+
+    void translateY(double y);
+
+    void translate(double x, double y);
 }

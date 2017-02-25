@@ -10,6 +10,7 @@ import org.eadge.model.script.Script;
 import org.eadge.renderer.ElementFinder;
 import org.eadge.renderer.EntryFinder;
 import org.eadge.renderer.Rect2D;
+import org.eadge.renderer.Rect2DInter;
 import org.eadge.view.MyFrame;
 import org.eadge.view.SceneView;
 
@@ -20,6 +21,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -39,17 +41,32 @@ public class SceneController
     private ElementFinder elementFinder;
     private EntryFinder entryFinder;
 
-    public SceneController(MyFrame myFrame, Script script)
+    public SceneController(Script script,
+                           MyFrame myFrame,
+                           SelectionModel selectionModel,
+                           ElementFinder elementFinder,
+                           EntryFinder entryFinder)
     {
+        this.script = script;
         this.myFrame = myFrame;
         this.sceneView = myFrame.sceneView;
-        this.script = script;
+        this.sceneModel = new SceneModel(elementFinder);
+        this.connectionModel = selectionModel.getConnectionModel();
+        this.selectionModel = selectionModel;
+        this.elementFinder = elementFinder;
+        this.entryFinder = entryFinder;
 
         // Add drag and drop from view
         sceneView.setTransferHandler(new SceneTransferHandler());
 
         // Add mouse listener to this painter
+        SceneMouseListener sceneMouseListener = new SceneMouseListener();
+        sceneView.addMouseListener(sceneMouseListener);
+        sceneView.addMouseMotionListener(sceneMouseListener);
+        sceneView.addMouseWheelListener(sceneMouseListener);
 
+        // Set model
+        sceneView.setSceneModel(sceneModel);
     }
 
     private class SceneTransferHandler extends TransferHandler
@@ -161,13 +178,14 @@ public class SceneController
                     if (entryIndex.entryIndex != -1)
                     {
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
-                        if (entryIndex.isInput)
+
+                        if (mouseEvent.getButton() == MouseEvent.BUTTON1)
                         {
-                            connectionModel.setStartIndex(entryIndex.entryIndex, true);
+                            connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
                         }
-                        else
+                        else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
                         {
-                            connectionModel.setStartIndex(entryIndex.entryIndex, false);
+                            script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
                         }
                     }
                 }
@@ -298,9 +316,25 @@ public class SceneController
             }
             else
             {
-                // Translate the scene
-                sceneModel.translateX(lastMouseX - mouseEvent.getX());
-                sceneModel.translateY(lastMouseY - mouseEvent.getY());
+                double translateX = lastMouseX - mouseEvent.getX();
+                double translateY = lastMouseY - mouseEvent.getY();
+
+                if (selectionModel.hasSelectedElements())
+                {
+                    // Move all selected elements
+                    Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
+                    for (MutableTreeNode selectedElement : selectedElements)
+                    {
+                        Rect2DInter rect2DInter = (Rect2DInter) selectedElement;
+                        rect2DInter.translate(translateX, translateY);
+                    }
+                }
+                else
+                {
+                    // Translate the scene
+                    sceneModel.translateX(translateX);
+                    sceneModel.translateY(translateY);
+                }
             }
 
             lastMouseX = mouseEvent.getX();

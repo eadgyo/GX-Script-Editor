@@ -69,4 +69,23 @@ public class Rect2D extends Rectangle2D.Double implements Rect2DInter
     {
         return this;
     }
+
+    @Override
+    public void translateX(double x)
+    {
+        this.x += x;
+    }
+
+    @Override
+    public void translateY(double y)
+    {
+        this.y += y;
+    }
+
+    @Override
+    public void translate(double x, double y)
+    {
+        translateX(x);
+        translateY(y);
+    }
 }

@@ -2,7 +2,8 @@ package org.eadge.view;
 
 import org.eadge.ConstantsView;
 import org.eadge.renderer.ElementRenderer;
-import org.eadge.renderer.frame.AddListRenderer;
+import org.eadge.renderer.EntryRenderer;
+import org.eadge.renderer.frame.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +14,19 @@ import java.awt.*;
 public class MyFrame extends JFrame
 {
     // Renderer
-    public ElementRenderer elementRenderer = new ElementRenderer(20, 7, 5, 2, Color.white, Color.black, Color.black, Color.black);
-    public AddListRenderer addListRenderer = new AddListRenderer(100, Color.white, new Color(127, 0, 0), elementRenderer);
+    public EntryRenderer entryRenderer = new EntryRenderer(Color.BLACK, 4, 2);
+    public ElementRenderer elementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
+    public AddListRenderer addListRenderer = new AddListRenderer(100, Color.white, new Color(255, 100, 100), elementRenderer);
+
+    public ElementRenderer selectedElementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
+    public ElementRenderer invalidMovingElementRenderer = new ElementRenderer(20, 5, Color.RED, Color.BLACK, Color.BLACK, entryRenderer);
+    public ElementRenderer movingElementRenderer = new ElementRenderer(20, 5, Color.BLUE, Color.BLACK, Color.BLACK, entryRenderer);
+
+    public ConnectionRenderer connectionRenderer = new ConnectionRenderer(Color.BLACK, elementRenderer);
+    public ConnectionSelectionRenderer connectionSelectionRenderer = new ConnectionSelectionRenderer(elementRenderer, Color.BLUE, Color.RED);
+
+    public SelectionRenderer selectionRenderer = new SelectionRenderer(selectedElementRenderer, invalidMovingElementRenderer, movingElementRenderer);
+    public SceneRenderer sceneRenderer = new SceneRenderer(Color.WHITE, new Color(255, 95, 90), elementRenderer, selectionRenderer, connectionRenderer, connectionSelectionRenderer);
 
 
     // Menu components
@@ -63,7 +75,13 @@ public class MyFrame extends JFrame
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create menu
+        createMenu();
+        createComponents();
+        createRenderer();
+    }
+
+    private void createMenu()
+    {
         JMenuBar jMenuBar = new JMenuBar();
         setJMenuBar(jMenuBar);
 
@@ -91,9 +109,10 @@ public class MyFrame extends JFrame
         jMenuBar.add(scriptMenu);
         scriptMenu.add(validateScriptItem);
         scriptMenu.add(runScriptItem);
+    }
 
-
-        // Add components
+    private void createComponents()
+    {
         // Top part
         JPanel buttonsPart = new JPanel();
         buttonsPart.setLayout(new BoxLayout(buttonsPart, BoxLayout.LINE_AXIS));
@@ -126,4 +145,10 @@ public class MyFrame extends JFrame
         JSplitPane mainPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightPane);
         add(mainPane);
     }
+
+    private void createRenderer()
+    {
+        sceneView.setSceneRenderer(sceneRenderer);
+    }
+
 }

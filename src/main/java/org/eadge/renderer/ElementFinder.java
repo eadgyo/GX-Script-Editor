@@ -16,6 +16,11 @@ public class ElementFinder
 {
     private Collection<MutableTreeNode> elements;
 
+    public ElementFinder()
+    {
+        this.elements = new HashSet<>();
+    }
+
     /**
      * Retrieve all elements in the selection square
      *
@@ -37,6 +42,16 @@ public class ElementFinder
         }
 
         return inSquareElements;
+    }
+
+    public void addElement(MutableTreeNode node)
+    {
+        elements.add(node);
+    }
+
+    public void removeElement(MutableTreeNode node)
+    {
+        elements.remove(node);
     }
 
     public void setElements(Collection<MutableTreeNode> elements)

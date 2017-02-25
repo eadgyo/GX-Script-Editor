@@ -2,9 +2,9 @@ package org.eadge.model.script;
 
 import org.eadge.gxscript.data.entity.Entity;
 import org.eadge.gxscript.data.script.RawGXScript;
+import org.eadge.renderer.ElementFinder;
 
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.util.Collection;
 import java.util.Observable;
 
@@ -25,6 +25,10 @@ public class Script extends Observable
      */
     private GXLayerModel layeredScript;
 
+    /**
+     * Holds element finder
+     */
+    private ElementFinder elementFinder;
 
     public Script(RawGXScript rawGXScript, GXLayerModel layeredScript)
     {
@@ -42,6 +46,7 @@ public class Script extends Observable
     {
         rawGXScript.addEntity(element);
         parent.insert(element, 0);
+        elementFinder.addElement(element);
 
         callObservers();
     }
@@ -55,6 +60,7 @@ public class Script extends Observable
     public void addLayer(GXLayer gxLayer, MutableTreeNode parent)
     {
         parent.insert(gxLayer, 0);
+        elementFinder.addElement(gxLayer);
 
         callObservers();
     }
@@ -77,12 +83,14 @@ public class Script extends Observable
      *
      * @param removed node
      */
-    public void removeNode(TreeNode removed)
+    public void removeNode(MutableTreeNode removed)
     {
         if (removed instanceof GXLayer)
             removeLayer((GXLayer) removed);
         else
             removeEntity((GXElement) removed);
+
+        elementFinder.removeElement(removed);
     }
 
     /**
@@ -95,7 +103,7 @@ public class Script extends Observable
         int numberOfChildren = gxLayer.getChildCount();
         for (int childIndex = 0; childIndex < numberOfChildren; childIndex++)
         {
-            TreeNode childAt = gxLayer.getChildAt(childIndex);
+            MutableTreeNode childAt = (MutableTreeNode) gxLayer.getChildAt(childIndex);
             removeNode(childAt);
         }
 
@@ -160,12 +168,19 @@ public class Script extends Observable
         }
     }
 
-    public void disconnectEntities(GXElement onOutput)
+    public void disconnectEntityOnEntry(GXElement gxElement, boolean isInput, int entryIndex)
     {
-
+        if (isInput)
+        {
+            // Remove input
+            gxElement.unlinkAsInput(entryIndex);
+        }
+        else
+        {
+            // Remove all output entities
+            gxElement.unlinkAsOutput(entryIndex);
+        }
 
         callObservers();
     }
-
-
 }
