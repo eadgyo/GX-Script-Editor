@@ -1,6 +1,6 @@
 package org.eadge.model.script;
 
-import org.eadge.gxscript.data.entity.Entity;
+import org.eadge.gxscript.data.entity.GXEntity;
 import org.eadge.gxscript.data.script.RawGXScript;
 import org.eadge.renderer.ElementFinder;
 
@@ -124,7 +124,7 @@ public class Script extends Observable
         callObservers();
     }
 
-    public Collection<Entity> getEntities()
+    public Collection<GXEntity> getEntities()
     {
         return rawGXScript.getEntities();
     }

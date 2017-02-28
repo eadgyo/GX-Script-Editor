@@ -1,7 +1,7 @@
 package org.eadge.model.script;
 
-import org.eadge.gxscript.data.entity.DefaultEntity;
-import org.eadge.gxscript.data.entity.Entity;
+import org.eadge.gxscript.data.entity.DefaultGXEntity;
+import org.eadge.gxscript.data.entity.GXEntity;
 import org.eadge.gxscript.data.script.Func;
 import org.eadge.gxscript.data.script.address.DataAddress;
 import org.eadge.gxscript.data.script.address.FuncDataAddresses;
@@ -18,11 +18,11 @@ import java.util.*;
  *
  * Holds entity and graphics for element representation
  */
-public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeNode
+public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTreeNode
 {
-    private DefaultEntity entity;
+    private DefaultGXEntity entity;
 
-    public GXElement(DefaultEntity entity)
+    public GXElement(DefaultGXEntity entity)
     {
         this.entity = entity;
     }
@@ -31,11 +31,11 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
     public GXElement clone()
     {
         GXElement clone = (GXElement) super.clone();
-        clone.entity = (DefaultEntity) entity.clone();
+        clone.entity = (DefaultGXEntity) entity.clone();
         return clone;
     }
 
-    public DefaultEntity getEntity()
+    public DefaultGXEntity getEntity()
     {
         return entity;
     }
@@ -65,12 +65,12 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.getOutputName(outputIndex);
     }
 
-    public Entity getInputEntity(int inputIndex)
+    public GXEntity getInputEntity(int inputIndex)
     {
         return entity.getInputEntity(inputIndex);
     }
 
-    public Collection<Entity> getOutputEntities(int outputIndex)
+    public Collection<GXEntity> getOutputEntities(int outputIndex)
     {
         return entity.getOutputEntities(outputIndex);
     }
@@ -115,12 +115,12 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.getInputIndex(name);
     }
 
-    public Entity getInputEntity(String name)
+    public GXEntity getInputEntity(String name)
     {
         return entity.getInputEntity(name);
     }
 
-    public boolean inputContains(int inputIndex, Entity entity)
+    public boolean inputContains(int inputIndex, GXEntity entity)
     {
         return this.entity.inputContains(inputIndex, entity);
     }
@@ -131,7 +131,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return getName();
     }
 
-    public boolean outputContains(int outputIndex, Entity entity)
+    public boolean outputContains(int outputIndex, GXEntity entity)
     {
         return this.entity.outputContains(outputIndex, entity);
     }
@@ -146,7 +146,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.getOutputClassFromInputEntity(inputIndex);
     }
 
-    public Collection<Entity> getAllInputEntities()
+    public Collection<GXEntity> getAllInputEntities()
     {
         return entity.getAllInputEntities();
     }
@@ -166,7 +166,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.getOutputIndex(name);
     }
 
-    public Collection<Entity> getOutputEntities(String name)
+    public Collection<GXEntity> getOutputEntities(String name)
     {
         return entity.getOutputEntities(name);
     }
@@ -176,12 +176,12 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.isOutputUsed(index);
     }
 
-    public int getIndexOfInputFromEntityOnOutput(int outputIndex, Entity outputEntity)
+    public int getIndexOfInputFromEntityOnOutput(int outputIndex, GXEntity outputEntity)
     {
         return entity.getIndexOfInputFromEntityOnOutput(outputIndex, outputEntity);
     }
 
-    public Collection<? extends Collection<Entity>> getAllOutputEntities()
+    public Collection<? extends Collection<GXEntity>> getAllOutputEntities()
     {
         return entity.getAllOutputEntities();
     }
@@ -296,7 +296,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.isVariableOutput(outputIndex);
     }
 
-    public void linkAsInput(int inputIndex, int entityOutput, Entity entity)
+    public void linkAsInput(int inputIndex, int entityOutput, GXEntity entity)
     {
         this.entity.linkAsInput(inputIndex, entityOutput, entity);
     }
@@ -306,7 +306,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         entity.unlinkAsInput(inputIndex);
     }
 
-    public void addLinkInput(int inputIndex, int outputEntityIndex, Entity entity)
+    public void addLinkInput(int inputIndex, int outputEntityIndex, GXEntity entity)
     {
         this.entity.addLinkInput(inputIndex, outputEntityIndex, entity);
     }
@@ -316,12 +316,12 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         entity.removeLinkInput(inputIndex);
     }
 
-    public void addLinkOutput(int outputIndex, int inputEntityIndex, Entity entity)
+    public void addLinkOutput(int outputIndex, int inputEntityIndex, GXEntity entity)
     {
         this.entity.addLinkOutput(outputIndex, inputEntityIndex, entity);
     }
 
-    public void removeLinkOutput(int outputIndex, Entity entity)
+    public void removeLinkOutput(int outputIndex, GXEntity entity)
     {
         this.entity.removeLinkOutput(outputIndex, entity);
     }
@@ -331,17 +331,17 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         entity.changeIndexOfOutputFromEntityOnInput(inputIndex, newOutputIndex);
     }
 
-    public void changeIndexOfInputFromEntityOnOutput(int outputIndex, Entity outputEntity, int newInputIndex)
+    public void changeIndexOfInputFromEntityOnOutput(int outputIndex, GXEntity outputEntity, int newInputIndex)
     {
         entity.changeIndexOfInputFromEntityOnOutput(outputIndex, outputEntity, newInputIndex);
     }
 
-    public void linkAsOutput(int outputIndex, int entityInput, Entity entity)
+    public void linkAsOutput(int outputIndex, int entityInput, GXEntity entity)
     {
         this.entity.linkAsOutput(outputIndex, entityInput, entity);
     }
 
-    public void unlinkAsOutput(int outputIndex, Entity entity)
+    public void unlinkAsOutput(int outputIndex, GXEntity entity)
     {
         this.entity.unlinkAsOutput(outputIndex, entity);
     }
@@ -353,7 +353,7 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
 
     public void pushEntityCode(ArrayList<Func> calledFunctions,
                                ArrayList<FuncDataAddresses> calledFunctionAddresses,
-                               Map<Entity, OutputAddresses> addressesMap)
+                               Map<GXEntity, OutputAddresses> addressesMap)
     {
         entity.pushEntityCode(calledFunctions, calledFunctionAddresses, addressesMap);
     }
@@ -363,12 +363,12 @@ public class GXElement extends Rect2D implements Cloneable, Entity, MutableTreeN
         return entity.createAndAllocOutputs(currentDataAddress);
     }
 
-    public FuncDataAddresses createAndLinkFuncDataAddresses(Map<Entity, OutputAddresses> addressesMap)
+    public FuncDataAddresses createAndLinkFuncDataAddresses(Map<GXEntity, OutputAddresses> addressesMap)
     {
         return entity.createAndLinkFuncDataAddresses(addressesMap);
     }
 
-    public Collection<Entity> getAllOutputEntitiesCollection()
+    public Collection<GXEntity> getAllOutputEntitiesCollection()
     {
         return entity.getAllOutputEntitiesCollection();
     }
