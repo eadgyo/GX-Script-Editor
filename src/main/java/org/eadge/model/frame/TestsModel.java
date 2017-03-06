@@ -5,4 +5,11 @@ package org.eadge.model.frame;
  */
 public class TestsModel
 {
+    public boolean canExportCompiled()
+    {
+        return false;
+    }
+
+    public boolean canExport
+
 }

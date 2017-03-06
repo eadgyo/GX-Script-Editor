@@ -1,17 +1,21 @@
 package org.eadge.model.script;
 
-import org.eadge.gxscript.data.entity.DefaultGXEntity;
-import org.eadge.gxscript.data.entity.GXEntity;
-import org.eadge.gxscript.data.script.Func;
-import org.eadge.gxscript.data.script.address.DataAddress;
-import org.eadge.gxscript.data.script.address.FuncDataAddresses;
-import org.eadge.gxscript.data.script.address.OutputAddresses;
+
+import org.eadge.gxscript.data.compile.script.address.DataAddress;
+import org.eadge.gxscript.data.compile.script.address.FuncDataAddresses;
+import org.eadge.gxscript.data.compile.script.address.OutputAddresses;
+import org.eadge.gxscript.data.compile.script.func.Func;
+import org.eadge.gxscript.data.entity.model.base.GXEntity;
+import org.eadge.gxscript.data.entity.model.def.DefaultGXEntity;
 import org.eadge.gxscript.tools.check.GXLiaisonChecker;
 import org.eadge.renderer.Rect2D;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -53,6 +57,12 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     public int getNumberOfOutputs()
     {
         return entity.getNumberOfOutputs();
+    }
+
+    @Override
+    public int getNumberOfOutputEntities(int i)
+    {
+        return 0;
     }
 
     public String getInputName(int inputIndex)
@@ -156,9 +166,10 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         return entity.getOutputClass(index);
     }
 
-    public Collection<Class> getAllOutputClasses()
+    @Override
+    public Collection<Class> getOutputClasses()
     {
-        return entity.getAllOutputClasses();
+        return entity.getOutputClasses();
     }
 
     public int getOutputIndex(String name)

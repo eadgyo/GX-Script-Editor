@@ -19,4 +19,9 @@ public class GXLayerModel extends DefaultTreeModel
     {
         super(treeNode, b);
     }
+
+    public void clear()
+    {
+        super.setRoot(new GXLayer());
+    }
 }

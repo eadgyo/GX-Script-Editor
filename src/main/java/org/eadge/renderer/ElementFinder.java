@@ -98,4 +98,9 @@ public class ElementFinder
 
         return null;
     }
+
+    public void clear()
+    {
+        elements.clear();
+    }
 }

@@ -1,7 +1,8 @@
 package org.eadge.model.script;
 
-import org.eadge.gxscript.data.entity.GXEntity;
-import org.eadge.gxscript.data.script.RawGXScript;
+
+import org.eadge.gxscript.data.compile.script.RawGXScript;
+import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.renderer.ElementFinder;
 
 import javax.swing.tree.MutableTreeNode;
@@ -18,12 +19,12 @@ public class Script extends Observable
     /**
      * Raw GXScript
      */
-    private RawGXScript rawGXScript;
+    protected RawGXScript rawGXScript;
 
     /**
      * Holds script layer model
      */
-    private GXLayerModel layeredScript;
+    protected GXLayerModel layeredScript;
 
     /**
      * Holds element finder
@@ -182,5 +183,18 @@ public class Script extends Observable
         }
 
         callObservers();
+    }
+
+    public void clear()
+    {
+        rawGXScript.clear();
+        layeredScript.clear();
+        elementFinder.clear();
+    }
+
+    public void set(Script script)
+    {
+        rawGXScript = script.rawGXScript;
+        layeredScript = script.layeredScript;
     }
 }

@@ -8,8 +8,8 @@ public interface ConstantsView
     String MAIN_WINDOW_TITLE = "Mon éditeur de script";
     String PROPERTIES_DIALOG_TITLE = "Propriétés";
 
-    String NAME_LAUNCH_SCRIPT = "Lancement";
-    String DESC_LAUNCH_SCRIPT = "Lancement du script";
+    String NAME_RUN_SCRIPT = "Lancement";
+    String DESC_RUN_SCRIPT = "Lancement du script";
 
     String NAME_VALIDATE_SCRIPT = "Valider";
     String DESC_VALIDATE_SCRIPT = "Validation du script";
@@ -52,10 +52,19 @@ public interface ConstantsView
 
     String MENU_FILE              = "Fichier";
     String NAME_NEW_FILE          = "Nouveau script";
-    String DESC_NEW_FILE          = "Création d'un nouveau script";
-    String NAME_SAVE_FILE         = "Enregistrer";
-    String DESC_SAVE_FILE    = "Sauvegarde du script";
-    String NAME_SAVE_AS_FILE = "Enregistrer sous";
+    String DESC_NEW_FILE      = "Création d'un nouveau script";
+    String NAME_SAVE_FILE     = "Enregistrer";
+    String DESC_SAVE_FILE     = "Sauvegarde du script";
+    String NAME_SAVE_AS_FILE  = "Enregistrer sous";
+    String DESC_SAVE_AS_FILE  = "Sauvegarde du script dans un autre repertoire";
+    String NAME_OPEN_FILE     = "Ouvrir";
+    String DESC_OPEN_FILE     = "Ouvrir un script existant";
+    String NAME_EXPORT        = "Exporter";
+    String DESC_EXPORT        = "Exporter le script en format compilé";
+    String NAME_IMPORT_SCRIPT = "Importer Script";
+    String DESC_IMPORT_SCRIPT    = "Importation d'un script compilé";
+    String NAME_IMPORT_ELEMENTS  = "Importer éléments";
+    String DESC_IMPORT_ELEMENTS  = "Importation d'un ensemble d'éléments";
 
     String MENU_EDIT = "Edit";
 
@@ -70,6 +79,12 @@ public interface ConstantsView
     String NAME_CANCEL = "Annuler";
 
 
+    String MESSAGE_CONFIRM_NEW_FILE = "Le script existant sera détruit, êtes vous sûr";
+
     int PREFERRED_DRAW_SIZE_WIDTH = 600;
     int PREFERRED_DRAW_SIZE_HEIGHT = 480;
+
+    String MESSAGE_CANT_EXPORT = "Le script n'est pas valide";
+    String MESSAGE_INVALID_FILE = "Le fichier n'est pas lisible";
+
 }

@@ -5,4 +5,25 @@ package org.eadge.model.frame.global.project;
  */
 public class FileModel
 {
+    private String scriptPath;
+
+    public FileModel(String scriptPath)
+    {
+        this.scriptPath = scriptPath;
+    }
+
+    public FileModel()
+    {
+        scriptPath = null;
+    }
+
+    public String getScriptPath()
+    {
+        return scriptPath;
+    }
+
+    public void setScriptPath(String scriptPath)
+    {
+        this.scriptPath = scriptPath;
+    }
 }
