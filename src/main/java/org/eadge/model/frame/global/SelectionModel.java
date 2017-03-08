@@ -73,8 +73,10 @@ public class SelectionModel extends DefaultTreeSelectionModel
 
     public MutableTreeNode getFirstSelectedElement()
     {
-        return selectedElements.iterator().next();
+        return selectedElements.isEmpty() ? null : selectedElements.iterator().next();
     }
+
+
 
     public Collection<MutableTreeNode> getSelectedElements()
     {

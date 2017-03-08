@@ -10,6 +10,9 @@ public class TestsModel
         return false;
     }
 
-    public boolean canExport
-
+    /**
+     * Check if the script needs inputs
+     * @return true if the script needs inputs, false otherwise
+     */
+    public boolean isScriptIndependent() { return false; }
 }

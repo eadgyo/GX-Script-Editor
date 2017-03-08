@@ -2,9 +2,11 @@ package org.eadge.controller;
 
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
+import org.eadge.model.Models;
 import org.eadge.model.frame.AddListModel;
 import org.eadge.model.frame.global.ConnectionModel;
 import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.model.frame.global.project.FileModel;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
@@ -20,7 +22,7 @@ import java.util.Observer;
 /**
  * Created by eadgyo on 16/02/17.
  *
- * Holds models view and controller creation
+ * Holds m view and controller creation
  */
 public class Application
 {
@@ -28,12 +30,8 @@ public class Application
     private MyFrame myFrame;
 
     // Model
-    private RawGXScript     rawGXScript;
-    private GXLayerModel    gxLayerModel;
-    private Script          script;
-    private AddListModel    addListModel;
-    private SelectionModel  selectionModel;
-    private ConnectionModel connectionModel;
+
+    private Models m = new Models();
 
     // Controller
     private MainController mainController;
@@ -89,24 +87,25 @@ public class Application
 
     private void createModels()
     {
-        rawGXScript = new RawGXScript();
-        gxLayerModel = new GXLayerModel(new GXLayer());
-        script = new Script(rawGXScript, gxLayerModel);
-        addListModel = new AddListModel();
-        connectionModel = new ConnectionModel();
-        selectionModel = new SelectionModel(connectionModel);
+        m.rawGXScript = new RawGXScript();
+        m.gxLayerModel = new GXLayerModel(new GXLayer());
+        m.script = new Script(m.rawGXScript, m.gxLayerModel);
+        m.addListModel = new AddListModel();
+        m.connectionModel = new ConnectionModel();
+        m.selectionModel = new SelectionModel(m.connectionModel);
+        m.fileModel = new FileModel();
     }
 
     private void createControllers()
     {
 
-        addController = new AddController(myFrame, addListModel);
+        addController = new AddController(myFrame, m.addListModel);
         consoleController = new ConsoleController(myFrame);
-        elementsController = new ElementsController(myFrame, script, selectionModel);
+        elementsController = new ElementsController(myFrame, m.script, m.selectionModel);
         testsController = new TestsController(myFrame);
-        sceneController = new SceneController(script, myFrame, selectionModel, elementFinder, entryFinder);
+        sceneController = new SceneController(m.script, myFrame, m.selectionModel, elementFinder, entryFinder);
 
-        mainController = new MainController(myFrame, script);
+        mainController = new MainController(myFrame, m);
     }
 
     private void createAction()
@@ -115,8 +114,8 @@ public class Application
 
     private void createObserver()
     {
-        selectionModel.addObserver(new SelectionChangeAction());
-        script.addObserver(new ScriptChangeAction());
+        m.selectionModel.addObserver(new SelectionChangeAction());
+        m.script.addObserver(new ScriptChangeAction());
     }
 
     private class ScriptChangeAction implements Observer

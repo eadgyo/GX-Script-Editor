@@ -2,15 +2,12 @@ package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
-import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.gxscript.data.io.EGX;
-import org.eadge.gxscript.tools.check.GXValidator;
-import org.eadge.gxscript.tools.compile.GXCompiler;
-import org.eadge.gxscript.tools.compile.GXEntityCreator;
+import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.model.AdvIOM;
-import org.eadge.model.frame.TestsModel;
-import org.eadge.model.frame.global.project.FileModel;
+import org.eadge.model.Models;
 import org.eadge.model.script.Script;
+import org.eadge.utils.Converter;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -24,9 +21,8 @@ import java.io.File;
 public class FileController
 {
     private MyFrame frame;
-    private Script script;
-    private FileModel fileModel;
-    private TestsModel testsModel;
+
+    private Models m;
 
     private NewFileAction newFileAction;
     private OpenAction    openAction;
@@ -36,12 +32,10 @@ public class FileController
     private ImportScriptAction importScriptAction;
     private ImportElementsAction importElementsAction;
 
-    public FileController(MyFrame frame, Script script, FileModel fileModel, TestsModel testsModel)
+    public FileController(MyFrame frame, Models m)
     {
         this.frame = frame;
-        this.script = script;
-        this.fileModel = fileModel;
-        this.testsModel = testsModel;
+        this.m = m;
 
         NewFileAction newFileAction = new NewFileAction();
         OpenAction    openAction    = new OpenAction();
@@ -60,6 +54,8 @@ public class FileController
         menuView.importScriptItem.setAction(importScriptAction);
         menuView.importElementsItem.setAction(importElementsAction);
     }
+
+
 
     private class NewFileAction extends AbstractAction
     {
@@ -80,7 +76,7 @@ public class FileController
 
             if (n == JOptionPane.OK_OPTION)
             {
-                script.clear();
+                m.script.clear();
             }
         }
     }
@@ -109,7 +105,7 @@ public class FileController
                     return;
                 }
 
-                script.set(importedScript);
+                m.script.set(importedScript);
             }
         }
     }
@@ -125,20 +121,20 @@ public class FileController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            if (fileModel.getScriptPath() == null)
+            if (m.fileModel.getScriptPath() == null)
             {
                 int returnVal = frame.chooseFile.showSaveDialog(frame);
 
                 if (returnVal == JFileChooser.APPROVE_OPTION)
                 {
                     File file = frame.chooseFile.getSelectedFile();
-                    fileModel.setScriptPath(file.getPath());
-                    AdvIOM.getAdv().saveScript(script, fileModel.getScriptPath());
+                    m.fileModel.setScriptPath(file.getPath());
+                    AdvIOM.getAdv().saveScript(m.script, m.fileModel.getScriptPath());
                 }
             }
             else
             {
-                AdvIOM.getAdv().saveScript(script, fileModel.getScriptPath());
+                AdvIOM.getAdv().saveScript(m.script, m.fileModel.getScriptPath());
             }
         }
     }
@@ -160,7 +156,7 @@ public class FileController
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = frame.chooseFile.getSelectedFile();
-                AdvIOM.getAdv().saveScript(script, file.getPath());
+                AdvIOM.getAdv().saveScript(m.script, file.getPath());
             }
         }
     }
@@ -177,7 +173,7 @@ public class FileController
         public void actionPerformed(ActionEvent actionEvent)
         {
             // If tests show valid script
-            if (!testsModel.canExportCompiled())
+            if (!m.testsModel.canExportCompiled())
             {
                 JOptionPane.showMessageDialog(frame, ConstantsView.MESSAGE_CANT_EXPORT);
                 return;
@@ -189,7 +185,7 @@ public class FileController
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = frame.chooseFile.getSelectedFile();
-                AdvIOM.getAdv().saveCompiledGXScript(file.getPath(), );
+                AdvIOM.getAdv().saveCompiledGXScript(file.getPath(), m.script.getCompiledRawGXScript());
             }
         }
     }
@@ -214,14 +210,25 @@ public class FileController
                 // Load this compiled script or compile existing script
                 CompiledGXScript compiledGXScript = AdvIOM.getAdv().loadCompiledOrScript(file.getPath());
 
+                // Check if the script has been loaded
                 if (compiledGXScript == null)
                 {
                     JOptionPane.showMessageDialog(frame, ConstantsView.MESSAGE_INVALID_FILE);
                     return;
                 }
 
-                // Add to list of elements this compiled script
+                String groupName = JOptionPane.showInputDialog(this, ConstantsView.INPUT_ASK_GROUP_NAME);
 
+                if (groupName == null || groupName.equals(""))
+                {
+                    return;
+                }
+
+                EGXGroup egxGroup = new EGXGroup(groupName);
+                egxGroup.add(Converter.compiledScriptToElement(compiledGXScript));
+
+                // Add to list of elements this compiled script
+                m.addListModel.addGroup(egxGroup);
             }
         }
     }
@@ -252,7 +259,13 @@ public class FileController
                     return;
                 }
 
+                egx = Converter.convertIfNeededToGXElements(egx);
+
                 // Add to list of elements this egx groups
+                for (EGXGroup egxGroup : egx.values())
+                {
+                    m.addListModel.addGroup(egxGroup);
+                }
             }
         }
     }

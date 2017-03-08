@@ -1,7 +1,7 @@
 package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
-import org.eadge.model.script.Script;
+import org.eadge.model.Models;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
  */
 public class ScriptController
 {
-    public ScriptController(MyFrame myFrame, Script script)
+    public ScriptController(MyFrame myFrame, Models script)
     {
         MenuView menuView = myFrame.menuView;
 

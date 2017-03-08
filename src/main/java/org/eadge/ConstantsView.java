@@ -87,4 +87,5 @@ public interface ConstantsView
     String MESSAGE_CANT_EXPORT = "Le script n'est pas valide";
     String MESSAGE_INVALID_FILE = "Le fichier n'est pas lisible";
 
+    String INPUT_ASK_GROUP_NAME = "Nom du groupe pour y insérer le script:";
 }

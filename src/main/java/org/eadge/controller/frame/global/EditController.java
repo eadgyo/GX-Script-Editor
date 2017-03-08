@@ -1,12 +1,15 @@
 package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
-import org.eadge.model.script.Script;
+import org.eadge.model.Models;
+import org.eadge.model.script.GXElement;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
+import javax.swing.tree.MutableTreeNode;
 import java.awt.event.ActionEvent;
+import java.util.Collection;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -15,8 +18,12 @@ import java.awt.event.ActionEvent;
  */
 public class EditController
 {
-    public EditController(MyFrame frame, Script script)
+    private Models m;
+
+    public EditController(MyFrame frame, Models m)
     {
+        this.m = m;
+
         MenuView menuView = frame.menuView;
 
         AddElementAction addElementAction = new AddElementAction();
@@ -47,7 +54,9 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-
+            GXElement selectedElement = m.addListModel.getSelectedElement();
+            MutableTreeNode firstSelectedElement = m.getFirstSelectedElementOrRoot();
+            m.script.addEntity(selectedElement, firstSelectedElement);
         }
     }
 
@@ -62,7 +71,11 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-
+            Collection<MutableTreeNode> selectedElements = m.selectionModel.getSelectedElements();
+            for (MutableTreeNode selectedElement : selectedElements)
+            {
+                m.script.removeNode(selectedElement);
+            }
         }
     }
 
@@ -78,7 +91,11 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
+            Collection<MutableTreeNode> selectedElements = m.selectionModel.getSelectedElements();
+            for (MutableTreeNode selectedElement : selectedElements)
+            {
 
+            }
         }
     }
     private class CutAction extends AbstractAction

@@ -1,8 +1,10 @@
 package org.eadge.model.script;
 
 
+import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
+import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.renderer.ElementFinder;
 
 import javax.swing.tree.MutableTreeNode;
@@ -197,4 +199,11 @@ public class Script extends Observable
         rawGXScript = script.rawGXScript;
         layeredScript = script.layeredScript;
     }
+
+    public CompiledGXScript getCompiledRawGXScript()
+    {
+        GXCompiler gxCompiler = new GXCompiler();
+        return gxCompiler.compile(rawGXScript);
+    }
+
 }
