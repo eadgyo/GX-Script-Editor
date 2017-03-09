@@ -173,7 +173,7 @@ public class FileController
         public void actionPerformed(ActionEvent actionEvent)
         {
             // If tests show valid script
-            if (!m.testsModel.canExportCompiled())
+            if (!m.testsModel.isCanExportCompiled())
             {
                 JOptionPane.showMessageDialog(frame, ConstantsView.MESSAGE_CANT_EXPORT);
                 return;

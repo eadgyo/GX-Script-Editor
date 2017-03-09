@@ -1,11 +1,16 @@
 package org.eadge.model.script;
 
+import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.renderer.Rect2D;
 import org.eadge.renderer.Rect2DInter;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * Created by eadgyo on 20/02/17.
@@ -39,9 +44,77 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         this.rect2D = rect2D;
     }
 
+    @Override
+    public Object clone()
+    {
+        GXLayer clone = (GXLayer) super.clone();
+        clone.backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), backgroundColor.getAlpha());
+        clone.rect2D = (Rect2D) rect2D.clone();
+        //noinspection unchecked
+        clone.children = children;
+        return clone;
+    }
+
+    /**
+     * Replace children, after creating gxEntity clone. You need to copy all entities first.
+     * @param gxEntityMap used to replace entities (do use for node)
+     */
+    public void replaceChildren(Map<GXEntity, GXEntity> gxEntityMap)
+    {
+        Vector oldChildren = this.children;
+        this.children = new Vector<MutableTreeNode>();
+        for (Object child : children)
+        {
+            if (child instanceof GXLayer)
+            {
+                // Copy the element
+                GXLayer childLayer = (GXLayer) child;
+                GXLayer clone      = (GXLayer) childLayer.clone();
+
+                // Replace entities
+                clone.replaceChildren(gxEntityMap);
+
+                // Add this element
+                //noinspection unchecked
+                this.children.add(clone);
+            }
+            else if (child instanceof GXElement)
+            {
+                // Copy the element
+                GXElement childElement = (GXElement) child;
+                GXElement clone      = (GXElement) childElement.clone();
+
+                // Replace entities
+                clone.replaceEntity(gxEntityMap);
+
+                // Add this element
+                //noinspection unchecked
+                this.children.add(clone);
+            }
+        }
+    }
+
+    /**
+     * Add all entities in the set
+     * @param entities list of entities
+     */
+    public void fillWithGXEntities(Set<GXEntity> entities)
+    {
+        for (Object child : children)
+        {
+            if (child instanceof GXLayer)
+            {
+                ((GXLayer) child).fillWithGXEntities(entities);
+            }
+            else if (child instanceof GXElement)
+            {
+                entities.add(((GXElement) child).getEntity());
+            }
+        }
+    }
+
     public void setX(double x)
     {
-
         rect2D.setX(x);
     }
 

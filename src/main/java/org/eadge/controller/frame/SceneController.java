@@ -44,13 +44,14 @@ public class SceneController
     public SceneController(Script script,
                            MyFrame myFrame,
                            SelectionModel selectionModel,
+                           SceneModel sceneModel,
                            ElementFinder elementFinder,
                            EntryFinder entryFinder)
     {
         this.script = script;
         this.myFrame = myFrame;
         this.sceneView = myFrame.sceneView;
-        this.sceneModel = new SceneModel(elementFinder);
+        this.sceneModel = sceneModel;
         this.connectionModel = selectionModel.getConnectionModel();
         this.selectionModel = selectionModel;
         this.elementFinder = elementFinder;

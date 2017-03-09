@@ -1,5 +1,6 @@
 package org.eadge.renderer.frame;
 
+import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.model.frame.AddListModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.renderer.ElementRenderer;
@@ -46,12 +47,12 @@ public class AddListRenderer
         AffineTransform savedMatrix = g.getTransform();
 
         // Renderer all element
-        AddListModel.MyGroup selectedGroup = addListModel.getSelectedGroup();
-        int numberOfElements = selectedGroup.size();
+        EGXGroup selectedGroup    = addListModel.getSelectedGroup();
+        int      numberOfElements = selectedGroup.size();
 
         for (int elIndex = 0; elIndex < numberOfElements; elIndex++)
         {
-            GXElement element = selectedGroup.get(elIndex);
+            GXElement element = (GXElement) selectedGroup.get(elIndex);
 
             // Render element
             elementRenderer.paint(g, element);

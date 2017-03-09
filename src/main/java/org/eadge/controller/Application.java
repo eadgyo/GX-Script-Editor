@@ -4,7 +4,10 @@ import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.model.Models;
 import org.eadge.model.frame.AddListModel;
+import org.eadge.model.frame.SceneModel;
+import org.eadge.model.frame.TestsModel;
 import org.eadge.model.frame.global.ConnectionModel;
+import org.eadge.model.frame.global.CopyModel;
 import org.eadge.model.frame.global.SelectionModel;
 import org.eadge.model.frame.global.project.FileModel;
 import org.eadge.model.script.GXLayer;
@@ -30,7 +33,6 @@ public class Application
     private MyFrame myFrame;
 
     // Model
-
     private Models m = new Models();
 
     // Controller
@@ -41,9 +43,6 @@ public class Application
     private ElementsController elementsController;
     private TestsController    testsController;
     private SceneController    sceneController;
-
-    private EntryFinder entryFinder;
-    private ElementFinder elementFinder;
 
     private ListModel<String> listElementsModel = new ListModel<String>()
     {
@@ -94,16 +93,20 @@ public class Application
         m.connectionModel = new ConnectionModel();
         m.selectionModel = new SelectionModel(m.connectionModel);
         m.fileModel = new FileModel();
+        m.copyModel = new CopyModel();
+        m.entryFinder = new EntryFinder(myFrame.elementRenderer);
+        m.elementFinder = new ElementFinder();
+        m.sceneModel = new SceneModel(m.elementFinder);
+        m.testsModel = new TestsModel();
     }
 
     private void createControllers()
     {
-
         addController = new AddController(myFrame, m.addListModel);
         consoleController = new ConsoleController(myFrame);
         elementsController = new ElementsController(myFrame, m.script, m.selectionModel);
-        testsController = new TestsController(myFrame);
-        sceneController = new SceneController(m.script, myFrame, m.selectionModel, elementFinder, entryFinder);
+        testsController = new TestsController(myFrame, m);
+        sceneController = new SceneController(m.script, myFrame, m.selectionModel, m.sceneModel, m.elementFinder, m.entryFinder);
 
         mainController = new MainController(myFrame, m);
     }

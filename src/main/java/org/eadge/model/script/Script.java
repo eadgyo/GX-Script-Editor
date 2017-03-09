@@ -206,4 +206,31 @@ public class Script extends Observable
         return gxCompiler.compile(rawGXScript);
     }
 
+    public void removeNodes(Collection<MutableTreeNode> selectedElements)
+    {
+        for (MutableTreeNode selectedElement : selectedElements)
+        {
+            removeNode(selectedElement);
+        }
+    }
+
+    public void addNode(MutableTreeNode mutableTreeNode, MutableTreeNode parent)
+    {
+        if (mutableTreeNode instanceof GXLayer)
+        {
+            addLayer((GXLayer) mutableTreeNode, parent);
+        }
+        else if (mutableTreeNode instanceof GXElement)
+        {
+            addEntity((GXElement) mutableTreeNode, parent);
+        }
+    }
+
+    public void addNodes(Collection<MutableTreeNode> savedElements, MutableTreeNode parent)
+    {
+        for (MutableTreeNode savedElement : savedElements)
+        {
+            addNode(savedElement, parent);
+        }
+    }
 }

@@ -3,6 +3,8 @@ package org.eadge.controller.frame.global;
 import org.eadge.ConstantsView;
 import org.eadge.model.Models;
 import org.eadge.model.script.GXElement;
+import org.eadge.utils.Copy;
+import org.eadge.utils.GraphicTools;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -92,10 +94,7 @@ public class EditController
         public void actionPerformed(ActionEvent actionEvent)
         {
             Collection<MutableTreeNode> selectedElements = m.selectionModel.getSelectedElements();
-            for (MutableTreeNode selectedElement : selectedElements)
-            {
-
-            }
+            m.copyModel.saveCopyOfElements(selectedElements);
         }
     }
     private class CutAction extends AbstractAction
@@ -109,7 +108,12 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
+            // Copy selected elements
+            Collection<MutableTreeNode> selectedElements = m.selectionModel.getSelectedElements();
+            m.copyModel.saveCopyOfElements(selectedElements);
 
+            // And remove all nodes
+            m.script.removeNodes(selectedElements);
         }
     }
     private class PasteAction extends AbstractAction
@@ -123,7 +127,21 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
+            // Get saved elements
+            Collection<MutableTreeNode> copiedElements = Copy.copyElements(m.copyModel.getSavedElements());
 
+            // Get left of screen
+            double leftX = m.sceneModel.computeXInScene(0);
+            double leftY = m.sceneModel.computeYInScene(0);
+
+            // Move rect containing all elements to left of screen
+            GraphicTools.moveElementsTo(leftX, leftY, copiedElements);
+
+            // Get selected node
+            MutableTreeNode parent = m.getFirstSelectedElementOrRoot();
+
+            // Add elements
+            m.script.addNodes(copiedElements, parent);
         }
     }
     private class UndoAction extends AbstractAction

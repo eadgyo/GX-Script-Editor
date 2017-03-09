@@ -35,8 +35,18 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     public GXElement clone()
     {
         GXElement clone = (GXElement) super.clone();
-        clone.entity = (DefaultGXEntity) entity.clone();
+        // Replacement will be done after copy
+        clone.entity = entity;
         return clone;
+    }
+
+    /**
+     * Replace contained entity with the new one
+     * @param replacementMap replacement map
+     */
+    public void replaceEntity(Map<GXEntity, GXEntity> replacementMap)
+    {
+        this.entity = (DefaultGXEntity) replacementMap.get(entity);
     }
 
     public DefaultGXEntity getEntity()
@@ -509,5 +519,10 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         {
             return GXLiaisonChecker.canConnect(this, entryIndex, otherElement, otherEntryIndex);
         }
+    }
+
+    public void replaceEntities(Map<GXEntity, GXEntity> replacementMap)
+    {
+        this.entity.replaceEntities(replacementMap);
     }
 }
