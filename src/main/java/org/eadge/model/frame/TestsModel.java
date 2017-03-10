@@ -24,7 +24,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
 
     private boolean isScriptIndependent = false;
     private boolean canExportCompiled   = false;
-    private ArrayList<Test> tests;
+    private ArrayList<Test> tests = new ArrayList<>();
 
     /**
      * Check if the script needs inputs

@@ -3,20 +3,21 @@ package org.eadge.model.frame;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
+import org.eadge.model.frame.addlist.MyGroupsOfElements;
 import org.eadge.model.script.GXElement;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
-import java.util.Collection;
 import java.util.Observable;
-import java.util.Vector;
 
 /**
  * Created by eadgyo on 19/02/17.
  */
 public class AddListModel extends Observable implements ListModel
 {
-    private MyGroupsOfElements els;
+    private MyGroupsOfElements els = new MyGroupsOfElements();
+
+    private MyComboBoxModel comboBoxModel = new MyComboBoxModel();
 
     private int selectedGroup = -1;
     private int selectedElement = -1;
@@ -28,6 +29,19 @@ public class AddListModel extends Observable implements ListModel
     public void addGroup(EGXGroup egxGroup)
     {
         els.add(egxGroup);
+
+        selectedGroup = 0;
+
+        setChanged();
+        notifyObservers();
+    }
+
+    public void addGroups(EGX egx)
+    {
+        for (EGXGroup egxGroup : egx.values())
+        {
+            addGroup(egxGroup);
+        }
     }
 
     public void removeGroup(int egxGroup)
@@ -93,6 +107,11 @@ public class AddListModel extends Observable implements ListModel
 
     }
 
+    public ComboBoxModel<String> getComboBoxModel()
+    {
+        return comboBoxModel;
+    }
+
     public GXElement getSelectedElement()
     {
         return els.get(selectedGroup, selectedElement);
@@ -134,169 +153,45 @@ public class AddListModel extends Observable implements ListModel
         setSelectedElement(-1);
     }
 
-    public class MyGroupsOfElements extends Vector<EGXGroup>
+
+    private class MyComboBoxModel implements ComboBoxModel<String>
     {
-        private EGX egx;
-
-        public int size(int groupIndex)
-        {
-            return get(groupIndex).size();
-        }
-
-        public GXElement get(int groupIndex, int elementIndex)
-        {
-            return (GXElement) get(groupIndex).get(elementIndex);
-        }
-
         @Override
-        public synchronized void addElement(EGXGroup egxGroup)
+        public void setSelectedItem(Object o)
         {
-            EGXGroup retGroup = egx.get(egxGroup.getName());
-
-            if (retGroup == null)
+            selectedGroup = els.size() - 1;
+            while (selectedGroup != -1 && !els.get(selectedGroup).getName().equals(o))
             {
-                retGroup = new EGXGroup(egxGroup.getName());
-                egx.add(retGroup);
-                super.addElement(retGroup);
-            }
-
-            retGroup.addAll(egxGroup);
-        }
-
-        @Override
-        public synchronized boolean add(EGXGroup egxGroup)
-        {
-            EGXGroup retGroup = egx.get(egxGroup.getName());
-
-            if (retGroup == null)
-            {
-                retGroup = new EGXGroup(egxGroup.getName());
-                egx.add(retGroup);
-                boolean a = super.add(egxGroup);
-            }
-
-            retGroup.addAll(egxGroup);
-            return true;
-        }
-
-        @Override
-        public synchronized void insertElementAt(EGXGroup egxGroup, int i)
-        {
-            EGXGroup retGroup = egx.get(egxGroup.getName());
-            remove(retGroup);
-
-            retGroup = new EGXGroup(egxGroup.getName());
-            egx.add(retGroup);
-            retGroup.addAll(egxGroup);
-            super.insertElementAt(retGroup, i);
-        }
-
-        @Override
-        public synchronized void removeElementAt(int i)
-        {
-            EGXGroup egxGroup = get(i);
-            egx.remove(egxGroup);
-            super.removeElementAt(i);
-        }
-
-        @Override
-        public synchronized boolean removeElement(Object o)
-        {
-            egx.remove((EGXGroup) o);
-            return super.removeElement(o);
-        }
-
-        @Override
-        public synchronized void removeAllElements()
-        {
-            egx.clear();
-            super.removeAllElements();
-        }
-
-        @Override
-        public boolean remove(Object o)
-        {
-            egx.remove((EGXGroup) o);
-            return super.remove(o);
-        }
-
-        @Override
-        public synchronized EGXGroup remove(int i)
-        {
-            EGXGroup egxGroup = get(i);
-            egx.remove(egxGroup);
-            return super.remove(i);
-        }
-
-        @Override
-        public synchronized boolean removeAll(Collection<?> collection)
-        {
-            for (Object o : collection)
-            {
-                remove(o);
-            }
-            return true;
-        }
-
-        @Override
-        protected synchronized void removeRange(int i, int i1)
-        {
-            for (int index = i; index < i1; index++)
-            {
-                remove(i);
+                selectedGroup--;
             }
         }
 
         @Override
-        public synchronized boolean addAll(Collection<? extends EGXGroup> collection)
+        public Object getSelectedItem()
         {
-            for (EGXGroup egxGroup : collection)
-            {
-                add(egxGroup);
-            }
-
-            return true;
+            return selectedGroup == -1 ? null : getSelectedGroup().getName();
         }
 
         @Override
-        public synchronized boolean addAll(int i, Collection<? extends EGXGroup> collection)
+        public int getSize()
         {
-            for (EGXGroup egxGroup : collection)
-            {
-                insertElementAt(egxGroup, i);
-            }
-
-            return true;
+            return els.size();
         }
 
-        public void addEntity(int groupIndex, GXEntity gxEntity)
+        @Override
+        public String getElementAt(int i)
         {
-            EGXGroup egxGroup = get(groupIndex);
-            egxGroup.add(gxEntity);
+            return i == -1 ? "" : els.get(i).getName();
         }
 
-        public void removeEntity(int groupIndex, GXEntity gxEntity)
+        @Override
+        public void addListDataListener(ListDataListener listDataListener)
         {
-            EGXGroup egxGroup = get(groupIndex);
-            egxGroup.remove(gxEntity);
         }
 
-        public void removeEntity(int groupIndex, int entityIndex)
+        @Override
+        public void removeListDataListener(ListDataListener listDataListener)
         {
-            EGXGroup egxGroup = get(groupIndex);
-            egxGroup.remove(entityIndex);
         }
-
-        public void removeEntity(String groupName, GXEntity gxEntity)
-        {
-            EGXGroup egxGroup = egx.get(groupName);
-            egxGroup.remove(gxEntity);
-        }
-
-        public void removeEntity(String groupName, int entityIndex)
-        {
-            EGXGroup egxGroup = egx.get(groupName);
-            egxGroup.remove(entityIndex);
-        }
-    }
+    };
 }

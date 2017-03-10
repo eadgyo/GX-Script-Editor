@@ -1,4 +1,4 @@
-package org.eadge.model.frame.global;
+package org.eadge.model.global;
 
 import org.eadge.model.script.GXElement;
 

@@ -30,7 +30,7 @@ public class ElementsView extends JPanel
         super(new BorderLayout());
 
         layerPropertiesDialog = new LayerPropertiesDialog(myFrame);
-        layerPropertiesDialog.setVisible(true);
+        layerPropertiesDialog.setVisible(false);
 
         // Top parts
         scrollPane = new JScrollPane(elementsTree);
@@ -51,12 +51,12 @@ public class ElementsView extends JPanel
         // Get selected element
         DefaultMutableTreeNode lastSelectedPathComponent = getSelectedNodeOrRoot();
 
-        // If the selected element is a GXLayer
+        // If the selected element is MyGroupsOfElements GXLayer
         if (lastSelectedPathComponent instanceof GXLayer)
         {
             return (GXLayer) lastSelectedPathComponent;
         }
-        else // The parent is a GXLayer
+        else // The parent is MyGroupsOfElements GXLayer
         {
             return (GXLayer) lastSelectedPathComponent.getParent();
         }

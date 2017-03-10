@@ -1,8 +1,8 @@
 package org.eadge.controller.frame;
 
 import org.eadge.ConstantsView;
-import org.eadge.model.frame.global.MyTransferableElement;
-import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.model.global.MyTransferableElement;
+import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
@@ -98,6 +98,7 @@ public class ElementsController
         {
             GXLayer selectedLayer = elementsView.getSelectedLayer();
             script.addLayer(new GXLayer(), selectedLayer);
+
         }
     }
 

@@ -1,9 +1,9 @@
 package org.eadge.controller.frame;
 
 import org.eadge.model.frame.SceneModel;
-import org.eadge.model.frame.global.ConnectionModel;
-import org.eadge.model.frame.global.MyTransferableElement;
-import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.model.global.ConnectionModel;
+import org.eadge.model.global.MyTransferableElement;
+import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.Script;
@@ -68,6 +68,7 @@ public class SceneController
 
         // Set model
         sceneView.setSceneModel(sceneModel);
+        sceneView.setSelectionModel(selectionModel);
     }
 
     private class SceneTransferHandler extends TransferHandler
@@ -226,7 +227,7 @@ public class SceneController
 
                         GXElement selected = (GXElement) selectionModel.getFirstSelectedElement();
 
-                        // Check if a connection can be made
+                        // Check if MyGroupsOfElements connection can be made
                         boolean isValid = selected.canConnectOnEntry(connectionModel.isStartInput(),
                                                                      connectionModel.getStartIndex(),
                                                                      onDragged,
@@ -294,7 +295,7 @@ public class SceneController
 
                         GXElement selected = (GXElement) selectionModel.getFirstSelectedElement();
 
-                        // Check if a connection can be made
+                        // Check if MyGroupsOfElements connection can be made
                         boolean isValid = selected.canConnectOnEntry(connectionModel.isStartInput(),
                                                    connectionModel.getStartIndex(),
                                                    onDragged,

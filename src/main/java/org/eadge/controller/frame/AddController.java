@@ -30,12 +30,14 @@ public class AddController implements MouseListener, Observer
 
         // Set adding elements list model
         this.addListModel = addListModel;
+        //this.addListModel.addObserver(new AddObserver());
         addView.addListPanel.setAddListModel(addListModel);
 
         // Add drag and drop support
         addView.addListPanel.setTransferHandler(new TransferHandler("GXElement Object"));
 
         // Add listener on group change
+        this.addView.groupList.setModel(addListModel.getComboBoxModel());
         this.addView.groupList.addActionListener(new ActionGroupChange());
     }
 
@@ -89,7 +91,6 @@ public class AddController implements MouseListener, Observer
             // Update selection
             addListModel.setSelectedElement(selectedIndexOnClick);
 
-
             // Init drag and drop
             JComponent src = (JComponent) mouseEvent.getSource();
             TransferHandler transferHandler = src.getTransferHandler();
@@ -135,12 +136,21 @@ public class AddController implements MouseListener, Observer
                 return;
 
             // Update selected group
-            addListModel.setSelectedGroup(selectedGroupIndex);
             addListModel.setSelectedElement(0);
 
             // Update panel size
             addView.addListPanel.updateLength();
-            addView.addListPanel.repaint();
+            addView.addScrollingPane.repaint();
+        }
+    }
+
+    private class AddObserver implements Observer
+    {
+        @Override
+        public void update(Observable observable, Object o)
+        {
+            System.out.println("Change");
+            myFrame.addView.repaint();
         }
     }
 }

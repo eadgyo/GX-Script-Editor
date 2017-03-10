@@ -2,7 +2,7 @@ package org.eadge.view;
 
 import org.eadge.ConstantsView;
 import org.eadge.model.frame.SceneModel;
-import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.model.global.SelectionModel;
 import org.eadge.renderer.frame.SceneRenderer;
 
 import javax.swing.*;

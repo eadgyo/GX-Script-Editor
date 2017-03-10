@@ -1,6 +1,6 @@
-package org.eadge.model.frame.global;
+package org.eadge.model.global;
 
-import org.eadge.model.frame.global.project.SelectionObservable;
+import org.eadge.model.global.project.SelectionObservable;
 
 /**
  * Created by eadgyo on 19/02/17.

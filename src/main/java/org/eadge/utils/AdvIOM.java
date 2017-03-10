@@ -1,4 +1,4 @@
-package org.eadge.model;
+package org.eadge.utils;
 
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.tools.check.GXValidator;
@@ -52,7 +52,7 @@ public class AdvIOM extends IOGXManager
     public static AdvIOM getAdv()
     {
         if (iogxManager == null)
-            iogxManager = new IOGXManager();
+            iogxManager = new AdvIOM();
         return (AdvIOM) iogxManager;
     }
 }

@@ -7,12 +7,12 @@ import javax.swing.text.*;
 /**
  *  Source: http://www.camick.com/java/source/LimitLinesDocumentListener.java
  *
- *  A class to control the maximum number of lines to be stored in a Document
+ *  A class to control the maximum number of lines to be stored in MyGroupsOfElements Document
  *
  *  Excess lines can be removed from the start or end of the Document
  *  depending on your requirement.
  *
- *  a) if you append text to the Document, then you would want to remove lines
+ *  MyGroupsOfElements) if you append text to the Document, then you would want to remove lines
  *     from the start.
  *  b) if you insert text at the beginning of the Document, then you would
  *     want to remove lines from the end.

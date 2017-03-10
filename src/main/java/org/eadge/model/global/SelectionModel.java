@@ -1,6 +1,6 @@
-package org.eadge.model.frame.global;
+package org.eadge.model.global;
 
-import org.eadge.model.frame.global.project.SelectionObservable;
+import org.eadge.model.global.project.SelectionObservable;
 
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
@@ -179,7 +179,7 @@ public class SelectionModel extends DefaultTreeSelectionModel
     }
 
     /**
-     * Check if a node is used in selection process
+     * Check if MyGroupsOfElements node is used in selection process
      * @param node checked node
      * @return true if the node is selected, false otherwise
      */

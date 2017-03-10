@@ -2,23 +2,25 @@ package org.eadge.controller;
 
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
+import org.eadge.gxscript.data.io.EGX;
 import org.eadge.model.Models;
 import org.eadge.model.frame.AddListModel;
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.frame.TestsModel;
-import org.eadge.model.frame.global.ConnectionModel;
-import org.eadge.model.frame.global.CopyModel;
-import org.eadge.model.frame.global.SelectionModel;
-import org.eadge.model.frame.global.project.FileModel;
+import org.eadge.model.global.ConnectionModel;
+import org.eadge.model.global.CopyModel;
+import org.eadge.model.global.SelectionModel;
+import org.eadge.model.global.project.FileModel;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
 import org.eadge.renderer.ElementFinder;
 import org.eadge.renderer.EntryFinder;
+import org.eadge.utils.AdvIOM;
+import org.eadge.utils.Converter;
 import org.eadge.view.MyFrame;
 
-import javax.swing.*;
-import javax.swing.event.ListDataListener;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -44,29 +46,6 @@ public class Application
     private TestsController    testsController;
     private SceneController    sceneController;
 
-    private ListModel<String> listElementsModel = new ListModel<String>()
-    {
-        private String testElements[] = {"element1", "element2"};
-
-        @Override
-        public int getSize()
-        {
-            return testElements.length;
-        }
-
-        @Override
-        public String getElementAt(int i)
-        {
-            return testElements[i];
-        }
-
-        @Override
-        public void addListDataListener(ListDataListener listDataListener) {}
-
-        @Override
-        public void removeListDataListener(ListDataListener listDataListener) {}
-    };
-
     public Application()
     {
         createView();
@@ -75,8 +54,23 @@ public class Application
         createAction();
         createObserver();
 
+        loadDefault();
+
         myFrame.pack();
         myFrame.setVisible(true);
+    }
+
+    private void loadDefault()
+    {
+        AdvIOM instance = AdvIOM.getAdv();
+        ArrayList<String> egxNames = instance.getAllFilesName("EGX", true);
+        for (String egxName : egxNames)
+        {
+            // Load the corresponding EGX
+            EGX egx = instance.loadEGX("EGX/" + egxName);
+            egx = Converter.convertIfNeededToGXElements(egx);
+            m.addListModel.addGroups(egx);
+        }
     }
 
     private void createView()

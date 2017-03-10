@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by eadgyo on 24/02/17.
  *
- * Select elements using a square
+ * Select elements using MyGroupsOfElements square
  */
 public class ElementFinder
 {

@@ -1,4 +1,4 @@
-package org.eadge.model.frame.global.project;
+package org.eadge.model.global.project;
 
 import java.util.Observable;
 

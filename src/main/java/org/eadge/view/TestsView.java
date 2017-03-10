@@ -20,6 +20,7 @@ public class TestsView extends JPanel
         validTests = new JList();
         
         JScrollPane jScrollPane = new JScrollPane(consoleTestsText);
+        consoleTestsText = new JTextArea();
         messageConsole = new MessageConsole(consoleTestsText);
         messageConsole.setMessageLines(100);
 

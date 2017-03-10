@@ -498,13 +498,13 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     }
 
     /**
-     * Check if a connection can be made between this element and another
+     * Check if MyGroupsOfElements connection can be made between this element and another
      * @param isInput  is connecting element on input
      * @param entryIndex used entry index
      * @param otherElement element to connect to
      * @param isOtherInput is connecting other element on input
      * @param otherEntryIndex used entry index
-     * @return true if a connection can be made, false otherwise
+     * @return true if MyGroupsOfElements connection can be made, false otherwise
      */
     public boolean canConnectOnEntry(boolean isInput, int entryIndex, GXElement otherElement, boolean isOtherInput, int otherEntryIndex)
     {

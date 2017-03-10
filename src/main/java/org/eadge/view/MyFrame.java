@@ -18,8 +18,8 @@ public class MyFrame extends JFrame
     public JFileChooser chooseFile = new JFileChooser();
 
     // Renderer
-    public EntryRenderer entryRenderer = new EntryRenderer(Color.BLACK, 4, 2);
-    public ElementRenderer elementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
+    public EntryRenderer entryRenderer = new EntryRenderer(Color.BLACK, 20, 30);
+    public ElementRenderer elementRenderer = new ElementRenderer(10, 30, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
     public AddListRenderer addListRenderer = new AddListRenderer(100, Color.white, new Color(255, 100, 100), elementRenderer);
 
     public ElementRenderer selectedElementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
@@ -64,6 +64,7 @@ public class MyFrame extends JFrame
 
     private void createMenu()
     {
+        menuView = new MenuView();
         setJMenuBar(menuView);
     }
 
@@ -75,6 +76,7 @@ public class MyFrame extends JFrame
         // --> left part
         addView = new AddView();
         addView.addListPanel.setCellRenderer(addListRenderer);
+        addView.setPreferredSize(new Dimension(400, 300));
 
         elementsView = new ElementsView(this);
         JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, addView, elementsView);

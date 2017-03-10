@@ -4,7 +4,7 @@ import org.eadge.ConstantsView;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
-import org.eadge.model.AdvIOM;
+import org.eadge.utils.AdvIOM;
 import org.eadge.model.Models;
 import org.eadge.model.script.Script;
 import org.eadge.utils.Converter;

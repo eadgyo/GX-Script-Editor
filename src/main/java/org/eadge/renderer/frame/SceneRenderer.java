@@ -1,7 +1,7 @@
 package org.eadge.renderer.frame;
 
 import org.eadge.model.frame.SceneModel;
-import org.eadge.model.frame.global.SelectionModel;
+import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.renderer.ElementRenderer;

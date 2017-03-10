@@ -9,10 +9,10 @@ import java.io.PrintStream;
 /**
  * Source: http://www.camick.com/java/source/MessageConsole.java
  *
- *  Create a simple console to display text messages.
+ *  Create MyGroupsOfElements simple console to display text messages.
  *
  *  Messages can be directed here from different sources. Each source can
- *  have its messages displayed in a different color.
+ *  have its messages displayed in MyGroupsOfElements different color.
  *
  *  Messages can either be appended to the console or inserted as the first
  *  line of the console
@@ -32,7 +32,7 @@ public class MessageConsole
     }
 
     /*
-     *	Use the text component specified as a simply console to display
+     *	Use the text component specified as MyGroupsOfElements simply console to display
      *  text messages.
      *
      *  The messages can either be appended to the end of the console or
@@ -57,7 +57,7 @@ public class MessageConsole
 
     /*
      *  Redirect the output from the standard output to the console
-     *  using the specified color and PrintStream. When a PrintStream
+     *  using the specified color and PrintStream. When MyGroupsOfElements PrintStream
      *  is specified the message will be added to the Document before
      *  it is also written to the PrintStream.
      */
@@ -78,7 +78,7 @@ public class MessageConsole
 
     /*
      *  Redirect the output from the standard error to the console
-     *  using the specified color and PrintStream. When a PrintStream
+     *  using the specified color and PrintStream. When MyGroupsOfElements PrintStream
      *  is specified the message will be added to the Document before
      *  it is also written to the PrintStream.
      */
@@ -105,8 +105,8 @@ public class MessageConsole
     }
 
     /*
-     *	Class to intercept output from a PrintStream and add it to a Document.
-     *  The output can optionally be redirected to a different PrintStream.
+     *	Class to intercept output from MyGroupsOfElements PrintStream and add it to MyGroupsOfElements Document.
+     *  The output can optionally be redirected to MyGroupsOfElements different PrintStream.
      *  The text displayed in the Document can be color coded to indicate
      *  the output source.
      */
@@ -139,7 +139,7 @@ public class MessageConsole
          *  Override this method to intercept the output text. Each line of text
          *  output will actually involve invoking this method twice:
          *
-         *  a) for the actual text message
+         *  MyGroupsOfElements) for the actual text message
          *  b) for the newLine string
          *
          *  The message will be treated differently depending on whether the line
@@ -209,7 +209,7 @@ public class MessageConsole
         private void clearBuffer()
         {
             //  In case both the standard out and standard err are being redirected
-            //  we need to insert a newline character for the first line only
+            //  we need to insert MyGroupsOfElements newline character for the first line only
 
             if (isFirstLine && document.getLength() != 0)
             {
