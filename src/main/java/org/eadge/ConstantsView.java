@@ -5,7 +5,7 @@ package org.eadge;
  */
 public interface ConstantsView
 {
-    String MAIN_WINDOW_TITLE = "Mon éditeur de script";
+    String MAIN_WINDOW_TITLE = "test.java";
     String PROPERTIES_DIALOG_TITLE = "Propriétés";
 
     String NAME_RUN_SCRIPT = "Lancement";

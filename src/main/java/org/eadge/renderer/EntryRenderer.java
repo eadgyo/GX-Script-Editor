@@ -3,7 +3,6 @@ package org.eadge.renderer;
 import org.eadge.model.script.GXElement;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 /**
  * Created by eadgyo on 24/02/17.
@@ -27,6 +26,10 @@ public class EntryRenderer
      */
     private int sizeBetween;
 
+    public final static double FONT_HEIGHT = 10;
+
+    public final static double ENTRY_HEIGHT = 30;
+
     /**
      * @param textColor Color of the entry text
      * @param rectSize Size of the entry rect
@@ -43,32 +46,30 @@ public class EntryRenderer
     {
         Graphics2D g = (Graphics2D) graphics;
 
-        // Save transformation matrix
-        AffineTransform savedMatrix = g.getTransform();
-
         int numberOfInputs = gxElement.getNumberOfInputs();
         g.setColor(textColor);
         for (int inputIndex = 0; inputIndex < numberOfInputs; inputIndex++)
         {
-            int inputX = (int) getRelativeOutputX(gxElement);
-            int inputY = (int) getRelativeOutputY(inputHeight, inputIndex, gxElement);
+            int inputX = (int) getRelativeInputX(gxElement);
+            int inputY = (int) getRelativeInputY(inputHeight, inputIndex);
+            int centerY = (int) (inputHeight * 0.5 + inputY);
 
             // Fill connexion rect
-            g.fillRect( inputX - rectSize / 2,
-                        inputY - rectSize / 2,
-                        inputX + rectSize / 2,
-                        inputY + rectSize /2);
+            int recX = (int) (inputX);
+            int recY = (int) (centerY - rectSize * 0.5);
+            g.fillRect( recX,
+                        recY,
+                        rectSize,
+                        rectSize);
 
             // Draw text
             String text = gxElement.getInputName(inputIndex);
-            g.drawString(text, sizeBetween + rectSize * 3, sizeBetween);
+            int textHeight = g.getFontMetrics().getHeight();
 
-            // Translate for the next inputs
-            g.translate(0, inputHeight);
+            int textX = sizeBetween + rectSize * 2;
+            int textY = (int) (centerY + textHeight * 0.5);
+            g.drawString(text, textX, textY);
         }
-
-        // Reset matrix transformation
-        g.setTransform(savedMatrix);
     }
 
     public void paintOutputs(Graphics graphics, double outputHeight, GXElement gxElement)
@@ -82,17 +83,24 @@ public class EntryRenderer
         for (int outputIndex = 0; outputIndex < numberOfOutputs; outputIndex++)
         {
             int outputX = (int) getRelativeOutputX(gxElement);
-            int outputY = (int) getRelativeOutputY(outputHeight, outputIndex, gxElement);
+            int outputY = (int) getRelativeOutputY(outputHeight, outputIndex);
+            int centerY = (int) (outputHeight * 0.5 + outputY);
 
             // Fill connexion rect
-            g.fillRect( outputX - rectSize / 2,
-                       outputY - rectSize / 2,
-                        outputX + rectSize / 2,
-                       outputY + rectSize /2);
+            int recX = (int) (outputX - rectSize * 0.5);
+            int recY = (int) (centerY - rectSize * 0.5);
+            g.fillRect( recX,
+                        recY,
+                        rectSize,
+                        rectSize);
 
             String text = gxElement.getOutputName(outputIndex);
+            int textHeight = g.getFontMetrics().getHeight();
             int textWidth = g.getFontMetrics().stringWidth(text);
-            g.drawString(text, elementWidth - sizeBetween - rectSize * 2 - textWidth, sizeBetween);
+
+            int textX = elementWidth - sizeBetween - rectSize * 2 - textWidth;
+            int textY = (int) (centerY + textHeight * 0.5);
+            g.drawString(text, textX, textY);
         }
     }
 
@@ -103,19 +111,29 @@ public class EntryRenderer
      */
     public double getRelativeInputX(GXElement gxElement)
     {
-        return sizeBetween + rectSize / 2;
+        return sizeBetween;
     }
 
     /**
      * Get input Y relative to the start of the element
      * @param heightOfInput input height block
      * @param inputIndex input index
+     * @return relative y
+     */
+    private double getRelativeInputY(double heightOfInput, int inputIndex)
+    {
+        return heightOfInput * inputIndex;
+    }
+
+    /**
+     * Get input Y relative to the start of the element
+     * @param inputIndex input index
      * @param gxElement used element
      * @return relative y
      */
-    public double getRelativeInputY(double heightOfInput, int inputIndex, GXElement gxElement)
+    public double getRelativeInputY(int inputIndex, GXElement gxElement)
     {
-        return heightOfInput * (inputIndex + 0.5);
+        return getRelativeInputY(getHeightOfEntry(gxElement), inputIndex);
     }
 
     /**
@@ -125,19 +143,29 @@ public class EntryRenderer
      */
     public double getRelativeOutputX(GXElement gxElement)
     {
-        return gxElement.getWidth() - sizeBetween - rectSize / 2;
+        return gxElement.getWidth() - sizeBetween;
     }
 
     /**
      * Get output Y relative to the start of the element
      * @param heightOfOutput output height block
      * @param outputIndex output index
+     * @return relative y
+     */
+    private double getRelativeOutputY(double heightOfOutput, int outputIndex)
+    {
+        return heightOfOutput * outputIndex;
+    }
+
+    /**
+     * Get output Y relative to the start of the element
+     * @param outputIndex output index
      * @param gxElement used element
      * @return relative y
      */
-    public double getRelativeOutputY(double heightOfOutput, int outputIndex, GXElement gxElement)
+    public double getRelativeOutputY(int outputIndex, GXElement gxElement)
     {
-        return heightOfOutput * (outputIndex + 0.5);
+        return getRelativeOutputY(getHeightOfEntry(gxElement), outputIndex);
     }
 
     public Color getTextColor()
@@ -168,5 +196,24 @@ public class EntryRenderer
     public void setSizeBetween(int sizeBetween)
     {
         this.sizeBetween = sizeBetween;
+    }
+
+    public double getFontHeight() { return FONT_HEIGHT; }
+
+    /**
+     * Get the height of entry block
+     * @param element used element
+     * @return height of one entry block
+     */
+    public double getHeightOfEntry(GXElement element)
+    {
+        // Compute input/output element size
+        int numberOfInputs = element.getNumberOfInputs();
+        int numberOfOutputs = element.getNumberOfOutputs();
+
+        // Get max to align input and outputs
+        double maxOfInputsOutputs = (numberOfInputs > numberOfOutputs) ? numberOfInputs : numberOfOutputs;
+
+        return (element.getHeight() - getSizeBetween() * 2)/maxOfInputsOutputs;
     }
 }

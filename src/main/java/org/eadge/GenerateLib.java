@@ -28,8 +28,7 @@ public class GenerateLib
         booleanGroup.add(new ModifyBoolGXEntity());
         booleanGroup.add(new InvertBoolGXEntity());
         egx.add(booleanGroup);
-
-
+        
         EGXGroup numberGroup = new EGXGroup("Nombre");
         numberGroup.add(new IntGXEntity());
         numberGroup.add(new ModifyBoolGXEntity());

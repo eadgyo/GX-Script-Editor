@@ -17,7 +17,7 @@ import java.util.Observer;
  *
  * Handle mouse motion on Add list
  */
-public class AddController implements MouseListener, Observer
+public class AddController
 {
     private MyFrame myFrame;
     private AddView addView;
@@ -30,11 +30,12 @@ public class AddController implements MouseListener, Observer
 
         // Set adding elements list model
         this.addListModel = addListModel;
-        //this.addListModel.addObserver(new AddObserver());
+        this.addListModel.addObserver(new AddObserver());
         addView.addListPanel.setAddListModel(addListModel);
 
         // Add drag and drop support
         addView.addListPanel.setTransferHandler(new TransferHandler("GXElement Object"));
+        addView.addListPanel.addMouseListener(new AddMouseListener());
 
         // Add listener on group change
         this.addView.groupList.setModel(addListModel.getComboBoxModel());
@@ -48,80 +49,64 @@ public class AddController implements MouseListener, Observer
      */
     public int getSelectedIndex(int x, int y)
     {
-        // Retrieve number of elements in the selected group
-        int numberOfElements = addListModel.getSize();
-
-        // If the list is empty
-        if (numberOfElements == 0)
-            return -1;
-
-        // Get block height
-        int blockHeight = addView.addListPanel.getAddListRenderer().getBlockHeight();
-
-        // Compute selected element from the list renderer
-        int selectedElement = y / blockHeight;
-
-        // If the selected element is out of bound, reset
-        if (selectedElement >= numberOfElements)
-            return -1;
-
-        return selectedElement;
+        return addView.addListPanel.getAddListRenderer().getSelectedElementIndex(x, y, addListModel);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent)
+    private class AddMouseListener implements MouseListener
     {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent mouseEvent)
-    {
-        // Get the pressed button index
-        int pressedButton = mouseEvent.getButton();
-
-        // If left mouse button is pressed
-        if (pressedButton == MouseEvent.BUTTON1)
+        @Override
+        public void mouseClicked(MouseEvent mouseEvent)
         {
-            // Retrieve selected index from the mouse coordinates
-            int mouseX = mouseEvent.getX();
-            int mouseY = mouseEvent.getY();
-            int selectedIndexOnClick = getSelectedIndex(mouseX, mouseY);
 
-            // Update selection
-            addListModel.setSelectedElement(selectedIndexOnClick);
-
-            // Init drag and drop
-            JComponent src = (JComponent) mouseEvent.getSource();
-            TransferHandler transferHandler = src.getTransferHandler();
-
-            // Set addView as the source object
-            transferHandler.exportAsDrag(addView, mouseEvent, TransferHandler.COPY);
         }
-    }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent)
-    {
+        @Override
+        public void mousePressed(MouseEvent mouseEvent)
+        {
+            System.out.println("Pressed");
 
-    }
+            // Get the pressed button index
+            int pressedButton = mouseEvent.getButton();
 
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent)
-    {
+            // If left mouse button is pressed
+            if (pressedButton == MouseEvent.BUTTON1)
+            {
+                // Retrieve selected index from the mouse coordinates
+                int mouseX = mouseEvent.getX();
+                int mouseY = mouseEvent.getY();
+                int selectedIndexOnClick = getSelectedIndex(mouseX, mouseY);
 
-    }
+                // Update selection
+                addListModel.setSelectedElement(selectedIndexOnClick);
 
-    @Override
-    public void mouseExited(MouseEvent mouseEvent)
-    {
+                // Init drag and drop
+                JComponent src = (JComponent) mouseEvent.getSource();
+                TransferHandler transferHandler = src.getTransferHandler();
 
-    }
+                // Set addView as the source object
+                transferHandler.exportAsDrag(addView, mouseEvent, TransferHandler.COPY);
 
-    @Override
-    public void update(Observable observable, Object o)
-    {
-        addView.addListPanel.repaint();
+
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent mouseEvent)
+        {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent mouseEvent)
+        {
+
+        }
     }
 
     private class ActionGroupChange implements ActionListener
@@ -140,7 +125,6 @@ public class AddController implements MouseListener, Observer
 
             // Update panel size
             addView.addListPanel.updateLength();
-            addView.addScrollingPane.repaint();
         }
     }
 
@@ -149,7 +133,6 @@ public class AddController implements MouseListener, Observer
         @Override
         public void update(Observable observable, Object o)
         {
-            System.out.println("Change");
             myFrame.addView.repaint();
         }
     }

@@ -24,7 +24,7 @@ public class AddView extends JPanel
         add(groupList, BorderLayout.PAGE_START);
 
         addScrollingPane = new JScrollPane(addListPanel);
-        add(addListPanel, BorderLayout.CENTER);
+        add(addScrollingPane, BorderLayout.CENTER);
     }
 
     public class AddListPanel extends JPanel
@@ -82,16 +82,16 @@ public class AddView extends JPanel
             setPreferredSize(new Dimension(width, height));
 
             // Revalidate panel
-            addScrollingPane.add(this);
-            addScrollingPane.revalidate();
+            addListPanel.revalidate();
+            addListPanel.repaint();
+            addScrollingPane.getVerticalScrollBar().setValue(0);
         }
 
         public void updateLength()
         {
-            int width = getWidth();
-            int height = addListModel.getNumberOfElements() * addListRenderer.getBlockHeight();
+            int width = addListPanel.getWidth();
+            int height = (int) addListRenderer.getTotalHeight(addListModel.getSelectedGroup());
             setLength(width, height);
-            this.setPreferredSize(new Dimension(width, height));
         }
     }
 }

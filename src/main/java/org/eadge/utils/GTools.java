@@ -1,5 +1,10 @@
 package org.eadge.utils;
 
+import org.eadge.gxscript.data.entity.model.base.GXEntity;
+import org.eadge.gxscript.data.io.EGX;
+import org.eadge.gxscript.data.io.EGXGroup;
+import org.eadge.model.script.GXElement;
+import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
 
 import javax.swing.tree.MutableTreeNode;
@@ -9,7 +14,7 @@ import java.util.Iterator;
 /**
  * Created by eadgyo on 09/03/17.
  */
-public class GraphicTools
+public class GTools
 {
     public static Rect2D createRectFromNodes(Collection<MutableTreeNode> nodes)
     {
@@ -54,7 +59,7 @@ public class GraphicTools
     public static void moveElementsTo(double leftDestX, double leftDestY, Collection<MutableTreeNode> nodes)
     {
         // Create rect containing elements
-        Rect2D rectFromNodes = GraphicTools.createRectFromNodes(nodes);
+        Rect2D rectFromNodes = GTools.createRectFromNodes(nodes);
 
         // Compute translate vector
         double translateX = leftDestX - rectFromNodes.getX();
@@ -64,4 +69,19 @@ public class GraphicTools
         translateElements(translateX, translateY, nodes);
     }
 
+    /**
+     * Compute graphics properties of GXElement
+     * @param elementRenderer used element renderer
+     * @param egx collection of entities
+     */
+    public static void applyRendererProperties(ElementRenderer elementRenderer, EGX egx)
+    {
+        for (EGXGroup gxEntities : egx.values())
+        {
+            for (GXEntity gxEntity : gxEntities)
+            {
+                ((GXElement) gxEntity).computeSize(elementRenderer);
+            }
+        }
+    }
 }

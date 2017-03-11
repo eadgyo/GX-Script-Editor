@@ -8,6 +8,7 @@ import org.eadge.gxscript.data.compile.script.func.Func;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.gxscript.data.entity.model.def.DefaultGXEntity;
 import org.eadge.gxscript.tools.check.GXLiaisonChecker;
+import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
 
 import javax.swing.tree.MutableTreeNode;
@@ -524,5 +525,11 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     public void replaceEntities(Map<GXEntity, GXEntity> replacementMap)
     {
         this.entity.replaceEntities(replacementMap);
+    }
+
+    public void computeSize(ElementRenderer elementRenderer)
+    {
+        setWidth(elementRenderer.computeGXElementWidth(this));
+        setHeight(elementRenderer.computeGXElementHeight(this));
     }
 }

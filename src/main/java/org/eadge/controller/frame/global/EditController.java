@@ -4,7 +4,7 @@ import org.eadge.ConstantsView;
 import org.eadge.model.Models;
 import org.eadge.model.script.GXElement;
 import org.eadge.utils.Copy;
-import org.eadge.utils.GraphicTools;
+import org.eadge.utils.GTools;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -135,7 +135,7 @@ public class EditController
             double leftY = m.sceneModel.computeYInScene(0);
 
             // Move rect containing all elements to left of screen
-            GraphicTools.moveElementsTo(leftX, leftY, copiedElements);
+            GTools.moveElementsTo(leftX, leftY, copiedElements);
 
             // Get selected node
             MutableTreeNode parent = m.getFirstSelectedElementOrRoot();

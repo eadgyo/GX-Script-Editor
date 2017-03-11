@@ -18,9 +18,9 @@ public class MyFrame extends JFrame
     public JFileChooser chooseFile = new JFileChooser();
 
     // Renderer
-    public EntryRenderer entryRenderer = new EntryRenderer(Color.BLACK, 20, 30);
-    public ElementRenderer elementRenderer = new ElementRenderer(10, 30, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
-    public AddListRenderer addListRenderer = new AddListRenderer(100, Color.white, new Color(255, 100, 100), elementRenderer);
+    public EntryRenderer entryRenderer = new EntryRenderer(Color.BLACK, 6, 6);
+    public ElementRenderer elementRenderer = new ElementRenderer(20, 10, new Color(250, 255, 251), Color.BLACK, Color.BLACK, entryRenderer);
+    public AddListRenderer addListRenderer = new AddListRenderer(Color.white, new Color(255, 100, 100), elementRenderer);
 
     public ElementRenderer selectedElementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
     public ElementRenderer invalidMovingElementRenderer = new ElementRenderer(20, 5, Color.RED, Color.BLACK, Color.BLACK, entryRenderer);
@@ -54,7 +54,6 @@ public class MyFrame extends JFrame
     public MyFrame()
     {
         super(ConstantsView.MAIN_WINDOW_TITLE);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         createMenu();

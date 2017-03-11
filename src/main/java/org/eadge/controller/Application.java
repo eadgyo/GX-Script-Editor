@@ -18,6 +18,7 @@ import org.eadge.renderer.ElementFinder;
 import org.eadge.renderer.EntryFinder;
 import org.eadge.utils.AdvIOM;
 import org.eadge.utils.Converter;
+import org.eadge.utils.GTools;
 import org.eadge.view.MyFrame;
 
 import java.util.ArrayList;
@@ -69,8 +70,10 @@ public class Application
             // Load the corresponding EGX
             EGX egx = instance.loadEGX("EGX/" + egxName);
             egx = Converter.convertIfNeededToGXElements(egx);
+            GTools.applyRendererProperties(myFrame.elementRenderer, egx);
             m.addListModel.addGroups(egx);
         }
+        myFrame.addView.addListPanel.updateLength();
     }
 
     private void createView()
