@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.controller.Actions;
 import org.eadge.controller.frame.global.EditController;
 import org.eadge.controller.frame.global.FileController;
 import org.eadge.controller.frame.global.ScriptController;
@@ -15,10 +16,10 @@ public class MainController
     private EditController editController;
     private ScriptController scriptController;
 
-    public MainController(MyFrame myFrame, Models m)
+    public MainController(MyFrame myFrame, Models m, Actions a)
     {
-        fileController = new FileController(myFrame, m);
-        editController = new EditController(myFrame, m);
-        scriptController = new ScriptController(myFrame, m);
+        fileController = new FileController(myFrame, m, a);
+        editController = new EditController(myFrame, m, a);
+        scriptController = new ScriptController(myFrame, m, a);
     }
 }

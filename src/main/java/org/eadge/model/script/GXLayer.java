@@ -19,10 +19,15 @@ import java.util.Vector;
  */
 public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 {
-    private Rect2D rect2D;
+    private Rect2D rect2D = new Rect2D();
     private Color backgroundColor;
     private boolean isDisplayed = true;
     private boolean isRectDisplayed = true;
+    private String name;
+
+    public GXLayer(String name) {
+        this.name = name;
+    }
 
     public Color getBackgroundColor()
     {
@@ -224,5 +229,11 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
     public void translate(double x, double y)
     {
         rect2D.translate(x, y);
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

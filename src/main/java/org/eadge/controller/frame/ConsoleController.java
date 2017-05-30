@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.controller.Actions;
 import org.eadge.view.MyFrame;
 
 /**
@@ -7,7 +8,7 @@ import org.eadge.view.MyFrame;
  */
 public class ConsoleController
 {
-    public ConsoleController(MyFrame myFrame)
+    public ConsoleController(MyFrame myFrame, Actions a)
     {
 
     }

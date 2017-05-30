@@ -1,10 +1,14 @@
 package org.eadge.view;
 
+import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.view.layer.LayerPropertiesDialog;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 
 /**
@@ -17,6 +21,7 @@ public class ElementsView extends JPanel
     public JScrollPane scrollPane;
     public JTree elementsTree = new JTree();
 
+    public JButton addElementButton = new JButton();
     public JButton addLayerButton = new JButton();
     public JButton removeLayerButton = new JButton();
     public JButton hideLayerButton = new JButton();
@@ -33,23 +38,36 @@ public class ElementsView extends JPanel
         layerPropertiesDialog.setVisible(false);
 
         // Top parts
+        elementsTree.setRootVisible(true);
+        elementsTree.setCellRenderer(new LayerCellRenderer());
         scrollPane = new JScrollPane(elementsTree);
         add(scrollPane, BorderLayout.CENTER);
 
         // Bottom Part
         JPanel buttonsPane = new JPanel();
-        buttonsPane.setLayout(new BoxLayout(buttonsPane, BoxLayout.LINE_AXIS));
-        buttonsPane.add(addLayerButton);
-        buttonsPane.add(removeLayerButton);
-        buttonsPane.add(hideLayerButton);
-        buttonsPane.add(propertyLayerButton);
+        buttonsPane.setLayout(new BoxLayout(buttonsPane, BoxLayout.PAGE_AXIS));
+
+        JPanel buttonsPaneTop = new JPanel();
+        buttonsPaneTop.setLayout(new BoxLayout(buttonsPaneTop, BoxLayout.LINE_AXIS));
+        buttonsPaneTop.add(addElementButton);
+        buttonsPaneTop.add(addLayerButton);
+
+        JPanel buttonsPaneBot = new JPanel();
+        buttonsPaneBot.setLayout(new BoxLayout(buttonsPaneBot, BoxLayout.LINE_AXIS));
+        buttonsPaneBot.add(hideLayerButton);
+        buttonsPaneBot.add(propertyLayerButton);
+        buttonsPaneBot.add(removeLayerButton);
+
+        buttonsPane.add(buttonsPaneTop);
+        buttonsPane.add(buttonsPaneBot);
+
         add(buttonsPane, BorderLayout.PAGE_END);
     }
 
     public GXLayer getSelectedLayer()
     {
         // Get selected element
-        DefaultMutableTreeNode lastSelectedPathComponent = getSelectedNodeOrRoot();
+        MutableTreeNode lastSelectedPathComponent = getSelectedNodeOrRoot();
 
         // If the selected element is MyGroupsOfElements GXLayer
         if (lastSelectedPathComponent instanceof GXLayer)
@@ -62,7 +80,7 @@ public class ElementsView extends JPanel
         }
     }
 
-    public DefaultMutableTreeNode getSelectedNode()
+    public MutableTreeNode getSelectedNode()
     {
         // Get selected element
         Object lastSelectedPathComponent = elementsTree.getLastSelectedPathComponent();
@@ -76,10 +94,10 @@ public class ElementsView extends JPanel
         }
 
         // Return the selected element
-        return (DefaultMutableTreeNode) lastSelectedPathComponent;
+        return (MutableTreeNode) lastSelectedPathComponent;
     }
 
-    public DefaultMutableTreeNode getSelectedNodeOrRoot()
+    public MutableTreeNode getSelectedNodeOrRoot()
     {
         // Get selected element
         Object lastSelectedPathComponent = elementsTree.getLastSelectedPathComponent();
@@ -92,6 +110,63 @@ public class ElementsView extends JPanel
         }
 
         // Return the selected element
-        return (DefaultMutableTreeNode) lastSelectedPathComponent;
+        return (MutableTreeNode) lastSelectedPathComponent;
     }
+
+    private class LayerCellRenderer implements TreeCellRenderer
+    {
+        JLabel firstNameLabel = new JLabel(" ");
+
+        JPanel renderer = new JPanel();
+
+        DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
+
+        Color backgroundSelectionColor;
+
+        Color backgroundNonSelectionColor;
+
+        public LayerCellRenderer() {
+            firstNameLabel.setForeground(Color.BLUE);
+            renderer.add(firstNameLabel);
+            renderer.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            backgroundSelectionColor = defaultRenderer.getBackgroundSelectionColor();
+            backgroundNonSelectionColor = defaultRenderer.getBackgroundNonSelectionColor();
+        }
+
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected,
+                                                      boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            Component returnValue = null;
+            if ((value != null) && (value instanceof MutableTreeNode)) {
+                MutableTreeNode userObject = ((MutableTreeNode) value);
+                if (userObject instanceof GXLayer)
+                {
+                    returnValue = defaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded,
+                                                                               true, row, hasFocus);
+                }
+                else if (userObject instanceof GXElement)
+                {
+                    GXElement element = (GXElement) userObject;
+                    firstNameLabel.setText(element.toString());
+                    if (selected)
+                    {
+                        renderer.setBackground(backgroundSelectionColor);
+                    }
+                    else
+                    {
+                        renderer.setBackground(backgroundNonSelectionColor);
+                    }
+                    renderer.setEnabled(tree.isEnabled());
+                    returnValue = renderer;
+                }
+            }
+            if (returnValue == null) {
+                returnValue = defaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded,
+                                                                           leaf, row, hasFocus);
+            }
+            return returnValue;
+        }
+    }
+
 }
+
+

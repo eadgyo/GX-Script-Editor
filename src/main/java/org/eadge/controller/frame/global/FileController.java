@@ -1,12 +1,13 @@
 package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
+import org.eadge.controller.Actions;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
-import org.eadge.utils.AdvIOM;
 import org.eadge.model.Models;
 import org.eadge.model.script.Script;
+import org.eadge.utils.AdvIOM;
 import org.eadge.utils.Converter;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
@@ -23,41 +24,36 @@ public class FileController
     private MyFrame frame;
 
     private Models m;
+    private Actions a;
 
-    private NewFileAction newFileAction;
-    private OpenAction    openAction;
-    private SaveAction    saveAction;
-    private SaveAsAction  saveAsAction;
-    private ExportAction  exportAction;
-    private ImportScriptAction importScriptAction;
-    private ImportElementsAction importElementsAction;
 
-    public FileController(MyFrame frame, Models m)
+    public FileController(MyFrame frame, Models m, Actions actions)
     {
         this.frame = frame;
         this.m = m;
+        this.a = actions;
 
-        NewFileAction newFileAction = new NewFileAction();
-        OpenAction    openAction    = new OpenAction();
-        SaveAction    saveAction    = new SaveAction();
-        SaveAsAction  saveAsAction  = new SaveAsAction();
-        ExportAction  exportAction  = new ExportAction();
-        ImportScriptAction importScriptAction = new ImportScriptAction();
-        ImportElementsAction importElementsAction = new ImportElementsAction();
+        a.newFileAction = new NewFileAction();
+        a.openAction    = new OpenAction();
+        a.saveAction    = new SaveAction();
+        a.saveAsAction  = new SaveAsAction();
+        a.exportAction  = new ExportAction();
+        a.importScriptAction = new ImportScriptAction();
+        a.importElementsAction = new ImportElementsAction();
 
         MenuView menuView = frame.menuView;
-        menuView.newFileItem.setAction(newFileAction);
-        menuView.openItem.setAction(openAction);
-        menuView.saveItem.setAction(saveAction);
-        menuView.saveAsItem.setAction(saveAsAction);
-        menuView.exportItem.setAction(exportAction);
-        menuView.importScriptItem.setAction(importScriptAction);
-        menuView.importElementsItem.setAction(importElementsAction);
+        menuView.newFileItem.setAction(a.newFileAction);
+        menuView.openItem.setAction(a.openAction);
+        menuView.saveItem.setAction(a.saveAction);
+        menuView.saveAsItem.setAction(a.saveAsAction);
+        menuView.exportItem.setAction(a.exportAction);
+        menuView.importScriptItem.setAction(a.importScriptAction);
+        menuView.importElementsItem.setAction(a.importElementsAction);
     }
 
 
 
-    private class NewFileAction extends AbstractAction
+    public class NewFileAction extends AbstractAction
     {
         public NewFileAction()
         {
@@ -81,7 +77,7 @@ public class FileController
         }
     }
 
-    private class OpenAction extends AbstractAction
+    public class OpenAction extends AbstractAction
     {
         public OpenAction()
         {
@@ -110,7 +106,7 @@ public class FileController
         }
     }
 
-    private class SaveAction extends AbstractAction
+    public class SaveAction extends AbstractAction
     {
         public SaveAction()
         {
@@ -140,7 +136,7 @@ public class FileController
     }
 
 
-    private class SaveAsAction extends AbstractAction
+    public class SaveAsAction extends AbstractAction
     {
         public SaveAsAction()
         {
@@ -161,7 +157,7 @@ public class FileController
         }
     }
 
-    private class ExportAction extends AbstractAction
+    public class ExportAction extends AbstractAction
     {
         public ExportAction()
         {
@@ -190,7 +186,7 @@ public class FileController
         }
     }
 
-    private class ImportScriptAction extends AbstractAction
+    public class ImportScriptAction extends AbstractAction
     {
         public ImportScriptAction()
         {
@@ -233,7 +229,7 @@ public class FileController
         }
     }
 
-    private class ImportElementsAction extends AbstractAction
+    public class ImportElementsAction extends AbstractAction
     {
         public ImportElementsAction()
         {

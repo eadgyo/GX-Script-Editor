@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.controller.Actions;
 import org.eadge.model.frame.AddListModel;
 import org.eadge.view.AddView;
 import org.eadge.view.MyFrame;
@@ -22,11 +23,13 @@ public class AddController
     private MyFrame myFrame;
     private AddView addView;
     private AddListModel addListModel;
+    private Actions a;
 
-    public AddController(MyFrame myFrame, AddListModel addListModel)
+    public AddController(MyFrame myFrame, AddListModel addListModel, Actions actions)
     {
         this.myFrame = myFrame;
         this.addView = myFrame.addView;
+        this.a = actions;
 
         // Set adding elements list model
         this.addListModel = addListModel;
@@ -39,7 +42,8 @@ public class AddController
 
         // Add listener on group change
         this.addView.groupList.setModel(addListModel.getComboBoxModel());
-        this.addView.groupList.addActionListener(new ActionGroupChange());
+        a.actionGroupChange = new ActionGroupChange();
+        this.addView.groupList.addActionListener(a.actionGroupChange );
     }
 
     /**
@@ -63,8 +67,6 @@ public class AddController
         @Override
         public void mousePressed(MouseEvent mouseEvent)
         {
-            System.out.println("Pressed");
-
             // Get the pressed button index
             int pressedButton = mouseEvent.getButton();
 
@@ -85,8 +87,6 @@ public class AddController
 
                 // Set addView as the source object
                 transferHandler.exportAsDrag(addView, mouseEvent, TransferHandler.COPY);
-
-
             }
         }
 
@@ -109,7 +109,7 @@ public class AddController
         }
     }
 
-    private class ActionGroupChange implements ActionListener
+    public class ActionGroupChange implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent actionEvent)
@@ -128,11 +128,12 @@ public class AddController
         }
     }
 
-    private class AddObserver implements Observer
+    public class AddObserver implements Observer
     {
         @Override
         public void update(Observable observable, Object o)
         {
+            a.addElementAction.setEnabled(addListModel.isSelectedElement());
             myFrame.addView.repaint();
         }
     }

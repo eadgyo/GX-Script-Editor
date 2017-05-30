@@ -26,6 +26,7 @@ import java.util.Map;
 public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTreeNode
 {
     private DefaultGXEntity entity;
+    private MutableTreeNode parent = null;
 
     public GXElement(DefaultGXEntity entity)
     {
@@ -38,6 +39,13 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         GXElement clone = (GXElement) super.clone();
         // Replacement will be done after copy
         clone.entity = entity;
+        return clone;
+    }
+
+    public GXElement deepClone()
+    {
+        GXElement clone = (GXElement) super.clone();
+        clone.entity = (DefaultGXEntity) entity.clone();
         return clone;
     }
 
@@ -435,12 +443,13 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public TreeNode getParent()
     {
-        return null;
+        return parent;
     }
 
     @Override
     public int getIndex(TreeNode treeNode)
     {
+        System.out.println("Index");
         return 0;
     }
 
@@ -453,7 +462,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public boolean isLeaf()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -465,19 +474,19 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public void insert(MutableTreeNode mutableTreeNode, int i)
     {
-
+        System.out.println("Insert");
     }
 
     @Override
     public void remove(int i)
     {
-
+        System.out.println("Remove");
     }
 
     @Override
     public void remove(MutableTreeNode mutableTreeNode)
     {
-
+        System.out.println("Remove");
     }
 
     @Override
@@ -489,13 +498,13 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public void removeFromParent()
     {
-
+        parent.remove(this);
     }
 
     @Override
     public void setParent(MutableTreeNode mutableTreeNode)
     {
-
+        parent = mutableTreeNode;
     }
 
     /**
@@ -531,5 +540,11 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     {
         setWidth(elementRenderer.computeGXElementWidth(this));
         setHeight(elementRenderer.computeGXElementHeight(this));
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return super.equals(o) && ((GXElement) o).getEntity() == this.entity;
     }
 }

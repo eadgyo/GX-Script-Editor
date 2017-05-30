@@ -1,6 +1,7 @@
 package org.eadge.model.script;
 
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
@@ -22,6 +23,16 @@ public class GXLayerModel extends DefaultTreeModel
 
     public void clear()
     {
-        super.setRoot(new GXLayer());
+        super.setRoot(new GXLayer("Root"));
+    }
+
+    @Override
+    public void insertNodeInto(MutableTreeNode mutableTreeNode, MutableTreeNode parentNode, int i)
+    {
+        super.insertNodeInto(mutableTreeNode, parentNode, i);
+
+        if (  parentNode == getRoot()  ) {
+            nodeStructureChanged((TreeNode) getRoot());
+        }
     }
 }

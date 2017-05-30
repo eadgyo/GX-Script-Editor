@@ -37,6 +37,7 @@ public class Application
 
     // Model
     private Models m = new Models();
+    private Actions a = new Actions();
 
     // Controller
     private MainController mainController;
@@ -84,28 +85,29 @@ public class Application
     private void createModels()
     {
         m.rawGXScript = new RawGXScript();
-        m.gxLayerModel = new GXLayerModel(new GXLayer());
-        m.script = new Script(m.rawGXScript, m.gxLayerModel);
+        m.gxLayerModel = new GXLayerModel(new GXLayer("Root"));
+        m.elementFinder = new ElementFinder();
+        m.script = new Script(m.rawGXScript, m.gxLayerModel, m.elementFinder);
         m.addListModel = new AddListModel();
         m.connectionModel = new ConnectionModel();
         m.selectionModel = new SelectionModel(m.connectionModel);
         m.fileModel = new FileModel();
         m.copyModel = new CopyModel();
         m.entryFinder = new EntryFinder(myFrame.elementRenderer);
-        m.elementFinder = new ElementFinder();
         m.sceneModel = new SceneModel(m.elementFinder);
         m.testsModel = new TestsModel();
     }
 
     private void createControllers()
     {
-        addController = new AddController(myFrame, m.addListModel);
-        consoleController = new ConsoleController(myFrame);
-        elementsController = new ElementsController(myFrame, m.script, m.selectionModel);
-        testsController = new TestsController(myFrame, m);
-        sceneController = new SceneController(m.script, myFrame, m.selectionModel, m.sceneModel, m.elementFinder, m.entryFinder);
+        addController = new AddController(myFrame, m.addListModel, a);
+        consoleController = new ConsoleController(myFrame, a);
+        elementsController = new ElementsController(myFrame, m.script, m.selectionModel, a);
+        testsController = new TestsController(myFrame, m, a);
+        sceneController = new SceneController(m.script, myFrame, m.selectionModel, m.sceneModel, m.elementFinder, m
+                .entryFinder, a);
 
-        mainController = new MainController(myFrame, m);
+        mainController = new MainController(myFrame, m, a);
     }
 
     private void createAction()
@@ -118,6 +120,9 @@ public class Application
         m.script.addObserver(new ScriptChangeAction());
     }
 
+    /**
+     * Handle script change and call observer to update frame
+     */
     private class ScriptChangeAction implements Observer
     {
         @Override
@@ -125,9 +130,13 @@ public class Application
         {
             // Redraw scene
             myFrame.sceneView.repaint();
+            myFrame.elementsView.repaint();
         }
     }
 
+    /**
+     * Handle selection change and call observer to update frame
+     */
     private class SelectionChangeAction implements Observer
     {
         @Override
@@ -135,6 +144,7 @@ public class Application
         {
             // Redraw scene
             myFrame.sceneView.repaint();
+            myFrame.elementsView.repaint();
         }
     }
 }

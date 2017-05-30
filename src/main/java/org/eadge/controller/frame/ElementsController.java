@@ -1,6 +1,7 @@
 package org.eadge.controller.frame;
 
 import org.eadge.ConstantsView;
+import org.eadge.controller.Actions;
 import org.eadge.model.global.MyTransferableElement;
 import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXElement;
@@ -12,7 +13,6 @@ import org.eadge.view.MyFrame;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.datatransfer.Transferable;
@@ -32,36 +32,36 @@ import java.util.HashSet;
  */
 public class ElementsController
 {
-    private PropertyLayerAction propertyLayerAction;
-    private HideLayerAction hideLayerAction;
-    private RemoveNodeAction removeNodeAction;
-    private AddLayerAction addLayerAction;
+
     private ElementsView elementsView;
 
     private SelectionModel selectionModel;
-    private Script script;
-    private MyFrame myFrame;
+    private Script         script;
+    private MyFrame        myFrame;
+    private Actions        a;
 
 
-    public ElementsController(MyFrame myFrame, Script script, SelectionModel selectionModel)
+    public ElementsController(MyFrame myFrame, Script script, SelectionModel selectionModel, Actions a)
     {
         this.myFrame = myFrame;
         this.elementsView = myFrame.elementsView;
         this.selectionModel = selectionModel;
+        this.script = script;
+        this.a = a;
 
         // Set the right model
         elementsView.elementsTree.setModel(script.getLayeredScript());
 
         // Create action
-        addLayerAction      = new AddLayerAction();
-        removeNodeAction    = new RemoveNodeAction();
-        hideLayerAction     = new HideLayerAction();
-        propertyLayerAction = new PropertyLayerAction();
+        a.addLayerAction      = new AddLayerAction();
+        a.removeNodeAction    = new RemoveNodeAction();
+        a.hideLayerAction     = new HideLayerAction();
+        a.propertyLayerAction = new PropertyLayerAction();
 
-        elementsView.addLayerButton.setAction(addLayerAction);
-        elementsView.removeLayerButton.setAction(removeNodeAction);
-        elementsView.hideLayerButton.setAction(hideLayerAction);
-        elementsView.propertyLayerButton.setAction(propertyLayerAction);
+        elementsView.addLayerButton.setAction(a.addLayerAction);
+        elementsView.removeLayerButton.setAction(a.removeNodeAction);
+        elementsView.hideLayerButton.setAction(a.hideLayerAction);
+        elementsView.propertyLayerButton.setAction(a.propertyLayerAction);
 
         // Create tree selection listener
         SelectedElementAction selectedElementAction = new SelectedElementAction();
@@ -85,7 +85,7 @@ public class ElementsController
         elementsView.layerPropertiesDialog.cancelButton.setAction(cancelPropertyAction);
     }
 
-    private class AddLayerAction extends AbstractAction
+    public class AddLayerAction extends AbstractAction
     {
         public AddLayerAction()
         {
@@ -97,13 +97,13 @@ public class ElementsController
         public void actionPerformed(ActionEvent actionEvent)
         {
             GXLayer selectedLayer = elementsView.getSelectedLayer();
-            script.addLayer(new GXLayer(), selectedLayer);
-
+            script.addLayer(new GXLayer("Layer"), selectedLayer);
+            script.callObservers();
         }
     }
 
 
-    private class RemoveNodeAction extends AbstractAction
+    public class RemoveNodeAction extends AbstractAction
     {
         public RemoveNodeAction()
         {
@@ -114,13 +114,13 @@ public class ElementsController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            DefaultMutableTreeNode selectedNode = elementsView.getSelectedNode();
+            MutableTreeNode selectedNode = elementsView.getSelectedNode();
             script.removeNode(selectedNode);
         }
     }
 
 
-    private class HideLayerAction extends AbstractAction
+    public class HideLayerAction extends AbstractAction
     {
         public HideLayerAction()
         {
@@ -138,7 +138,7 @@ public class ElementsController
     }
 
 
-    private class PropertyLayerAction extends AbstractAction
+    public class PropertyLayerAction extends AbstractAction
     {
         public PropertyLayerAction()
         {
@@ -156,23 +156,23 @@ public class ElementsController
         }
     }
 
-    private class SelectedElementAction implements TreeSelectionListener
+    public class SelectedElementAction implements TreeSelectionListener
     {
         @Override
         public void valueChanged(TreeSelectionEvent treeSelectionEvent)
         {
-            DefaultMutableTreeNode selectedNode = elementsView.getSelectedNode();
+            MutableTreeNode selectedNode = elementsView.getSelectedNode();
 
             boolean isSelected = (selectedNode != null);
-            removeNodeAction.setEnabled(true);
+            a.removeNodeAction.setEnabled(isSelected);
 
             boolean isLayerSelected = isSelected && (selectedNode instanceof GXLayer);
-            propertyLayerAction.setEnabled(isLayerSelected);
-            hideLayerAction.setEnabled(isLayerSelected);
+            a.propertyLayerAction.setEnabled(isLayerSelected);
+            a.hideLayerAction.setEnabled(isLayerSelected);
         }
     }
 
-    private class OkPropertyAction extends AbstractAction
+    public class OkPropertyAction extends AbstractAction
     {
         public OkPropertyAction()
         {
@@ -187,7 +187,7 @@ public class ElementsController
         }
     }
 
-    private class CancelPropertyAction extends AbstractAction
+    public class CancelPropertyAction extends AbstractAction
     {
         public CancelPropertyAction()
         {
@@ -203,7 +203,7 @@ public class ElementsController
     }
 
 
-    private class ElementTransferHandler extends TransferHandler
+    public class ElementTransferHandler extends TransferHandler
     {
         @Override
         public boolean importData(TransferSupport transferSupport)
@@ -271,6 +271,7 @@ public class ElementsController
         {
             // Update selection
             selectionModel.setSelectedElements(getSelectedNodes());
+            selectionModel.callObservers();
         }
 
         public Collection<MutableTreeNode> getSelectedNodes()
@@ -305,7 +306,7 @@ public class ElementsController
         public void mouseReleased(MouseEvent mouseEvent)
         {
             if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
-            {
+            {/*
                 // Get the inserted GXLayer
                 GXLayer insertedLayer = elementsView.getSelectedLayer();
 
@@ -319,7 +320,7 @@ public class ElementsController
                         selectedElement.removeFromParent();
                         insertedLayer.add(selectedElement);
                     }
-                }
+                }*/
             }
         }
 

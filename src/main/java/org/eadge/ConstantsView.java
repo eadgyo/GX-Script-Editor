@@ -17,10 +17,10 @@ public interface ConstantsView
     String NAME_LOAD_FUNCTION = "Charger fonction";
     String DESC_LOAD_FUNCTION = "Charge une fonction pour être ajoutée à notre script";
 
-    String NAME_ADD_ELEMENT = "Ajouter";
+    String NAME_ADD_ELEMENT = "+ élement";
     String DESC_ADD_ELEMENT = "Ajout d'un élément au script";
 
-    String NAME_DEL_ELEMENT = "Supprimer";
+    String NAME_DEL_ELEMENT = "- élément";
     String DESC_DEL_ELEMENT = "Supprimer les éléments sélectionnés";
 
     String NAME_COPY = "Copie";
@@ -38,11 +38,11 @@ public interface ConstantsView
     String NAME_REDO = "Annuler revenir en arrière";
     String DESC_REDO = "Annule l'effet d'une annulation de l'action passée";
 
-    String NAME_ADD_LAYER = "Ajouter";
+    String NAME_ADD_LAYER = "+ couche";
     String DESC_ADD_LAYER = "Ajout d'une nouvelle couche";
 
     String NAME_REMOVE_NODE = "Supprimer";
-    String DESC_REMOVE_NODE = "Suppression des elements selectionnées";
+    String DESC_REMOVE_NODE = "Suppression des elements selectionnés";
 
     String NAME_HIDE_LAYER = "Cacher";
     String DESC_HIDE_LAYER = "Affichage de la couche";

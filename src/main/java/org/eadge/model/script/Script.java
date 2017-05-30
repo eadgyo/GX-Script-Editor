@@ -33,10 +33,11 @@ public class Script extends Observable
      */
     private ElementFinder elementFinder;
 
-    public Script(RawGXScript rawGXScript, GXLayerModel layeredScript)
+    public Script(RawGXScript rawGXScript, GXLayerModel layeredScript, ElementFinder elementFinder)
     {
         this.rawGXScript = rawGXScript;
         this.layeredScript = layeredScript;
+        this.elementFinder = elementFinder;
     }
 
     /**
@@ -48,7 +49,7 @@ public class Script extends Observable
     public void addEntity(GXElement element, MutableTreeNode parent)
     {
         rawGXScript.addEntity(element);
-        parent.insert(element, 0);
+        layeredScript.insertNodeInto(element, parent,0);
         elementFinder.addElement(element);
 
         callObservers();
@@ -62,7 +63,7 @@ public class Script extends Observable
      */
     public void addLayer(GXLayer gxLayer, MutableTreeNode parent)
     {
-        parent.insert(gxLayer, 0);
+        layeredScript.insertNodeInto(gxLayer, parent, 0);
         elementFinder.addElement(gxLayer);
 
         callObservers();
@@ -76,7 +77,7 @@ public class Script extends Observable
     public void removeEntity(GXElement element)
     {
         rawGXScript.removeEntity(element);
-        element.removeFromParent();
+        layeredScript.removeNodeFromParent(element);
 
         callObservers();
     }
@@ -88,12 +89,12 @@ public class Script extends Observable
      */
     public void removeNode(MutableTreeNode removed)
     {
+        elementFinder.removeElement(removed);
+
         if (removed instanceof GXLayer)
             removeLayer((GXLayer) removed);
         else
             removeEntity((GXElement) removed);
-
-        elementFinder.removeElement(removed);
     }
 
     /**
@@ -103,14 +104,16 @@ public class Script extends Observable
      */
     public void removeLayer(GXLayer gxLayer)
     {
+        if (gxLayer == layeredScript.getRoot())
+            return;
+
         int numberOfChildren = gxLayer.getChildCount();
         for (int childIndex = 0; childIndex < numberOfChildren; childIndex++)
         {
             MutableTreeNode childAt = (MutableTreeNode) gxLayer.getChildAt(childIndex);
             removeNode(childAt);
         }
-
-        gxLayer.removeFromParent();
+        layeredScript.removeNodeFromParent(gxLayer);
 
         callObservers();
     }
@@ -122,7 +125,7 @@ public class Script extends Observable
      */
     public void detachLayer(GXLayer gxLayer)
     {
-        gxLayer.removeFromParent();
+        layeredScript.removeNodeFromParent(gxLayer);
 
         callObservers();
     }

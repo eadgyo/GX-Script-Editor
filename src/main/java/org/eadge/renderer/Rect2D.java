@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * Created by eadgyo on 19/02/17.
  */
-public class Rect2D extends Rectangle2D.Double implements Rect2DInter
+public class Rect2D extends Rectangle2D.Double implements Rect2DInter, Cloneable
 {
     public Rect2D()
     {

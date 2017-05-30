@@ -1,6 +1,7 @@
 package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
+import org.eadge.controller.Actions;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.gxscript.tools.run.GXRunner;
@@ -19,21 +20,21 @@ public class ScriptController
     private MyFrame myFrame;
     private Models m;
 
-    public ScriptController(MyFrame myFrame, Models m)
+    public ScriptController(MyFrame myFrame, Models m, Actions a)
     {
         this.myFrame = myFrame;
         this.m = m;
 
         MenuView menuView = myFrame.menuView;
 
-        ValidateScriptAction validateScriptAction = new ValidateScriptAction();
-        RunScriptAction runScriptAction = new RunScriptAction();
+        a.validateScriptAction = new ValidateScriptAction();
+        a.runScriptAction = new RunScriptAction();
 
-        menuView.validateScriptItem.setAction(validateScriptAction);
-        menuView.runScriptItem.setAction(runScriptAction);
+        menuView.validateScriptItem.setAction(a.validateScriptAction);
+        menuView.runScriptItem.setAction(a.runScriptAction);
     }
 
-    private class ValidateScriptAction extends AbstractAction
+    public class ValidateScriptAction extends AbstractAction
     {
         public ValidateScriptAction()
         {
@@ -49,7 +50,7 @@ public class ScriptController
     }
 
 
-    private class RunScriptAction extends AbstractAction
+    public class RunScriptAction extends AbstractAction
     {
         public RunScriptAction()
         {

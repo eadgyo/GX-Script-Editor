@@ -33,7 +33,7 @@ public class MenuView extends JMenuBar
     public JMenuItem validateScriptItem = new JMenuItem();
     public JMenuItem runScriptItem = new JMenuItem();
 
-    private void MenuView()
+    public MenuView()
     {
 
         // --> File menu

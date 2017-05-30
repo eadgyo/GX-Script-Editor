@@ -43,14 +43,17 @@ public class ConnectionRenderer
             // Get the corresponding on input element
             GXElement onInputElement  = (GXElement) gxElement.getInputEntity(inputIndex);
 
-            int startX = (int) (elementRenderer.getRelativeInputX(gxElement) + gxElement.getX());
-            int startY = (int) (elementRenderer.getRelativeInputY(inputIndex, gxElement) + gxElement.getY());
+            if (onInputElement != null)
+            {
+                int startX = (int) (elementRenderer.getRelativeInputX(gxElement) + gxElement.getX());
+                int startY = (int) (elementRenderer.getRelativeInputY(inputIndex, gxElement) + gxElement.getY());
 
-            int outputIndex = gxElement.getIndexOfOutputFromEntityOnInput(inputIndex);
-            int endX = (int) (elementRenderer.getRelativeOutputX(onInputElement)+ onInputElement.getX());
-            int endY = (int) (elementRenderer.getRelativeOutputY(outputIndex, onInputElement) + onInputElement.getY());
-
-            g.drawLine(startX, startY, endX, endY);
+                int outputIndex = gxElement.getIndexOfOutputFromEntityOnInput(inputIndex);
+                int endX        = (int) (elementRenderer.getRelativeOutputX(onInputElement) + onInputElement.getX());
+                int endY = (int) (elementRenderer.getRelativeOutputY(outputIndex,
+                                                                     onInputElement) + onInputElement.getY());
+                g.drawLine(startX, startY, endX, endY);
+            }
         }
     }
 }

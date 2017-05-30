@@ -194,4 +194,8 @@ public class AddListModel extends Observable implements ListModel
         {
         }
     };
+
+    public boolean isSelectedElement() {
+        return getSelectedElementIndex() != -1;
+    }
 }

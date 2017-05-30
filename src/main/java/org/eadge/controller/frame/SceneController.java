@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.controller.Actions;
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.global.ConnectionModel;
 import org.eadge.model.global.MyTransferableElement;
@@ -46,7 +47,7 @@ public class SceneController
                            SelectionModel selectionModel,
                            SceneModel sceneModel,
                            ElementFinder elementFinder,
-                           EntryFinder entryFinder)
+                           EntryFinder entryFinder, Actions a)
     {
         this.script = script;
         this.myFrame = myFrame;

@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.controller.Actions;
 import org.eadge.model.Models;
 import org.eadge.view.MyFrame;
 import org.eadge.view.TestsView;
@@ -9,7 +10,7 @@ import org.eadge.view.TestsView;
  */
 public class TestsController
 {
-    public TestsController(MyFrame myFrame, Models m)
+    public TestsController(MyFrame myFrame, Models m, Actions a)
     {
         TestsView testsView = myFrame.testsView;
         //testsView.messageConsole.redirectOut(Color.black, m.testsModel.getTestStream());

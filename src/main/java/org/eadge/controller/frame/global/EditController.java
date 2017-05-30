@@ -1,10 +1,12 @@
 package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
+import org.eadge.controller.Actions;
 import org.eadge.model.Models;
 import org.eadge.model.script.GXElement;
 import org.eadge.utils.Copy;
 import org.eadge.utils.GTools;
+import org.eadge.view.ElementsView;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -22,30 +24,33 @@ public class EditController
 {
     private Models m;
 
-    public EditController(MyFrame frame, Models m)
+    public EditController(MyFrame frame, Models m, Actions a)
     {
         this.m = m;
 
         MenuView menuView = frame.menuView;
+        ElementsView elementsView = frame.elementsView;
 
-        AddElementAction addElementAction = new AddElementAction();
-        RemoveElementAction removeElementAction = new RemoveElementAction();
-        CopyAction copyAction = new CopyAction();
-        CutAction cutAction = new CutAction();
-        PasteAction pasteAction = new PasteAction();
-        UndoAction undoAction = new UndoAction();
-        RedoAction redoAction = new RedoAction();
+        a.addElementAction = new AddElementAction();
+        a.removeElementAction = new RemoveElementAction();
+        a.copyAction = new CopyAction();
+        a.cutAction = new CutAction();
+        a.pasteAction = new PasteAction();
+        a.undoAction = new UndoAction();
+        a.redoAction = new RedoAction();
 
-        menuView.addElementItem.setAction(addElementAction);
-        menuView.removeElementItem.setAction(removeElementAction);
-        menuView.copyItem.setAction(copyAction);
-        menuView.cutItem.setAction(cutAction);
-        menuView.pasteItem.setAction(pasteAction);
-        menuView.undoItem.setAction(undoAction);
-        menuView.redoItem.setAction(redoAction);
+        menuView.addElementItem.setAction(a.addElementAction);
+        menuView.removeElementItem.setAction(a.removeElementAction);
+        menuView.copyItem.setAction(a.copyAction);
+        menuView.cutItem.setAction(a.cutAction);
+        menuView.pasteItem.setAction(a.pasteAction);
+        menuView.undoItem.setAction(a.undoAction);
+        menuView.redoItem.setAction(a.redoAction);
+
+        elementsView.addElementButton.setAction(a.addElementAction);
     }
 
-    private class AddElementAction extends AbstractAction
+    public class AddElementAction extends AbstractAction
     {
         public AddElementAction()
         {
@@ -56,13 +61,14 @@ public class EditController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            GXElement selectedElement = m.addListModel.getSelectedElement();
-            MutableTreeNode firstSelectedElement = m.getFirstSelectedElementOrRoot();
+            GXElement selectedElement = m.addListModel.getSelectedElement().deepClone();
+            MutableTreeNode firstSelectedElement = m.getFirstSelectedLayerOrRoot();
             m.script.addEntity(selectedElement, firstSelectedElement);
+
         }
     }
 
-    private class RemoveElementAction extends AbstractAction
+    public class RemoveElementAction extends AbstractAction
     {
         public RemoveElementAction()
         {
@@ -82,7 +88,7 @@ public class EditController
     }
 
 
-    private class CopyAction extends AbstractAction
+    public class CopyAction extends AbstractAction
     {
         public CopyAction()
         {
@@ -97,7 +103,7 @@ public class EditController
             m.copyModel.saveCopyOfElements(selectedElements);
         }
     }
-    private class CutAction extends AbstractAction
+    public class CutAction extends AbstractAction
     {
         public CutAction()
         {
@@ -116,7 +122,7 @@ public class EditController
             m.script.removeNodes(selectedElements);
         }
     }
-    private class PasteAction extends AbstractAction
+    public class PasteAction extends AbstractAction
     {
         public PasteAction()
         {
@@ -138,13 +144,13 @@ public class EditController
             GTools.moveElementsTo(leftX, leftY, copiedElements);
 
             // Get selected node
-            MutableTreeNode parent = m.getFirstSelectedElementOrRoot();
+            MutableTreeNode parent = m.getFirstSelectedLayerOrRoot();
 
             // Add elements
             m.script.addNodes(copiedElements, parent);
         }
     }
-    private class UndoAction extends AbstractAction
+    public class UndoAction extends AbstractAction
     {
         public UndoAction()
         {
@@ -158,7 +164,7 @@ public class EditController
 
         }
     }
-    private class RedoAction extends AbstractAction
+    public class RedoAction extends AbstractAction
     {
         public RedoAction()
         {
