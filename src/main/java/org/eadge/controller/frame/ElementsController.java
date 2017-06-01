@@ -271,7 +271,10 @@ public class ElementsController
         public void mousePressed(MouseEvent e)
         {
 
+            // If mouse is not on an element
             if (elementsView.elementsTree.getPathForLocation(e.getX(), e.getY()) == null) {
+
+                // Set as root selection
                 selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
                 elementsView.elementsTree.clearSelection();
             }
@@ -282,33 +285,7 @@ public class ElementsController
             selectionModel.callObservers();
         }
 
-        public Collection<MutableTreeNode> getSelectedNodes()
-        {
-            TreePath[] selectionPaths = elementsView.elementsTree.getSelectionPaths();
-            HashSet<MutableTreeNode> mutableTreeNodes = new HashSet<>();
 
-            if (selectionPaths == null)
-                return mutableTreeNodes;
-
-            start: for (TreePath treePath : selectionPaths)
-            {
-                // Check if parent is selected
-                for (TreePath isParentPath : selectionPaths)
-                {
-                    if (isParentPath != treePath)
-                    {
-                        if (treePath.isDescendant(isParentPath))
-                        {
-                            continue start;
-                        }
-                    }
-                }
-
-                mutableTreeNodes.add((MutableTreeNode) treePath.getLastPathComponent());
-            }
-
-            return mutableTreeNodes;
-        }
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
@@ -361,6 +338,10 @@ public class ElementsController
                 TreePath pathForLocation = elementsView.elementsTree.getPathForLocation(x, y);
                 selectionModel.setSelectionPath(pathForLocation);
 
+                // Update the on dragg element
+                selectionModel.setOnDragElement((MutableTreeNode)((pathForLocation == null) ? script.getLayeredScript().getRoot()
+                                                                                            : pathForLocation.getLastPathComponent()));
+
                 // Update selection
                 selectionModel.callObservers();
             }
@@ -372,4 +353,33 @@ public class ElementsController
 
         }
     }
+
+    private Collection<MutableTreeNode> getSelectedNodes()
+    {
+        TreePath[] selectionPaths = elementsView.elementsTree.getSelectionPaths();
+        HashSet<MutableTreeNode> mutableTreeNodes = new HashSet<>();
+
+        if (selectionPaths == null)
+            return mutableTreeNodes;
+
+        start: for (TreePath treePath : selectionPaths)
+        {
+            // Check if parent is selected
+            for (TreePath isParentPath : selectionPaths)
+            {
+                if (isParentPath != treePath)
+                {
+                    if (treePath.isDescendant(isParentPath))
+                    {
+                        continue start;
+                    }
+                }
+            }
+
+            mutableTreeNodes.add((MutableTreeNode) treePath.getLastPathComponent());
+        }
+
+        return mutableTreeNodes;
+    }
+
 }

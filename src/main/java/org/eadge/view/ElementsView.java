@@ -38,6 +38,7 @@ public class ElementsView extends JPanel
         layerPropertiesDialog.setVisible(false);
 
         // Top parts
+        elementsTree.setShowsRootHandles(true);
         elementsTree.setRootVisible(false);
         elementsTree.setCellRenderer(new LayerCellRenderer());
         scrollPane = new JScrollPane(elementsTree);
