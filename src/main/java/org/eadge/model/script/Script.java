@@ -48,8 +48,21 @@ public class Script extends Observable
      */
     public void addEntity(GXElement element, MutableTreeNode parent)
     {
+        addEntity(element, parent, parent.getChildCount());
+    }
+
+
+    /**
+     * Add GXElement to the scene in the corresponding layer
+     *
+     * @param element added GXElement
+     * @param parent parent GXLayer
+     * @param index inserted index
+     */
+    public void addEntity(GXElement element, MutableTreeNode parent, int index)
+    {
         rawGXScript.addEntity(element);
-        layeredScript.insertNodeInto(element, parent,0);
+        layeredScript.insertNodeInto(element, parent, index);
         elementFinder.addElement(element);
 
         callObservers();
@@ -63,7 +76,19 @@ public class Script extends Observable
      */
     public void addLayer(GXLayer gxLayer, MutableTreeNode parent)
     {
-        layeredScript.insertNodeInto(gxLayer, parent, 0);
+        addLayer(gxLayer, parent,  parent.getChildCount());
+    }
+
+    /**
+     * Add GXLayer to the scene in parent GXLayer
+     *
+     * @param gxLayer added GXLayer
+     * @param parent parent GXLayer
+     * @param index inserted index
+     */
+    public void addLayer(GXLayer gxLayer, MutableTreeNode parent, int index)
+    {
+        layeredScript.insertNodeInto(gxLayer, parent, index);
         elementFinder.addElement(gxLayer);
 
         callObservers();
@@ -119,13 +144,13 @@ public class Script extends Observable
     }
 
     /**
-     * Detach GXLayer from parent without removing subElements
+     * Detach Node from parent without removing subElements
      *
-     * @param gxLayer removed GXLayer
+     * @param node removed GXLayer
      */
-    public void detachLayer(GXLayer gxLayer)
+    public void detachNode(MutableTreeNode node)
     {
-        layeredScript.removeNodeFromParent(gxLayer);
+        layeredScript.removeNodeFromParent(node);
 
         callObservers();
     }

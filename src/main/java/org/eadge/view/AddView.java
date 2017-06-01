@@ -25,6 +25,9 @@ public class AddView extends JPanel
 
         addScrollingPane = new JScrollPane(addListPanel);
         add(addScrollingPane, BorderLayout.CENTER);
+
+        // Change scrolling velocity of scrolling pane
+        addScrollingPane.getVerticalScrollBar().setUnitIncrement(16);
     }
 
     public class AddListPanel extends JPanel

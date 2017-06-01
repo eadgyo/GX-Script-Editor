@@ -143,6 +143,11 @@ public class SelectionModel extends DefaultTreeSelectionModel
         return false;
     }
 
+    public boolean isChanging(MutableTreeNode insertedNode, MutableTreeNode insertedElement)
+    {
+        return insertedNode != insertedElement.getParent();
+    }
+
     public SelectionState getSelectionState()
     {
         return selectionState;

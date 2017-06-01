@@ -69,6 +69,7 @@ public class ElementsController
 
         elementsView.elementsTree.addMouseListener(new MouseElementsListener());
         elementsView.elementsTree.addMouseMotionListener(new MouseMotionElementsListener());
+        elementsView.elementsTree.setSelectionModel(selectionModel);
 
         // Add drop support
         elementsView.setTransferHandler(new ElementTransferHandler());
@@ -257,7 +258,7 @@ public class ElementsController
         }
     }
 
-    private class MouseElementsListener implements MouseListener, MouseMotionListener
+    private class MouseElementsListener implements MouseListener
     {
 
         @Override
@@ -267,10 +268,17 @@ public class ElementsController
         }
 
         @Override
-        public void mousePressed(MouseEvent mouseEvent)
+        public void mousePressed(MouseEvent e)
         {
+
+            if (elementsView.elementsTree.getPathForLocation(e.getX(), e.getY()) == null) {
+                selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
+                elementsView.elementsTree.clearSelection();
+            }
+            else {
+                selectionModel.setSelectedElements(getSelectedNodes());
+            }
             // Update selection
-            selectionModel.setSelectedElements(getSelectedNodes());
             selectionModel.callObservers();
         }
 
@@ -306,7 +314,7 @@ public class ElementsController
         public void mouseReleased(MouseEvent mouseEvent)
         {
             if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
-            {/*
+            {
                 // Get the inserted GXLayer
                 GXLayer insertedLayer = elementsView.getSelectedLayer();
 
@@ -315,12 +323,13 @@ public class ElementsController
                 for (MutableTreeNode selectedElement : selectedElements)
                 {
                     // If is not trying to move on parent in child node
-                    if (!selectionModel.isParentOrEqual(selectedElement, insertedLayer))
+                    if (!selectionModel.isParentOrEqual(selectedElement, insertedLayer) && selectionModel.isChanging
+                            (insertedLayer, selectedElement))
                     {
-                        selectedElement.removeFromParent();
-                        insertedLayer.add(selectedElement);
+                        script.detachNode(selectedElement);
+                        script.addNode(selectedElement, insertedLayer);
                     }
-                }*/
+                }
             }
         }
 
@@ -335,23 +344,6 @@ public class ElementsController
         {
         }
 
-        @Override
-        public void mouseDragged(MouseEvent mouseEvent)
-        {
-            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
-            {
-                // Update selected element
-                TreePath pathForLocation = elementsView.elementsTree.getPathForLocation(mouseEvent.getX(),
-                                                                                        mouseEvent.getY());
-                selectionModel.setSelectionPath(pathForLocation);
-            }
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent mouseEvent)
-        {
-
-        }
     }
 
     private class MouseMotionElementsListener implements MouseMotionListener
@@ -359,14 +351,18 @@ public class ElementsController
         @Override
         public void mouseDragged(MouseEvent mouseEvent)
         {
-            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+            boolean leftMouseButton = SwingUtilities.isLeftMouseButton(mouseEvent);
+            if (leftMouseButton)
             {
                 int x = mouseEvent.getX();
                 int y = mouseEvent.getY();
 
                 // Update selected layer
                 TreePath pathForLocation = elementsView.elementsTree.getPathForLocation(x, y);
-                elementsView.elementsTree.setSelectionPath(pathForLocation);
+                selectionModel.setSelectionPath(pathForLocation);
+
+                // Update selection
+                selectionModel.callObservers();
             }
         }
 

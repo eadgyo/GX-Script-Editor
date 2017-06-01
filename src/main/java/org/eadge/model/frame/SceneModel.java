@@ -16,7 +16,7 @@ public class SceneModel
     private int translateX;
     private int translateY;
 
-    private float scale;
+    private float scale = 1;
 
     private ElementFinder elementFinder;
 

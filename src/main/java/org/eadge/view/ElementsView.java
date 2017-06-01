@@ -38,7 +38,7 @@ public class ElementsView extends JPanel
         layerPropertiesDialog.setVisible(false);
 
         // Top parts
-        elementsTree.setRootVisible(true);
+        elementsTree.setRootVisible(false);
         elementsTree.setCellRenderer(new LayerCellRenderer());
         scrollPane = new JScrollPane(elementsTree);
         add(scrollPane, BorderLayout.CENTER);
@@ -141,7 +141,7 @@ public class ElementsView extends JPanel
                 if (userObject instanceof GXLayer)
                 {
                     returnValue = defaultRenderer.getTreeCellRendererComponent(tree, value, selected, expanded,
-                                                                               true, row, hasFocus);
+                                                                               false, row, hasFocus);
                 }
                 else if (userObject instanceof GXElement)
                 {

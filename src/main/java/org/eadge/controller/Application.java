@@ -21,6 +21,7 @@ import org.eadge.utils.Converter;
 import org.eadge.utils.GTools;
 import org.eadge.view.MyFrame;
 
+import javax.swing.tree.MutableTreeNode;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -58,6 +59,8 @@ public class Application
 
         loadDefault();
 
+        test1();
+
         myFrame.pack();
         myFrame.setVisible(true);
     }
@@ -75,6 +78,8 @@ public class Application
             m.addListModel.addGroups(egx);
         }
         myFrame.addView.addListPanel.updateLength();
+        if (m.addListModel.getNumberOfElements() > 0)
+            m.addListModel.setSelectedElement(0);
     }
 
     private void createView()
@@ -96,6 +101,22 @@ public class Application
         m.entryFinder = new EntryFinder(myFrame.elementRenderer);
         m.sceneModel = new SceneModel(m.elementFinder);
         m.testsModel = new TestsModel();
+    }
+
+    private void test1()
+    {
+        MutableTreeNode root = (MutableTreeNode) m.script.getLayeredScript().getRoot();
+
+        // Create one layer
+        GXLayer layer = new GXLayer("Test1");
+        m.script.addLayer(layer, root);
+
+        // Create second layer
+        GXLayer layer2 = new GXLayer("Moveable");
+        m.script.addLayer(layer2, root);
+
+        // Add one element
+        m.script.addEntity(m.addListModel.getSelectedElement(), layer);
     }
 
     private void createControllers()
