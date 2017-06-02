@@ -54,6 +54,10 @@ public class SceneRenderer
      */
     public void paint(Graphics2D g, int width, int height, Collection<MutableTreeNode> inSceneNodes, SceneModel sceneModel, SelectionModel selectionModel)
     {
+        // Clear rect
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, width, height);
+
         // Save graphics settings
         AffineTransform transform = g.getTransform();
 
@@ -62,10 +66,6 @@ public class SceneRenderer
 
         // Set translation
         g.translate(sceneModel.getTranslateX(), sceneModel.getTranslateY());
-
-        // Clear rect
-        g.setColor(backgroundColor);
-        g.fillRect(0, 0, width, height);
 
         Collection<GXElement> unselectedElements = new HashSet<>();
         Collection<GXLayer> unselectedLayers = new HashSet<>();

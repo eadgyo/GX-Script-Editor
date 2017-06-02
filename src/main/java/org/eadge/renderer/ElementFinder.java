@@ -88,11 +88,14 @@ public class ElementFinder
         // Find all elements in this square
         for (MutableTreeNode node : elements)
         {
-            Rect2DInter element = (Rect2DInter) node;
-
-            if (selectionSquare.intersects(element.getRect2D()))
+            if (!(node instanceof GXLayer) || node.getChildCount() != 0)
             {
-                return node;
+                Rect2DInter element = (Rect2DInter) node;
+
+                if (selectionSquare.intersects(element.getRect2D()))
+                {
+                    return node;
+                }
             }
         }
 

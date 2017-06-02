@@ -19,7 +19,6 @@ import java.util.Vector;
  */
 public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 {
-    private Rect2D rect2D = new Rect2D();
     private Color backgroundColor;
     private boolean isDisplayed = true;
     private boolean isRectDisplayed = true;
@@ -39,22 +38,11 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         this.backgroundColor = backgroundColor;
     }
 
-    public Rect2D getRect2D()
-    {
-        return rect2D;
-    }
-
-    public void setRect2D(Rect2D rect2D)
-    {
-        this.rect2D = rect2D;
-    }
-
     @Override
     public Object clone()
     {
         GXLayer clone = (GXLayer) super.clone();
         clone.backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), backgroundColor.getAlpha());
-        clone.rect2D = (Rect2D) rect2D.clone();
         //noinspection unchecked
         clone.children = children;
         return clone;
@@ -120,77 +108,152 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 
     public void setX(double x)
     {
-        rect2D.setX(x);
+        double x1 = this.getX();
+        translateX(x - x1);
     }
 
     public void setY(double y)
     {
-        rect2D.setY(y);
+        double y1 = this.getY();
+        translateY(y - y1);
     }
 
     public void setPos(double x, double y)
     {
-        rect2D.setPos(x, y);
+        setX(x);
+        setY(y);
     }
 
     public void setCenterX(double centerX)
     {
-        rect2D.setCenterX(centerX);
+        translateX(centerX - getCenterX());
     }
 
     public void setCenterY(double centerY)
     {
-        rect2D.setCenterY(centerY);
+        translateY(centerY - getCenterY());
     }
 
     public void setCenter(double centerX, double centerY)
     {
-        rect2D.setCenter(centerX, centerY);
+        setCenterX(centerX);
+        setCenterY(centerY);
+    }
+
+    public double getCenterX()
+    {
+        return getX() + getWidth() * 0.5;
+    }
+
+    public double getCenterY()
+    {
+        return getY() + getHeight() * 0.5;
     }
 
     public void setWidth(double width)
     {
-        rect2D.setWidth(width);
+        System.out.println("Can't change width");
     }
 
     public void setHeight(double height)
     {
-        rect2D.setHeight(height);
+        System.out.println("Can't change height");
     }
 
     public void setLength(double width, double height)
     {
-        rect2D.setLength(width, height);
+        setWidth(width);
+        setHeight(height);
+    }
+
+    public double getMinX()
+    {
+        if (children == null || children.size() == 0)
+            return 0;
+
+        double v = Double.MAX_VALUE;
+        for (Object child : children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            if (v < rect.getX())
+                v = rect.getX();
+        }
+        return v;
+    }
+
+    public double getMaxX()
+    {
+        if (children == null || children.size() == 0)
+            return 0;
+
+        double v = -Double.MAX_VALUE;
+        for (Object child : children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            if (v > rect.getX())
+                v = rect.getX();
+        }
+        return v;
+    }
+
+    public double getMinY()
+    {
+        if (children == null || children.size() == 0)
+            return 0;
+
+        double v = Double.MAX_VALUE;
+        for (Object child : children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            if (v < rect.getY())
+                v = rect.getY();
+        }
+        return v;
+    }
+
+    public double getMaxY()
+    {
+        if (children == null || children.size() == 0)
+            return 0;
+
+        double v = -Double.MAX_VALUE;
+        for (Object child : children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            if (v > rect.getY())
+                v = rect.getY();
+        }
+        return v;
     }
 
     public double getX()
     {
-        return rect2D.getX();
+        return getMinX();
     }
 
     public double getY()
     {
-        return rect2D.getY();
+        return getMinY();
     }
 
     public double getWidth()
     {
-        return rect2D.getWidth();
+        return getMaxX() - getMaxX();
     }
 
     public double getHeight()
     {
-        return rect2D.getHeight();
+        return getMaxY() - getMinY();
     }
 
     public void setRect(double v, double v1, double v2, double v3)
     {
-        rect2D.setRect(v, v1, v2, v3);
+        System.out.println("Can't change rect Layer");
     }
 
     public void setRect(Rectangle2D rectangle2D)
     {
-        rect2D.setRect(rectangle2D);
+        System.out.println("Can't chang rect layer");
     }
 
     public boolean isDisplayed()
@@ -214,21 +277,42 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
     }
 
     @Override
+    public Rect2D getRect2D()
+    {
+        double x = getMinX();
+        double y = getMinY();
+        double xMax = getMaxX();
+        double yMax = getMaxY();
+        return new Rect2D(x, y, xMax - x, yMax - y);
+    }
+
+    @Override
     public void translateX(double x)
     {
-        rect2D.translateX(x);
+        // Translate children
+        for (Object child: children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            rect.translateX(x);
+        }
     }
 
     @Override
     public void translateY(double y)
     {
-        rect2D.translateY(y);
+        // Translate children
+        for (Object child: children)
+        {
+            Rect2DInter rect = (Rect2DInter) child;
+            rect.translateY(y);
+        }
     }
 
     @Override
     public void translate(double x, double y)
     {
-        rect2D.translate(x, y);
+        translateX(x);
+        translateY(y);
     }
 
     @Override

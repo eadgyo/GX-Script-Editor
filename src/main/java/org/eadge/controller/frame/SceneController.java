@@ -1,5 +1,6 @@
 package org.eadge.controller.frame;
 
+import org.eadge.DebugTools;
 import org.eadge.controller.Actions;
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.global.ConnectionModel;
@@ -23,6 +24,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -133,7 +135,8 @@ public class SceneController
 
         public Rect2D createMouseRec(MouseEvent event, int size)
         {
-            return new Rect2D(event.getX() - size / 2, event.getY() - size / 2, size, size);
+            return new Rect2D(event.getX() - size / 2 - sceneModel.getTranslateX(), event.getY() - size / 2 -
+                    sceneModel.getTranslateY(), size, size);
         }
 
         @Override
@@ -170,16 +173,23 @@ public class SceneController
             }
             else
             {
-                selectionModel.setSelectedElements(node);
-
-                if (node instanceof GXElement)
+                if (node == null)
                 {
+                    DebugTools.PrintDebug("Translating Scene");
+
+                    selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
+                }
+                else if (node instanceof GXElement)
+                {
+                    selectionModel.setSelectedElements(node);
                     GXElement gxElement = (GXElement) node;
 
                     // Check if it's connecting on entry
                     EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
                     if (entryIndex.entryIndex != -1)
                     {
+                        DebugTools.PrintDebug("Connecting entry");
+
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
 
                         if (mouseEvent.getButton() == MouseEvent.BUTTON1)
@@ -196,6 +206,8 @@ public class SceneController
 
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
+
+            script.callObservers();
         }
 
         @Override
@@ -251,6 +263,8 @@ public class SceneController
 
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
+
+            script.callObservers();
         }
 
         @Override
@@ -324,24 +338,33 @@ public class SceneController
 
                 if (selectionModel.hasSelectedElements())
                 {
+                    DebugTools.PrintDebug("Dragging selected elements");
+
+
+                    selectionModel.setSelectionState(SelectionModel.SelectionState.MOVING);
                     // Move all selected elements
                     Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
                     for (MutableTreeNode selectedElement : selectedElements)
                     {
                         Rect2DInter rect2DInter = (Rect2DInter) selectedElement;
-                        rect2DInter.translate(translateX, translateY);
+                        rect2DInter.translate(-translateX, -translateY);
                     }
                 }
                 else
                 {
+                    DebugTools.PrintDebug("Translating Scene");
+
+                    selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
                     // Translate the scene
-                    sceneModel.translateX(translateX);
-                    sceneModel.translateY(translateY);
+                    sceneModel.translateX(-translateX);
+                    sceneModel.translateY(-translateY);
                 }
             }
 
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
+
+            script.callObservers();
         }
 
         @Override

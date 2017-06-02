@@ -51,13 +51,14 @@ public class AddListRenderer
 
             // Translate to center
             int elementWidth = (int) elementRenderer.getBlockWidth(element);
-            g.translate((width - elementWidth ) * 0.5, 0);
+            g.translate((width - elementWidth ) * 0.5, elementRenderer.getTotalTextHeight());
 
             // Render element
             elementRenderer.paint(g, element);
 
             // Translate to start of next element
-            g.translate(-(width - elementWidth ) * 0.5, elementRenderer.getBlockHeight(element));
+            g.translate(-(width - elementWidth ) * 0.5, -elementRenderer.getTotalTextHeight() + elementRenderer
+                    .getBlockHeight(element));
         }
 
         // Reset matrix transformation

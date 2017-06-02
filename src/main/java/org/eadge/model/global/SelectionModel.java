@@ -92,6 +92,7 @@ public class SelectionModel extends DefaultTreeSelectionModel
 
     public void setSelectedElements(MutableTreeNode selectedElement)
     {
+        this.selectedElements.clear();
         this.selectedElements.add(selectedElement);
     }
 

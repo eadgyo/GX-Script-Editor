@@ -61,25 +61,25 @@ public class ElementRenderer
 
     public void paint(Graphics2D g, GXElement element)
     {
+        g.translate(element.getX(), element.getY());
+        paintRel(g, element);
+        g.translate(-element.getX(), -element.getY());
+    }
+
+    public void paintRel(Graphics2D g, GXElement element)
+    {
         // Get element width and height
-        int elementWidth = (int) element.getWidth();
+        int elementWidth  = (int) element.getWidth();
         int elementHeight = (int) element.getHeight();
 
-        // Draw name of element
-        g.setColor(textNameColor);
-        int nameWidth = g.getFontMetrics().stringWidth(element.getName());
-        int fontHeight = g.getFontMetrics().getHeight();
-        g.drawString(element.getName(), elementWidth * 0.5f - nameWidth * 0.5f, textPadding + fontHeight * 0.5f);
-
-        g.translate(0, textHeight + textPadding);
+        // Render name of the element
+        paintRelTitle(g, element, elementWidth);
 
         // Render background element
         g.setColor(backgroundColor);
         g.fillRect(0, 0, elementWidth, elementHeight);
         g.setColor(rectColor);
         g.drawRect(0, 0, elementWidth, elementHeight);
-
-
 
         // Get height of input rect
         double heightOfEntry = entryRenderer.getHeightOfEntry(element);
@@ -90,7 +90,19 @@ public class ElementRenderer
         // Draw outputs
         entryRenderer.paintOutputs(g, heightOfEntry, element);
 
-        g.translate(0, -(textHeight + textPadding));
+    }
+
+    private void paintRelTitle(Graphics2D g, GXElement element, int elementWidth)
+    {
+        g.translate(0, -getTotalTextHeight());
+
+        // Draw name of element
+        g.setColor(textNameColor);
+        int nameWidth  = g.getFontMetrics().stringWidth(element.getName());
+        int fontHeight = g.getFontMetrics().getHeight();
+        g.drawString(element.getName(), elementWidth * 0.5f - nameWidth * 0.5f, textPadding + fontHeight * 0.5f);
+
+        g.translate(0, getTotalTextHeight() );
     }
 
     public double getRelativeInputX(GXElement gxElement)
@@ -122,6 +134,8 @@ public class ElementRenderer
     {
         return (isInput) ? getRelativeInputY(entryIndex, gxElement) : getRelativeOutputY(entryIndex, gxElement);
     }
+
+    public int getTotalTextHeight() { return textHeight + textPadding; }
 
     public int getTextHeight()
     {
@@ -242,7 +256,7 @@ public class ElementRenderer
     }
 
     /**
-     * Get widht of block containing element and text
+     * Get width of block containing element and text
      * @param element used element
      * @return width of element
      */

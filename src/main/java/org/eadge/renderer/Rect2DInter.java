@@ -14,4 +14,12 @@ public interface Rect2DInter
     void translateY(double y);
 
     void translate(double x, double y);
+
+    double getX();
+
+    double getY();
+
+    double getWidth();
+
+    double getHeight();
 }

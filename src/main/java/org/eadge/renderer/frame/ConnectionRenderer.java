@@ -28,12 +28,19 @@ public class ConnectionRenderer
         this.elementRenderer = elementRenderer;
     }
 
+    public void paint(Graphics2D g, GXElement gxElement)
+    {
+        g.translate(gxElement.getX(), gxElement.getY());
+        paintRel(g, gxElement);
+        g.translate(-gxElement.getX(), -gxElement.getY());
+    }
+
     /**
      * Render connection
      * @param g used to render
      * @param gxElement draw input connections
      */
-    public void paint(Graphics2D g, GXElement gxElement)
+    public void paintRel(Graphics2D g, GXElement gxElement)
     {
         g.setColor(colorConnection);
 

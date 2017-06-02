@@ -18,12 +18,12 @@ public class Rect2D extends Rectangle2D.Double implements Rect2DInter, Cloneable
 
     public void setX(double x)
     {
-        this.x = x;
+        translateX(x - getX());
     }
 
     public void setY(double y)
     {
-        this.y = y;
+        translateX(y - getY());
     }
 
     public void setPos(double x, double y)
@@ -34,12 +34,12 @@ public class Rect2D extends Rectangle2D.Double implements Rect2DInter, Cloneable
 
     public void setCenterX(double centerX)
     {
-        this.x = centerX - width * 0.5;
+        translateX(centerX - getCenterX());
     }
 
     public void setCenterY(double centerY)
     {
-        this.y = centerY - height * 0.5;
+        translateY(centerY - getCenterY());
     }
 
     public void setCenter(double centerX, double centerY)

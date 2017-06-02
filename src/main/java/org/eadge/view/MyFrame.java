@@ -22,9 +22,11 @@ public class MyFrame extends JFrame
     public ElementRenderer elementRenderer = new ElementRenderer(20, 10, new Color(250, 255, 251), Color.BLACK, Color.BLACK, entryRenderer);
     public AddListRenderer addListRenderer = new AddListRenderer(Color.white, new Color(255, 100, 100), elementRenderer);
 
-    public ElementRenderer selectedElementRenderer = new ElementRenderer(20, 5, Color.WHITE, Color.BLACK, Color.BLACK, entryRenderer);
-    public ElementRenderer invalidMovingElementRenderer = new ElementRenderer(20, 5, Color.RED, Color.BLACK, Color.BLACK, entryRenderer);
-    public ElementRenderer movingElementRenderer = new ElementRenderer(20, 5, Color.BLUE, Color.BLACK, Color.BLACK, entryRenderer);
+    public ElementRenderer selectedElementRenderer = new ElementRenderer(20, 10, Color.WHITE, Color.RED, Color.BLACK,
+                                                                         entryRenderer);
+    public ElementRenderer invalidMovingElementRenderer = new ElementRenderer(20, 10, Color.RED, Color.BLACK, Color.BLACK, entryRenderer);
+    public ElementRenderer movingElementRenderer = new ElementRenderer(20, 10, Color.WHITE, Color.BLUE, Color.BLACK,
+                                                                       entryRenderer);
 
     public ConnectionRenderer connectionRenderer = new ConnectionRenderer(Color.BLACK, elementRenderer);
     public ConnectionSelectionRenderer connectionSelectionRenderer = new ConnectionSelectionRenderer(elementRenderer, Color.BLUE, Color.RED);
