@@ -5,6 +5,7 @@ import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.renderer.ElementRenderer;
+import org.eadge.utils.AColor;
 
 import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
@@ -74,10 +75,10 @@ public class SceneRenderer
         findUnselectedLayersAndElements(inSceneNodes, selectionModel, unselectedElements, unselectedLayers);
 
         // Paint layers first and then elements
-        paintLayers(g, unselectedLayers);
-        paintSelectionLayers(g, selectionModel);
         paintElements(g, unselectedElements);
         paintSelectionElements(g, selectionModel);
+        paintLayers(g, unselectedLayers);
+        paintSelectionLayers(g, selectionModel);
 
         // Paint connection
         paintConnectionSelection(g, selectionModel);
@@ -116,15 +117,19 @@ public class SceneRenderer
             Color backgroundColor = layer.getBackgroundColor();
 
             // Change alpha
-            Color backGroundColorLight = new Color(backgroundColor.getRed(),
-                                                   backgroundColor.getGreen(),
-                                                   backgroundColor.getBlue(),
-                                                   backgroundColor.getAlpha() * LAYER_ALPHA_FACTOR);
+            Color backGroundColorLight = new AColor(backgroundColor.getRed(),
+                                                    backgroundColor.getGreen(),
+                                                    backgroundColor.getBlue(),
+                                                    (int) (backgroundColor.getAlpha() * LAYER_ALPHA_FACTOR));
 
+            float alpha = (backGroundColorLight.getAlpha()/255.0f);
             g.setColor(backGroundColorLight);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
             g.fillRect((int) layer.getX(), (int) layer.getY(), (int) layer.getWidth(), (int) layer.getHeight());
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f  ));
         }
     }
+
     private void paintElements(Graphics2D g, Collection<GXElement> entities)
     {
         // Draw all elements

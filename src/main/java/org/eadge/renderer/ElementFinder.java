@@ -1,5 +1,6 @@
 package org.eadge.renderer;
 
+import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXLayer;
 
 import javax.swing.tree.MutableTreeNode;
@@ -102,8 +103,50 @@ public class ElementFinder
         return null;
     }
 
+
     public void clear()
     {
         elements.clear();
+    }
+
+    /**
+     * Get first element in the selection square with advance selection for the first element
+     *
+     * @param mouseRect square selecting elements
+     * @param selectionModel selection model used to determine which element is already selected
+     */
+    public MutableTreeNode retrieveFirstElement(Rect2D mouseRect, SelectionModel selectionModel)
+    {
+        // Retrieve all selected elements using mouse square rect
+        Set<MutableTreeNode> mutableTreeNodes = retrieveElements(mouseRect);
+        Set<MutableTreeNode> notSelectedElements = selectionModel.getNotSelectedElements(mutableTreeNodes);
+
+        // Iter
+        myIter:
+        for (MutableTreeNode testedParent : mutableTreeNodes)
+        {
+            // Check if the element is not already selected or there a no other element to select in the area
+            if (notSelectedElements.contains(testedParent) || notSelectedElements.size() == 0)
+            {
+                // If element has children
+                if (!testedParent.isLeaf())
+                {
+                    // Check if there is already one sub element not selected
+                    for (MutableTreeNode mutableTreeNode : notSelectedElements)
+                    {
+                        if (selectionModel.isParent(testedParent, mutableTreeNode))
+                        {
+                            // One sub element is not selected, select it first
+                            continue myIter;
+                        }
+                    }
+                    // No sub element not selected
+                }
+
+                return testedParent;
+            }
+        }
+
+        return null;
     }
 }

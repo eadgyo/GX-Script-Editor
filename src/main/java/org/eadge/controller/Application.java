@@ -116,7 +116,7 @@ public class Application
         m.script.addLayer(layer2, root);
 
         // Add one element
-        m.script.addEntity(m.addListModel.getSelectedElement(), layer);
+        m.script.addEntity(m.addListModel.getSelectedElement().deepClone(), layer);
     }
 
     private void createControllers()

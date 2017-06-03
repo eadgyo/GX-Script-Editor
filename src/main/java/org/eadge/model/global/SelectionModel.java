@@ -7,6 +7,7 @@ import javax.swing.tree.MutableTreeNode;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Observer;
+import java.util.Set;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -88,6 +89,26 @@ public class SelectionModel extends DefaultTreeSelectionModel
         this.selectedElements.clear();
         this.selectedElements.addAll(selectedElements);
 
+    }
+
+    /**
+     * Get not selected element from the given list
+     *
+     * @param mutableTreeNodes list used to get not selected element
+     *
+     * @return list of not selected elements
+     */
+    public Set<MutableTreeNode> getNotSelectedElements(Set<MutableTreeNode> mutableTreeNodes)
+    {
+        HashSet<MutableTreeNode> notSelectedElements = new HashSet<>();
+
+        for (MutableTreeNode el : mutableTreeNodes)
+        {
+            if (!contains(el))
+                notSelectedElements.add(el);
+        }
+
+        return notSelectedElements;
     }
 
     public void setSelectedElements(MutableTreeNode selectedElement)

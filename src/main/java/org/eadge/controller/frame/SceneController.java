@@ -142,16 +142,10 @@ public class SceneController
         @Override
         public void mouseClicked(MouseEvent mouseEvent)
         {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent mouseEvent)
-        {
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
             // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect);
+            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
 
             if (mouseEvent.isControlDown())
@@ -179,30 +173,46 @@ public class SceneController
 
                     selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
                 }
-                else if (node instanceof GXElement)
+                else
                 {
                     selectionModel.setSelectedElements(node);
-                    GXElement gxElement = (GXElement) node;
 
-                    // Check if it's connecting on entry
-                    EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
-                    if (entryIndex.entryIndex != -1)
+                    if (node instanceof GXElement)
                     {
-                        DebugTools.PrintDebug("Connecting entry");
+                        DebugTools.PrintDebug("Selecting object");
 
-                        selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
+                        GXElement gxElement = (GXElement) node;
 
-                        if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+                        // Check if it's connecting on entry
+                        EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
+                        if (entryIndex.entryIndex != -1)
                         {
-                            connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
-                        }
-                        else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
-                        {
-                            script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            DebugTools.PrintDebug("Connecting entry");
+
+                            selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
+
+                            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+                            {
+                                connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
+                            }
+                            else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
+                            {
+                                script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            }
                         }
                     }
                 }
             }
+
+            lastMouseX = mouseEvent.getX();
+            lastMouseY = mouseEvent.getY();
+
+            script.callObservers();
+        }
+
+        @Override
+        public void mousePressed(MouseEvent mouseEvent)
+        {
 
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
@@ -285,7 +295,7 @@ public class SceneController
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
             // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect);
+            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
 
             // If connecting
             if (selectionModel.isSelectionStateEquals(SelectionModel.SelectionState.CONNECTING))
@@ -340,7 +350,6 @@ public class SceneController
                 {
                     DebugTools.PrintDebug("Dragging selected elements");
 
-
                     selectionModel.setSelectionState(SelectionModel.SelectionState.MOVING);
                     // Move all selected elements
                     Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
@@ -352,7 +361,7 @@ public class SceneController
                 }
                 else
                 {
-                    DebugTools.PrintDebug("Translating Scene");
+                    //DebugTools.PrintDebug("Translating Scene");
 
                     selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
                     // Translate the scene

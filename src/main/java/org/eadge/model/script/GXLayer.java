@@ -3,6 +3,7 @@ package org.eadge.model.script;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.renderer.Rect2D;
 import org.eadge.renderer.Rect2DInter;
+import org.eadge.utils.AColor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
@@ -19,7 +20,7 @@ import java.util.Vector;
  */
 public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 {
-    private Color backgroundColor;
+    private Color backgroundColor = new AColor(60, 150, 225, 175);
     private boolean isDisplayed = true;
     private boolean isRectDisplayed = true;
     private String name;
@@ -175,7 +176,7 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         for (Object child : children)
         {
             Rect2DInter rect = (Rect2DInter) child;
-            if (v < rect.getX())
+            if (rect.getX() < v)
                 v = rect.getX();
         }
         return v;
@@ -190,8 +191,8 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         for (Object child : children)
         {
             Rect2DInter rect = (Rect2DInter) child;
-            if (v > rect.getX())
-                v = rect.getX();
+            if (rect.getX() + rect.getWidth() > v)
+                v = rect.getX() + rect.getWidth();
         }
         return v;
     }
@@ -205,7 +206,7 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         for (Object child : children)
         {
             Rect2DInter rect = (Rect2DInter) child;
-            if (v < rect.getY())
+            if (rect.getY() < v)
                 v = rect.getY();
         }
         return v;
@@ -220,8 +221,8 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         for (Object child : children)
         {
             Rect2DInter rect = (Rect2DInter) child;
-            if (v > rect.getY())
-                v = rect.getY();
+            if (rect.getY() + rect.getHeight()> v)
+                v = rect.getY() + rect.getHeight();
         }
         return v;
     }
@@ -238,7 +239,7 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 
     public double getWidth()
     {
-        return getMaxX() - getMaxX();
+        return getMaxX() - getMinX();
     }
 
     public double getHeight()

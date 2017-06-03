@@ -64,7 +64,6 @@ public class EditController
             GXElement selectedElement = m.addListModel.getSelectedElement().deepClone();
             MutableTreeNode firstSelectedElement = m.getFirstSelectedLayerOrRoot();
             m.script.addEntity(selectedElement, firstSelectedElement);
-
         }
     }
 
