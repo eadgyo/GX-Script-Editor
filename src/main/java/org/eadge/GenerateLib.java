@@ -1,15 +1,15 @@
 package org.eadge;
 
-import org.eadge.gxscript.data.entity.classic.types.EqualGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.bool.BoolGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.bool.ModifyBoolGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.bool.transform.InvertBoolGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.IntGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.RealGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.comparison.BetweenNumbersGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.comparison.InferiorThanNumberGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.comparison.SuperiorThanNumberGXEntity;
-import org.eadge.gxscript.data.entity.classic.types.number.operations.maths.*;
+import org.eadge.gxscript.data.entity.classic.entity.types.EqualGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.bool.BoolGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.bool.ModifyBoolGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.bool.transform.InvertBoolGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.IntGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.RealGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.BetweenNumbersGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.InferiorThanNumberGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.SuperiorThanNumberGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.types.number.operations.maths.*;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.gxscript.tools.io.IOGXManager;
