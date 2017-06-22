@@ -6,6 +6,7 @@ import org.eadge.view.AddView;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
+import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -37,7 +38,7 @@ public class AddController
         addView.addListPanel.setAddListModel(addListModel);
 
         // Add drag and drop support
-        addView.addListPanel.setTransferHandler(new TransferHandler("GXElement Object"));
+        addView.addListPanel.setTransferHandler(new AddTransferHandler());
         addView.addListPanel.addMouseListener(new AddMouseListener());
 
         // Add listener on group change
@@ -87,6 +88,8 @@ public class AddController
 
                 // Set addView as the source object
                 transferHandler.exportAsDrag(addView, mouseEvent, TransferHandler.COPY);
+
+                System.out.println("Export as drag");
             }
         }
 
@@ -135,6 +138,76 @@ public class AddController
         {
             a.addElementAction.setEnabled(addListModel.isSelectedElement());
             myFrame.addView.repaint();
+        }
+    }
+
+    private class AddTransferHandler extends TransferHandler implements DropTargetListener, DragSourceMotionListener,
+            DragGestureListener
+    {
+        public void dragGestureRecognized(DragGestureEvent dragGestureEvent)
+        {
+            System.out.println("Recognised");
+        }
+
+        public void dragEnter(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drag enter");
+        }
+
+        public void dragOver(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drag over");
+        }
+
+        public void dropActionChanged(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drop Action");
+        }
+
+        public void dragExit(DragSourceEvent dragSourceEvent)
+        {
+            System.out.println("Drag exit");
+        }
+
+        public void dragDropEnd(DragSourceDropEvent dragSourceDropEvent)
+        {
+            System.out.println("Drag end");
+        }
+
+        @Override
+        public void dragMouseMoved(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Motion");
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragged enter");
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragged out");
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragg action");
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent dropTargetEvent)
+        {
+            System.out.println("Dragg exit");
+        }
+
+        @Override
+        public void drop(DropTargetDropEvent dropTargetDropEvent)
+        {
+
         }
     }
 }

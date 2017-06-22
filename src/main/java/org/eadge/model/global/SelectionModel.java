@@ -213,7 +213,7 @@ public class SelectionModel extends DefaultTreeSelectionModel
      */
     public boolean contains(MutableTreeNode node)
     {
-        return selectedElements.contains(node) || onDragElement == node;
+        return selectedElements.contains(node);// || onDragElement == node;
     }
 
 }

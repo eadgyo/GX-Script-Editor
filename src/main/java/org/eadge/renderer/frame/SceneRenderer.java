@@ -64,15 +64,15 @@ public class SceneRenderer
         findUnselectedLayersAndElements(inSceneNodes, selectionModel, unselectedElements, unselectedLayers);
 
         // Paint layers first and then elements
-        paintElements(g, unselectedElements);
-        paintSelectionElements(g, selectionModel);
         paintLayers(g, unselectedLayers);
         paintSelectionLayers(g, selectionModel);
+        paintElements(g, unselectedElements);
+        paintSelectionElements(g, selectionModel);
 
         // Paint connection
         paintConnectionSelection(g, selectionModel);
 
-        drawDebug(g, sceneModel);
+        //drawDebug(g, sceneModel);
 
         // Reset graphics settings
         g.setTransform(transform);
@@ -145,6 +145,8 @@ public class SceneRenderer
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
             g.fillRect((int) layer.getX(), (int) layer.getY(), (int) layer.getWidth(), (int) layer.getHeight());
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f  ));
+            g.setColor(Color.BLACK);
+            g.drawRect((int) layer.getX(), (int) layer.getY(), (int) layer.getWidth(), (int) layer.getHeight());
         }
     }
 

@@ -21,6 +21,7 @@ import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.Collection;
@@ -283,7 +284,7 @@ public class SceneController
         @Override
         public void mouseEntered(MouseEvent mouseEvent)
         {
-
+            //
         }
 
         @Override
@@ -404,6 +405,45 @@ public class SceneController
 
             sceneModel.scalePane(factor, e.getX(), e.getY());
             script.callObservers();
+        }
+    }
+
+    private class SceneDragListener implements DragGestureListener, DragSourceListener{
+
+        @Override
+        public void dragGestureRecognized(DragGestureEvent dragGestureEvent)
+        {
+            System.out.println("Dragged gesture");
+        }
+
+        @Override
+        public void dragEnter(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Entered");
+        }
+
+        @Override
+        public void dragOver(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drag over");
+        }
+
+        @Override
+        public void dropActionChanged(DragSourceDragEvent dragSourceDragEvent)
+        {
+
+        }
+
+        @Override
+        public void dragExit(DragSourceEvent dragSourceEvent)
+        {
+
+        }
+
+        @Override
+        public void dragDropEnd(DragSourceDropEvent dragSourceDropEvent)
+        {
+
         }
     }
 }

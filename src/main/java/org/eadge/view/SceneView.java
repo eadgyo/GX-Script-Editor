@@ -21,7 +21,10 @@ public class SceneView extends JPanel
 
     public SceneView()
     {
-        setPreferredSize(new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH, ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT));
+        Dimension dimension = new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH,
+                                            ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT);
+        setPreferredSize(dimension);
+        setMinimumSize(dimension);
     }
 
     public SceneModel getSceneModel()
@@ -50,5 +53,4 @@ public class SceneView extends JPanel
         Collection<MutableTreeNode> elementsInScene = sceneModel.findElementsInScene(getWidth(), getHeight());
         sceneRenderer.paint((Graphics2D) graphics, getWidth(), getHeight(), elementsInScene, sceneModel, selectionModel);
     }
-
 }

@@ -17,6 +17,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -72,7 +73,11 @@ public class ElementsController
         elementsView.elementsTree.setSelectionModel(selectionModel);
 
         // Add drop support
-        elementsView.setTransferHandler(new ElementTransferHandler());
+        ElementTransferHandler transferHandler = new ElementTransferHandler();
+        elementsView.elementsTree.setTransferHandler(transferHandler);
+        myFrame.sceneView.setTransferHandler(transferHandler);
+
+        elementsView.elementsTree.setDragEnabled(true);
 
         createLayerProperties();
     }
@@ -204,8 +209,14 @@ public class ElementsController
     }
 
 
-    public class ElementTransferHandler extends TransferHandler
+    public class ElementTransferHandler extends TransferHandler implements DragGestureListener,
+            DragSourceMotionListener, DropTargetListener
     {
+        public ElementTransferHandler()
+        {
+            super();
+        }
+
         @Override
         public boolean importData(TransferSupport transferSupport)
         {
@@ -256,6 +267,73 @@ public class ElementsController
         {
             return super.createTransferable(jComponent);
         }
+
+        @Override
+        public void dragGestureRecognized(DragGestureEvent dragGestureEvent)
+        {
+            System.out.println("Recognised");
+        }
+
+        public void dragEnter(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drag enter");
+        }
+
+        public void dragOver(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drag over");
+        }
+
+        public void dropActionChanged(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Drop Action");
+        }
+
+        public void dragExit(DragSourceEvent dragSourceEvent)
+        {
+            System.out.println("Drag exit");
+        }
+
+        public void dragDropEnd(DragSourceDropEvent dragSourceDropEvent)
+        {
+            System.out.println("Drag end");
+        }
+
+        @Override
+        public void dragMouseMoved(DragSourceDragEvent dragSourceDragEvent)
+        {
+            System.out.println("Motion");
+        }
+
+        @Override
+        public void dragEnter(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragged enter");
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragged out");
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent)
+        {
+            System.out.println("Dragg action");
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent dropTargetEvent)
+        {
+            System.out.println("Dragg exit");
+        }
+
+        @Override
+        public void drop(DropTargetDropEvent dropTargetDropEvent)
+        {
+
+        }
     }
 
     private class MouseElementsListener implements MouseListener
@@ -270,7 +348,6 @@ public class ElementsController
         @Override
         public void mousePressed(MouseEvent e)
         {
-
             // If mouse is not on an element
             if (elementsView.elementsTree.getPathForLocation(e.getX(), e.getY()) == null) {
 
@@ -290,6 +367,8 @@ public class ElementsController
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
         {
+
+
             if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
             {
                 // Get the inserted GXLayer
@@ -381,5 +460,4 @@ public class ElementsController
 
         return mutableTreeNodes;
     }
-
 }

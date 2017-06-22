@@ -20,7 +20,7 @@ import java.util.Vector;
  */
 public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
 {
-    private Color backgroundColor = new AColor(60, 150, 225, 175);
+    private Color backgroundColor = new AColor(60, 150, 100, 175);
     private boolean isDisplayed = true;
     private boolean isRectDisplayed = true;
     private String name;

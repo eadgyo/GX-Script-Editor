@@ -28,6 +28,10 @@ public class AddView extends JPanel
 
         // Change scrolling velocity of scrolling pane
         addScrollingPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        final Dimension d = new Dimension(200, 300);
+        this.setPreferredSize(d);
+        this.setMinimumSize(d);
     }
 
     public class AddListPanel extends JPanel
