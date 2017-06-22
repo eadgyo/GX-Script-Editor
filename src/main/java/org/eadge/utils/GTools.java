@@ -8,6 +8,7 @@ import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
 
 import javax.swing.tree.MutableTreeNode;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -83,5 +84,14 @@ public class GTools
                 ((GXElement) gxEntity).computeSize(elementRenderer);
             }
         }
+    }
+
+    public static void drawRect2D(Graphics2D g, Rect2D rect2D)
+    {
+        int x = (int) rect2D.getX();
+        int y = (int) rect2D.getY();
+        int width = (int) rect2D.getWidth();
+        int height = (int) rect2D.getHeight();
+        g.fillRect(x, y, width, height);
     }
 }

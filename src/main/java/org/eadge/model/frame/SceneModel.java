@@ -13,10 +13,14 @@ import java.util.Collection;
  */
 public class SceneModel
 {
-    private int translateX;
-    private int translateY;
+    private double translateX;
+    private double translateY;
 
-    private float scale = 1;
+    public double DEBUG_POINT_X = 0;
+    public double DEBUG_POINT_Y = 0;
+
+
+    private double scale = 1;
 
     private ElementFinder elementFinder;
 
@@ -49,34 +53,92 @@ public class SceneModel
         return new Rect2D(paneX, paneY, paneWidth, paneHeight);
     }
 
-    public int getTranslateX()
+    public double getTranslateX()
     {
         return translateX;
     }
 
-    public void setTranslateX(int translateX)
+    public void setTranslateX(double translateX)
     {
         this.translateX = translateX;
     }
 
-    public int getTranslateY()
+    public double getTranslateY()
     {
         return translateY;
     }
 
-    public void setTranslateY(int translateY)
+    public void setTranslateY(double translateY)
     {
         this.translateY = translateY;
     }
 
-    public float getScale()
+    public double getScale()
     {
         return scale;
     }
 
-    public void setScale(float scale)
+    public double setScale(double desiredScale)
     {
-        this.scale = scale;
+        // Check if desired scale is valid
+        if (desiredScale < 0.01f)
+        {
+            desiredScale = 0.01f;
+        }
+        else if (desiredScale > 5f)
+        {
+            desiredScale = 5f;
+        }
+
+        double scaledFactor = desiredScale/this.scale;
+        this.scale = desiredScale;
+        return scaledFactor;
+    }
+
+    /**
+     * Scale the scene from the center (0, 0)
+     * @param factor scale factor
+     */
+    public double scaleScene(double factor)
+    {
+        return setScale(scale * factor);
+    }
+
+    /**
+     * Scale the scene from a different point in the pane coordinates
+     * @param factor scale factor
+     * @param paneX X in pane coordinates
+     * @param paneY Y in pane coordinates
+     */
+    public void scalePane(double factor, double paneX, double paneY)
+    {
+        double sceneX = paneX; //computeXInScene(paneX);
+        double sceneY = paneY; //computeYInScene(paneY);
+
+        scaleScene(factor, sceneX, sceneY);
+    }
+
+    /**
+     * Scale the scene from a different point in the scene coordinates
+     * @param factor scale factor
+     * @param sceneX X in pane coordinates
+     * @param sceneY Y in pane coordinates
+     */
+    public void scaleScene(double factor, double sceneX, double sceneY)
+    {
+        double _scale = this.scale;
+        factor = scaleScene(factor);
+
+        double xScaled = scaleD(translateX * _scale, sceneX, factor);
+        double yScaled = scaleD(translateY * _scale, sceneY, factor);
+
+        setTranslateX(xScaled / this.scale);
+        setTranslateY(yScaled / this.scale);
+    }
+
+    public double scaleD(double v, double center, double factor)
+    {
+        return (v - center) * factor + center;
     }
 
     /**
@@ -86,7 +148,8 @@ public class SceneModel
      */
     public double computeXInScene(double paneX)
     {
-        return (paneX - this.translateX) / scale;
+        return (paneX / this.scale) - this.translateX;
+        //return (paneX - this.translateX) / this.scale;
     }
 
     /**
@@ -96,7 +159,8 @@ public class SceneModel
      */
     public double computeYInScene(double paneY)
     {
-        return (paneY - this.translateY) / scale;
+        return (paneY / this.scale) - this.translateY;
+        //return (paneY - this.translateY) / this.scale;
     }
 
     /**
@@ -117,7 +181,8 @@ public class SceneModel
      */
     public double computeXInPane(double sceneX)
     {
-        return (sceneX * scale) + this.translateX;
+        //return (sceneX + this.translateX) * this.scale;
+        return sceneX * this.scale + this.translateX;
     }
 
     /**
@@ -127,7 +192,8 @@ public class SceneModel
      */
     public double computeYInPane(double sceneY)
     {
-        return (sceneY * scale) + this.translateY;
+        //return (sceneY + this.translateY) * scale;
+        return sceneY * this.scale + this.translateY;
     }
 
     /**

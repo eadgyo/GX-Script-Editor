@@ -135,8 +135,9 @@ public class SceneController
 
         public Rect2D createMouseRec(MouseEvent event, int size)
         {
-            return new Rect2D(event.getX() - size / 2 - sceneModel.getTranslateX(), event.getY() - size / 2 -
-                    sceneModel.getTranslateY(), size, size);
+            double mouseX = sceneModel.computeXInScene(event.getX());
+            double mouseY = sceneModel.computeYInScene(event.getY());
+            return new Rect2D(mouseX, mouseY, size, size);
         }
 
         @Override
@@ -213,9 +214,11 @@ public class SceneController
         @Override
         public void mousePressed(MouseEvent mouseEvent)
         {
-
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
+
+            sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(lastMouseX);
+            sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(lastMouseY);
 
             script.callObservers();
         }
@@ -343,8 +346,8 @@ public class SceneController
             }
             else
             {
-                double translateX = lastMouseX - mouseEvent.getX();
-                double translateY = lastMouseY - mouseEvent.getY();
+                double translateX = sceneModel.computeHeightInScene(lastMouseX - mouseEvent.getX());
+                double translateY = sceneModel.computeHeightInScene(lastMouseY - mouseEvent.getY());
 
                 if (selectionModel.hasSelectedElements())
                 {
@@ -383,34 +386,24 @@ public class SceneController
         }
 
         @Override
-        public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent)
+        public void mouseWheelMoved(MouseWheelEvent e)
         {
-            float FACTOR = 3;
-            int wheelRotation = mouseWheelEvent.getWheelRotation();
 
-            float desiredScale;
-            float scale = sceneModel.getScale();
+            sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(e.getX());
+            sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(e.getY());
+
+
+            float FACTOR = 2;
+            double factor;
+            int wheelRotation = e.getWheelRotation();
 
             if (wheelRotation < 0)
-            {
-                desiredScale = scale * FACTOR/ -wheelRotation;
-            }
+                factor = FACTOR / -wheelRotation;
             else
-            {
-                desiredScale = scale * wheelRotation / FACTOR;
-            }
+                factor =  wheelRotation / FACTOR;
 
-            // Check if desired scale is valid
-            if (desiredScale < 0.01f)
-            {
-                desiredScale = 0.01f;
-            }
-            else if (desiredScale > 5f)
-            {
-                desiredScale = 5f;
-            }
-
-            sceneModel.setScale(desiredScale);
+            sceneModel.scalePane(factor, e.getX(), e.getY());
+            script.callObservers();
         }
     }
 }

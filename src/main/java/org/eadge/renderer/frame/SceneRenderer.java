@@ -55,18 +55,7 @@ public class SceneRenderer
      */
     public void paint(Graphics2D g, int width, int height, Collection<MutableTreeNode> inSceneNodes, SceneModel sceneModel, SelectionModel selectionModel)
     {
-        // Clear rect
-        g.setColor(backgroundColor);
-        g.fillRect(0, 0, width, height);
-
-        // Save graphics settings
-        AffineTransform transform = g.getTransform();
-
-        // Set scale
-        g.scale(sceneModel.getScale(), sceneModel.getScale());
-
-        // Set translation
-        g.translate(sceneModel.getTranslateX(), sceneModel.getTranslateY());
+        AffineTransform transform = this.prepareScene(g, width, height, sceneModel);
 
         Collection<GXElement> unselectedElements = new HashSet<>();
         Collection<GXLayer> unselectedLayers = new HashSet<>();
@@ -83,8 +72,37 @@ public class SceneRenderer
         // Paint connection
         paintConnectionSelection(g, selectionModel);
 
+        drawDebug(g, sceneModel);
+
         // Reset graphics settings
         g.setTransform(transform);
+
+    }
+
+    private void drawDebug(Graphics2D g, SceneModel sceneModel)
+    {
+        g.setColor(Color.RED);
+        int x = (int) sceneModel.DEBUG_POINT_X;
+        int y = (int) sceneModel.DEBUG_POINT_Y;
+        g.fillOval(x - 3, y - 3, 6, 6);
+    }
+
+    private AffineTransform prepareScene(Graphics2D g, int width, int height, SceneModel sceneModel)
+    {
+        // Clear rect
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, width, height);
+
+        // Save graphics settings
+        AffineTransform transform = g.getTransform();
+
+        // Set scale
+        g.scale(sceneModel.getScale(), sceneModel.getScale());
+
+        // Set translation
+        g.translate(sceneModel.getTranslateX(), sceneModel.getTranslateY());
+
+        return transform;
     }
 
     private void findUnselectedLayersAndElements(Collection<MutableTreeNode> inSceneNodes,

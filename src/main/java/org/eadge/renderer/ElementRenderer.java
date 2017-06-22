@@ -66,6 +66,7 @@ public class ElementRenderer
         g.translate(-element.getX(), -element.getY());
     }
 
+
     public void paintRel(Graphics2D g, GXElement element)
     {
         // Get element width and height
@@ -92,7 +93,6 @@ public class ElementRenderer
 
         // Draw outputs
         entryRenderer.paintOutputs(g, heightOfEntry, element);
-
 
         g.translate(0, -getTotalTextHeight() );
     }
