@@ -112,10 +112,14 @@ public class SceneModel
      */
     public void scalePane(double factor, double paneX, double paneY)
     {
-        double sceneX = paneX; //computeXInScene(paneX);
-        double sceneY = paneY; //computeYInScene(paneY);
+        double oldScale = this.scale;
+        factor = scaleScene(factor);
 
-        scaleScene(factor, sceneX, sceneY);
+        double xScaled = scaleD(translateX * oldScale, paneX, factor);
+        double yScaled = scaleD(translateY * oldScale, paneY, factor);
+
+        setTranslateX(xScaled / this.scale);
+        setTranslateY(yScaled / this.scale);
     }
 
     /**
@@ -126,14 +130,10 @@ public class SceneModel
      */
     public void scaleScene(double factor, double sceneX, double sceneY)
     {
-        double _scale = this.scale;
-        factor = scaleScene(factor);
+        double paneX = computeXInPane(sceneX);
+        double paneY = computeYInPane(sceneY);
 
-        double xScaled = scaleD(translateX * _scale, sceneX, factor);
-        double yScaled = scaleD(translateY * _scale, sceneY, factor);
-
-        setTranslateX(xScaled / this.scale);
-        setTranslateY(yScaled / this.scale);
+        scalePane(factor, paneX, paneY);
     }
 
     public double scaleD(double v, double center, double factor)
