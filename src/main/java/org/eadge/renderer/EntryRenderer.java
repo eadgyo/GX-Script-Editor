@@ -42,7 +42,7 @@ public class EntryRenderer
         this.sizeBetween = sizeBetween;
     }
 
-    public void paintInputs(Graphics graphics, double inputHeight, GXElement gxElement)
+    public void paintInputs(Graphics graphics, double inputHeight, double totalTextHeight, GXElement gxElement)
     {
         Graphics2D g = (Graphics2D) graphics;
 
@@ -51,12 +51,11 @@ public class EntryRenderer
         for (int inputIndex = 0; inputIndex < numberOfInputs; inputIndex++)
         {
             int inputX = (int) getRelativeInputX(gxElement);
-            int inputY = (int) getRelativeInputY(inputHeight, inputIndex);
-            int centerY = (int) (inputHeight * 0.5 + inputY);
+            int inputY = (int) getRelativeInputY(inputHeight, totalTextHeight, inputIndex);
 
             // Fill connexion rect
-            int recX = (int) (inputX);
-            int recY = (int) (centerY - rectSize * 0.5);
+            int recX = (int) (inputX - rectSize * 0.5);
+            int recY = (int) (inputY - rectSize * 0.5);
             g.fillRect( recX,
                         recY,
                         rectSize,
@@ -67,12 +66,12 @@ public class EntryRenderer
             int textHeight = g.getFontMetrics().getHeight();
 
             int textX = sizeBetween + rectSize * 2;
-            int textY = (int) (centerY + textHeight * 0.5);
+            int textY = (int) (inputY + textHeight * 0.5);
             g.drawString(text, textX, textY);
         }
     }
 
-    public void paintOutputs(Graphics graphics, double outputHeight, GXElement gxElement)
+    public void paintOutputs(Graphics graphics, double outputHeight, double totalTextHeight, GXElement gxElement)
     {
         Graphics2D g = (Graphics2D) graphics;
 
@@ -83,12 +82,11 @@ public class EntryRenderer
         for (int outputIndex = 0; outputIndex < numberOfOutputs; outputIndex++)
         {
             int outputX = (int) getRelativeOutputX(gxElement);
-            int outputY = (int) getRelativeOutputY(outputHeight, outputIndex);
-            int centerY = (int) (outputHeight * 0.5 + outputY);
+            int outputY = (int) getRelativeOutputY(outputHeight, totalTextHeight, outputIndex);
 
             // Fill connexion rect
             int recX = (int) (outputX - rectSize * 0.5);
-            int recY = (int) (centerY - rectSize * 0.5);
+            int recY = (int) (outputY - rectSize * 0.5);
             g.fillRect( recX,
                         recY,
                         rectSize,
@@ -99,7 +97,7 @@ public class EntryRenderer
             int textWidth = g.getFontMetrics().stringWidth(text);
 
             int textX = elementWidth - sizeBetween - rectSize * 2 - textWidth;
-            int textY = (int) (centerY + textHeight * 0.5);
+            int textY = (int) (outputY + textHeight * 0.5);
             g.drawString(text, textX, textY);
         }
     }
@@ -118,22 +116,24 @@ public class EntryRenderer
      * Get input Y relative to the start of the element
      * @param heightOfInput input height block
      * @param inputIndex input index
+     * @param totalTextHeight height of the text removed from the entries
      * @return relative y
      */
-    private double getRelativeInputY(double heightOfInput, int inputIndex)
+    private double getRelativeInputY(double heightOfInput, double totalTextHeight, int inputIndex)
     {
-        return heightOfInput * inputIndex;
+        return heightOfInput * (inputIndex + 0.5) + totalTextHeight;
     }
 
     /**
      * Get input Y relative to the start of the element
      * @param inputIndex input index
      * @param gxElement used element
+     * @param totalTextHeight height of the text removed from the entries
      * @return relative y
      */
-    public double getRelativeInputY(int inputIndex, GXElement gxElement)
+    public double getRelativeInputY(int inputIndex, GXElement gxElement, double totalTextHeight)
     {
-        return getRelativeInputY(getHeightOfEntry(gxElement), inputIndex);
+        return getRelativeInputY(getHeightOfEntry(gxElement, totalTextHeight), totalTextHeight, inputIndex);
     }
 
     /**
@@ -147,25 +147,27 @@ public class EntryRenderer
     }
 
     /**
-     * Get output Y relative to the start of the element
+     * Get output Y relative to the start of the element entries
      * @param heightOfOutput output height block
+     * @param totalTextHeight height of the text height
      * @param outputIndex output index
      * @return relative y
      */
-    private double getRelativeOutputY(double heightOfOutput, int outputIndex)
+    private double getRelativeOutputY(double heightOfOutput, double totalTextHeight, int outputIndex)
     {
-        return heightOfOutput * outputIndex;
+        return heightOfOutput * (outputIndex + 0.5) + totalTextHeight;
     }
 
     /**
      * Get output Y relative to the start of the element
      * @param outputIndex output index
      * @param gxElement used element
+     * @param totalTextHeight height of the text removed from the entry
      * @return relative y
      */
-    public double getRelativeOutputY(int outputIndex, GXElement gxElement)
+    public double getRelativeOutputY(int outputIndex, GXElement gxElement, double totalTextHeight)
     {
-        return getRelativeOutputY(getHeightOfEntry(gxElement), outputIndex);
+        return getRelativeOutputY(getHeightOfEntry(gxElement, totalTextHeight), totalTextHeight, outputIndex);
     }
 
     public Color getTextColor()
@@ -203,9 +205,10 @@ public class EntryRenderer
     /**
      * Get the height of entry block
      * @param element used element
+     * @param totalTextHeight height of the text removed from the entry
      * @return height of one entry block
      */
-    public double getHeightOfEntry(GXElement element)
+    public double getHeightOfEntry(GXElement element, double totalTextHeight)
     {
         // Compute input/output element size
         int numberOfInputs = element.getNumberOfInputs();
@@ -214,6 +217,6 @@ public class EntryRenderer
         // Get max to align input and outputs
         double maxOfInputsOutputs = (numberOfInputs > numberOfOutputs) ? numberOfInputs : numberOfOutputs;
 
-        return (element.getHeight() - getSizeBetween() * 2)/maxOfInputsOutputs;
+        return (element.getHeight() - totalTextHeight)/maxOfInputsOutputs;
     }
 }

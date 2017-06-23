@@ -150,7 +150,7 @@ public class SceneController
             MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
 
-            if (mouseEvent.isControlDown())
+            if (mouseEvent.isControlDown() || mouseEvent.isShiftDown())
             {
                 if (node != null)
                 {
@@ -179,30 +179,7 @@ public class SceneController
                 {
                     selectionModel.setSelectedElements(node);
 
-                    if (node instanceof GXElement)
-                    {
-                        DebugTools.PrintDebug("Selecting object");
-
-                        GXElement gxElement = (GXElement) node;
-
-                        // Check if it's connecting on entry
-                        EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
-                        if (entryIndex.entryIndex != -1)
-                        {
-                            DebugTools.PrintDebug("Connecting entry");
-
-                            selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
-
-                            if (mouseEvent.getButton() == MouseEvent.BUTTON1)
-                            {
-                                connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
-                            }
-                            else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
-                            {
-                                script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
-                            }
-                        }
-                    }
+                    DebugTools.PrintDebug("Selecting node");
                 }
             }
 
@@ -220,6 +197,36 @@ public class SceneController
 
             sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(lastMouseX);
             sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(lastMouseY);
+
+            // Check if it's selecting an entry
+            if (!mouseEvent.isControlDown() && !mouseEvent.isShiftDown())
+            {
+                Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
+                MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
+
+                if (node instanceof GXElement)
+                {
+                    GXElement gxElement = (GXElement) node;
+
+                    // Check if it's connecting on entry
+                    EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
+                    if (entryIndex.entryIndex != -1)
+                    {
+                        DebugTools.PrintDebug("Connecting entry");
+
+                        selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
+
+                        if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+                        {
+                            connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
+                        }
+                        else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
+                        {
+                            script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                        }
+                    }
+                }
+            }
 
             script.callObservers();
         }

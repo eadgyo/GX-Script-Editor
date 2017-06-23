@@ -94,4 +94,10 @@ public class GTools
         int height = (int) rect2D.getHeight();
         g.fillRect(x, y, width, height);
     }
+
+    public static void drawRect2D(Graphics2D g, Rect2D rect2D, Color color)
+    {
+        g.setColor(color);
+        drawRect2D(g, rect2D);
+    }
 }

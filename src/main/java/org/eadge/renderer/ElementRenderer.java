@@ -2,6 +2,7 @@ package org.eadge.renderer;
 
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.model.script.GXElement;
+import org.eadge.utils.GTools;
 
 import java.awt.*;
 
@@ -83,18 +84,42 @@ public class ElementRenderer
         paintRelTitle(g, element, elementWidth);
 
         // Translate to the start of the entries
-        g.translate(0, getTotalTextHeight() );
+        // g.translate(0, getTotalTextHeight() );
 
         // Get height of input rect
-        double heightOfEntry = entryRenderer.getHeightOfEntry(element) - getTextPadding();
+        double heightOfEntry = getHeightOfEntry(element);
 
         // Draw inputs
-        entryRenderer.paintInputs(g, heightOfEntry, element);
+        entryRenderer.paintInputs(g, heightOfEntry, getTotalTextHeight(), element);
 
         // Draw outputs
-        entryRenderer.paintOutputs(g, heightOfEntry, element);
+        entryRenderer.paintOutputs(g, heightOfEntry, getTotalTextHeight(), element);
 
-        g.translate(0, -getTotalTextHeight() );
+        //g.translate(0, -getTotalTextHeight() );
+        paintDebugBlocks(g, element);
+    }
+
+    private void paintDebug(Graphics2D g, GXElement element)
+    {
+        for (int i = 0; i < element.getNumberOfInputs(); i++)
+        {
+            Rect2D inputRec = this.createInputRec(element, i);
+            GTools.drawRect2D(g, inputRec, Color.YELLOW);
+        }
+
+        for (int i = 0; i < element.getNumberOfOutputs(); i++)
+        {
+            Rect2D outputRec = this.createOutputRec(element, i);
+            GTools.drawRect2D(g, outputRec, Color.GREEN);
+        }
+    }
+    private void paintDebugBlocks(Graphics2D g, GXElement element)
+    {
+        Rect2D inputZoneRect = this.createInputZoneRect(element);
+        GTools.drawRect2D(g, inputZoneRect, Color.YELLOW);
+
+        Rect2D outputZoneRect = this.createOutputZoneRect(element);
+        GTools.drawRect2D(g, outputZoneRect, Color.GREEN);
     }
 
     private void paintRelTitle(Graphics2D g, GXElement element, int elementWidth)
@@ -113,7 +138,7 @@ public class ElementRenderer
 
     public double getRelativeInputY(int inputIndex, GXElement gxElement)
     {
-        return entryRenderer.getRelativeInputY(inputIndex, gxElement);
+        return entryRenderer.getRelativeInputY(inputIndex, gxElement, getTotalTextHeight());
     }
 
     public double getRelativeOutputX(GXElement gxElement)
@@ -123,7 +148,7 @@ public class ElementRenderer
 
     public double getRelativeOutputY(int outputIndex, GXElement gxElement)
     {
-        return entryRenderer.getRelativeOutputY(outputIndex, gxElement);
+        return entryRenderer.getRelativeOutputY(outputIndex, gxElement, getTotalTextHeight());
     }
 
     public double getRelativeEntryX(GXElement gxElement, boolean isInput)
@@ -200,20 +225,30 @@ public class ElementRenderer
 
     public Rect2D createInputZoneRect(GXElement gxElement)
     {
-        double entryWidth = entryRenderer.getRectSize() + entryRenderer.getSizeBetween();
-        return new Rect2D(gxElement.getX(), gxElement.getY(), entryWidth, gxElement.getHeight());
+        int rectSize = entryRenderer.getRectSize();
+        int entryWidth = rectSize + entryRenderer.getSizeBetween();
+        double startX = getAbsoluteInputX(gxElement) - rectSize/2;
+        double startY = getAbsoluteInputY(gxElement, 0) - rectSize/2;
+        return new Rect2D(startX, startY,
+                          entryWidth,
+                          getHeightOfInputs(gxElement));
     }
 
     public Rect2D createOutputZoneRect(GXElement gxElement)
     {
-        double entryWidth = entryRenderer.getRectSize() + entryRenderer.getSizeBetween();
-        return new Rect2D(gxElement.getX() - entryWidth, gxElement.getY(), entryWidth, gxElement.getHeight());
+        int rectSize = entryRenderer.getRectSize();
+        int entryWidth = rectSize + entryRenderer.getSizeBetween();
+        double startX = getAbsoluteOutputX(gxElement) - rectSize/2;
+        double startY = getAbsoluteOutputY(gxElement, 0) - rectSize / 2;
+        return new Rect2D(startX, startY,
+                          entryWidth,
+                          getHeightOfOutputs(gxElement));
     }
 
     public Rect2D createInputRec(GXElement gxElement, int inputIndex)
     {
         double absoluteX = entryRenderer.getRelativeInputX(gxElement);
-        double absoluteY = entryRenderer.getRelativeInputY(inputIndex, gxElement);
+        double absoluteY = entryRenderer.getRelativeInputY(inputIndex, gxElement, getTotalTextHeight());
 
         double rectSize = entryRenderer.getRectSize();
         return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);
@@ -222,7 +257,7 @@ public class ElementRenderer
     public Rect2D createOutputRec(GXElement gxElement, int outputIndex)
     {
         double absoluteX = entryRenderer.getRelativeOutputX(gxElement);
-        double absoluteY = entryRenderer.getRelativeOutputY(outputIndex, gxElement);
+        double absoluteY = entryRenderer.getRelativeOutputY(outputIndex, gxElement, getTotalTextHeight());
 
         double rectSize = entryRenderer.getRectSize();
         return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);
@@ -243,7 +278,59 @@ public class ElementRenderer
 
     public double getHeightOfEntry(GXElement element)
     {
-        return entryRenderer.getHeightOfEntry(element);
+        return entryRenderer.getHeightOfEntry(element, getTotalTextHeight());
+    }
+
+    public double getHeightOfInputs(GXElement element)
+    {
+        return getHeightOfEntry(element) * element.getNumberOfInputs();
+    }
+
+    public double getHeightOfOutputs(GXElement element)
+    {
+        return getHeightOfEntry(element) * element.getNumberOfOutputs();
+    }
+
+    /**
+     * Get the absolute x coordinate of start of input
+     * @param element element
+     * @return absolute x coordinate of input
+     */
+    public double getAbsoluteInputX(GXElement element)
+    {
+        return element.getX() + getRelativeInputX(element);
+    }
+
+    /**
+     * Get the absolute y coordinate of start of input
+     * @param element element
+     * @param inputIndex input index
+     * @return absolute y coordinate of input
+     */
+    public double getAbsoluteInputY(GXElement element, int inputIndex)
+    {
+        return element.getY() + getRelativeInputY(inputIndex, element);
+    }
+
+    /**
+     * Get the absolute x coordinate of start of output
+     * @param element element
+     * @return absolute x coordinate of output
+     */
+    public double getAbsoluteOutputX(GXElement element)
+    {
+        return element.getX() + getRelativeOutputX(element);
+    }
+
+    /**
+     * Get the absolute y coordinate of start of output
+     * @param element element
+     * @param outputIndex output index
+     * @return absolute y coordinate of output
+     */
+    public double getAbsoluteOutputY(GXElement element, int outputIndex)
+    {
+        return element.getY() + getRelativeOutputY(outputIndex, element);
     }
 
     /**
