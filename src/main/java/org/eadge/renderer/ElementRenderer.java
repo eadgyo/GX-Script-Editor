@@ -65,6 +65,8 @@ public class ElementRenderer
         g.translate(element.getX(), element.getY());
         paintRel(g, element);
         g.translate(-element.getX(), -element.getY());
+
+        paintDebugBlocks(g, element);
     }
 
 
@@ -96,7 +98,7 @@ public class ElementRenderer
         entryRenderer.paintOutputs(g, heightOfEntry, getTotalTextHeight(), element);
 
         //g.translate(0, -getTotalTextHeight() );
-        paintDebugBlocks(g, element);
+
     }
 
     private void paintDebug(Graphics2D g, GXElement element)

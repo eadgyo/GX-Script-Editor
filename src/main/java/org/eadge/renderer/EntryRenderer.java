@@ -121,7 +121,7 @@ public class EntryRenderer
      */
     private double getRelativeInputY(double heightOfInput, double totalTextHeight, int inputIndex)
     {
-        return heightOfInput * (inputIndex + 0.5) + totalTextHeight;
+        return heightOfInput * inputIndex + totalTextHeight;
     }
 
     /**
@@ -143,7 +143,7 @@ public class EntryRenderer
      */
     public double getRelativeOutputX(GXElement gxElement)
     {
-        return gxElement.getWidth() - sizeBetween;
+        return gxElement.getWidth() - sizeBetween - rectSize;
     }
 
     /**
@@ -155,7 +155,7 @@ public class EntryRenderer
      */
     private double getRelativeOutputY(double heightOfOutput, double totalTextHeight, int outputIndex)
     {
-        return heightOfOutput * (outputIndex + 0.5) + totalTextHeight;
+        return heightOfOutput * outputIndex + totalTextHeight;
     }
 
     /**

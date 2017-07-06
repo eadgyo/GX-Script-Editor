@@ -61,8 +61,6 @@ public class MyFrame extends JFrame
         createMenu();
         createComponents();
         createRenderer();
-
-        this.pack();
     }
 
     private void createMenu()
