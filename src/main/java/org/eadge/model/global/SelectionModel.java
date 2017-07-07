@@ -4,10 +4,7 @@ import org.eadge.model.global.project.SelectionObservable;
 
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -31,7 +28,7 @@ public class SelectionModel extends DefaultTreeSelectionModel
     /**
      * Holds selected elements
      */
-    private Collection<MutableTreeNode> selectedElements = new HashSet<>();
+    private Set<MutableTreeNode> selectedElements = new HashSet<>();
 
     /**
      * Store the element on mouse dragged
@@ -207,13 +204,34 @@ public class SelectionModel extends DefaultTreeSelectionModel
     }
 
     /**
-     * Check if MyGroupsOfElements node is used in selection process
+     * Check if MyGroupsOfElements node is selected
      * @param node checked node
      * @return true if the node is selected, false otherwise
      */
     public boolean contains(MutableTreeNode node)
     {
-        return selectedElements.contains(node);// || onDragElement == node;
+        return selectedElements.contains(node);
     }
 
+
+    /**
+     * Check if one of nodes is selected
+     * @param nodes checked node
+     * @return true if the node is selected, false otherwise
+     */
+    public boolean containsOne(Collection<MutableTreeNode> nodes)
+    {
+        for (MutableTreeNode node : nodes)
+        {
+            if (this.contains(node))
+                return true;
+        }
+        return false;
+    }
+
+    public void clearSelection()
+    {
+        this.selectionState = SelectionState.NONE;
+        this.selectedElements.clear();
+    }
 }

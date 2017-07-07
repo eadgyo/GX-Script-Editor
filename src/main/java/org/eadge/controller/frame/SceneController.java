@@ -26,6 +26,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -225,6 +226,18 @@ public class SceneController
                             script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
                         }
                     }
+
+                }
+                else if (node != null)
+                {
+                    // Check if it's selecting one node
+                    Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
+                    if (!selectionModel.containsOne(nodes))
+                        selectionModel.clearSelection();
+                }
+                else
+                {
+                    selectionModel.clearSelection();
                 }
             }
 
@@ -356,7 +369,7 @@ public class SceneController
             {
                 double translateX = sceneModel.computeHeightInScene(lastMouseX - mouseEvent.getX());
                 double translateY = sceneModel.computeHeightInScene(lastMouseY - mouseEvent.getY());
-
+                Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
                 if (selectionModel.hasSelectedElements())
                 {
                     DebugTools.PrintDebug("Dragging selected elements");

@@ -47,7 +47,7 @@ public class EntryFinder
             return -1;
 
         double heightOfEntry = elementRenderer.getHeightOfEntry(element);
-        double relativeY = rect2D.getCenterY() - element.getY();
+        double relativeY = rect2D.getCenterY() - entryRect.getY();
 
         if (relativeY < 0)
             return 0;

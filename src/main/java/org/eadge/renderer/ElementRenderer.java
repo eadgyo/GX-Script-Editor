@@ -65,8 +65,7 @@ public class ElementRenderer
         g.translate(element.getX(), element.getY());
         paintRel(g, element);
         g.translate(-element.getX(), -element.getY());
-
-        paintDebugBlocks(g, element);
+        //paintDebugBlocks(g, element);
     }
 
 
