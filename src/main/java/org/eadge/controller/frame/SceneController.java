@@ -209,6 +209,8 @@ public class SceneController
             sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(lastMouseX);
             sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(lastMouseY);
 
+            connectionModel.setDesiring(true);
+
             // Check if it's selecting an entry
             if (!mouseEvent.isControlDown() && !mouseEvent.isShiftDown())
             {
@@ -238,6 +240,14 @@ public class SceneController
                         {
                             script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
                         }
+                    }
+                    else
+                    {
+                        // Check if it's selecting one node
+                        Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
+                        if (!selectionModel.containsOne(nodes))
+                            selectionModel.clearSelection();
+                        selectionModel.addSelectedElement(gxElement);
                     }
                 }
                 else if (node != null)
@@ -271,7 +281,7 @@ public class SceneController
                 mouseRect = createMouseRec(mouseEvent, 6);
 
                 // If mouse is dragging toward another element
-                if (node != null && node instanceof GXElement && selectionModel.contains(node))
+                if (node != null && node instanceof GXElement)
                 {
                     GXElement onDragged = (GXElement) node;
                     selectionModel.setOnDragElement(onDragged);
@@ -302,10 +312,10 @@ public class SceneController
                                                    connectionModel.getEndIndex());
                         }
 
-                        connectionModel.setDesiring(true);
-                        selectionModel.clearDragElement();
                     }
                 }
+                connectionModel.setDesiring(true);
+                selectionModel.clearDragElement();
             }
 
             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);

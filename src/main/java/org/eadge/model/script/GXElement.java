@@ -518,7 +518,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
      */
     public boolean canConnectOnEntry(boolean isInput, int entryIndex, GXElement otherElement, boolean isOtherInput, int otherEntryIndex)
     {
-        if (isInput == isOtherInput)
+        if (isInput == isOtherInput || otherElement == this)
             return false;
 
         if (isInput)

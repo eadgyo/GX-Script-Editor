@@ -178,7 +178,7 @@ public class Script extends Observable
 
     public void connectEntities(GXElement onOutputEntity, int outputIndex, GXElement onInputEntity, int inputIndex)
     {
-        onInputEntity.addLinkInput(inputIndex, outputIndex, onInputEntity);
+        onInputEntity.addLinkInput(inputIndex, outputIndex, onOutputEntity);
 
         callObservers();
     }

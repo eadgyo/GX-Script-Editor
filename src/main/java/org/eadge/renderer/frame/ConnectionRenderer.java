@@ -30,9 +30,7 @@ public class ConnectionRenderer
 
     public void paint(Graphics2D g, GXElement gxElement)
     {
-        g.translate(gxElement.getX(), gxElement.getY());
-        paintRel(g, gxElement);
-        g.translate(-gxElement.getX(), -gxElement.getY());
+        paintAbs(g, gxElement);
     }
 
     /**
@@ -40,7 +38,7 @@ public class ConnectionRenderer
      * @param g used to render
      * @param gxElement draw input connections
      */
-    public void paintRel(Graphics2D g, GXElement gxElement)
+    public void paintAbs(Graphics2D g, GXElement gxElement)
     {
         g.setColor(colorConnection);
 
