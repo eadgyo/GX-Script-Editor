@@ -108,6 +108,26 @@ public class SelectionModel extends DefaultTreeSelectionModel
         return notSelectedElements;
     }
 
+    /**
+     * Get already selected element from the given list
+     *
+     * @param mutableTreeNodes list used to get not selected element
+     *
+     * @return list of not selected elements
+     */
+    public Set<MutableTreeNode> getAlreadySelectedElements(Set<MutableTreeNode> mutableTreeNodes)
+    {
+        HashSet<MutableTreeNode> selectedElements = new HashSet<>();
+
+        for (MutableTreeNode el : mutableTreeNodes)
+        {
+            if (contains(el))
+                selectedElements.add(el);
+        }
+
+        return selectedElements;
+    }
+
     public void setSelectedElements(MutableTreeNode selectedElement)
     {
         this.selectedElements.clear();

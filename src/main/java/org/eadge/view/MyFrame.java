@@ -29,7 +29,10 @@ public class MyFrame extends JFrame
                                                                        entryRenderer);
 
     public ConnectionRenderer connectionRenderer = new ConnectionRenderer(Color.BLACK, elementRenderer);
-    public ConnectionSelectionRenderer connectionSelectionRenderer = new ConnectionSelectionRenderer(elementRenderer, Color.BLUE, Color.RED);
+    public ConnectionSelectionRenderer connectionSelectionRenderer = new ConnectionSelectionRenderer(elementRenderer,
+                                                                                                     Color.BLUE,
+                                                                                                     Color.GREEN, Color
+                                                                                                             .RED);
 
     public SelectionRenderer selectionRenderer = new SelectionRenderer(selectedElementRenderer, invalidMovingElementRenderer, movingElementRenderer);
     public SceneRenderer sceneRenderer = new SceneRenderer(Color.WHITE, new Color(255, 95, 90), elementRenderer, selectionRenderer, connectionRenderer, connectionSelectionRenderer);

@@ -115,7 +115,7 @@ public class ElementFinder
      * @param mouseRect square selecting elements
      * @param selectionModel selection model used to determine which element is already selected
      */
-    public MutableTreeNode retrieveFirstElement(Rect2D mouseRect, SelectionModel selectionModel)
+    public MutableTreeNode retrieveFirstElementOut(Rect2D mouseRect, SelectionModel selectionModel)
     {
         // Retrieve all selected elements using mouse square rect
         Set<MutableTreeNode> mutableTreeNodes = retrieveElements(mouseRect);
@@ -147,6 +147,30 @@ public class ElementFinder
             }
         }
 
+        return null;
+    }
+
+    /**
+     * Get first element in the selection square with advance selection for the first element
+     *
+     * @param mouseRect square selecting elements
+     * @param selectionModel selection model used to determine which element is already selected
+     */
+    public MutableTreeNode retrieveFirstElementIn(Rect2D mouseRect, SelectionModel selectionModel)
+    {
+        // Retrieve all selected elements using mouse square rect
+        Set<MutableTreeNode> mutableTreeNodes = retrieveElements(mouseRect);
+        Set<MutableTreeNode> selectedElements = selectionModel.getAlreadySelectedElements(mutableTreeNodes);
+
+        // Get first if possible already selected element
+        if (selectedElements.iterator().hasNext())
+        {
+            return selectedElements.iterator().next();
+        }
+        else if (mutableTreeNodes.iterator().hasNext())
+        {
+            return mutableTreeNodes.iterator().next();
+        }
         return null;
     }
 }

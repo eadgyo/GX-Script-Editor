@@ -66,6 +66,7 @@ public class ElementRenderer
         paintRel(g, element);
         g.translate(-element.getX(), -element.getY());
         //paintDebugBlocks(g, element);
+        paintDebugEntries(g, element);
     }
 
 
@@ -121,6 +122,20 @@ public class ElementRenderer
 
         Rect2D outputZoneRect = this.createOutputZoneRect(element);
         GTools.drawRect2D(g, outputZoneRect, Color.GREEN);
+    }
+    private void paintDebugEntries(Graphics2D g, GXElement element)
+    {
+        for (int i = 0; i < element.getNumberOfInputs(); i++)
+        {
+            Rect2D inputRec = this.createInputRec(element, i);
+            GTools.drawRect2D(g, inputRec, Color.GREEN);
+        }
+
+        for (int i = 0; i < element.getNumberOfOutputs(); i++)
+        {
+            Rect2D outputRec = this.createOutputRec(element, i);
+            GTools.drawRect2D(g, outputRec, Color.blue);
+        }
     }
 
     private void paintRelTitle(Graphics2D g, GXElement element, int elementWidth)
@@ -248,8 +263,9 @@ public class ElementRenderer
 
     public Rect2D createInputRec(GXElement gxElement, int inputIndex)
     {
-        double absoluteX = entryRenderer.getRelativeInputX(gxElement);
-        double absoluteY = entryRenderer.getRelativeInputY(inputIndex, gxElement, getTotalTextHeight());
+        double absoluteX = entryRenderer.getRelativeInputX(gxElement) + gxElement.getX();
+        double absoluteY = entryRenderer.getRelativeInputY(inputIndex, gxElement, getTotalTextHeight()) + gxElement
+                .getY();
 
         double rectSize = entryRenderer.getRectSize();
         return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);
@@ -257,8 +273,9 @@ public class ElementRenderer
 
     public Rect2D createOutputRec(GXElement gxElement, int outputIndex)
     {
-        double absoluteX = entryRenderer.getRelativeOutputX(gxElement);
-        double absoluteY = entryRenderer.getRelativeOutputY(outputIndex, gxElement, getTotalTextHeight());
+        double absoluteX = entryRenderer.getRelativeOutputX(gxElement) + gxElement.getX();
+        double absoluteY = entryRenderer.getRelativeOutputY(outputIndex, gxElement, getTotalTextHeight()) + gxElement
+                .getY();
 
         double rectSize = entryRenderer.getRectSize();
         return new Rect2D(absoluteX - rectSize / 2, absoluteY - rectSize / 2, rectSize, rectSize);

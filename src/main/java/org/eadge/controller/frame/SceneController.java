@@ -142,13 +142,23 @@ public class SceneController
             return new Rect2D(mouseX, mouseY, size, size);
         }
 
+        public double getXinScene(MouseEvent event)
+        {
+            return sceneModel.computeXInScene(event.getX());
+        }
+
+        public double  getYinScene(MouseEvent event)
+        {
+            return sceneModel.computeYInScene(event.getY());
+        }
+
         @Override
         public void mouseClicked(MouseEvent mouseEvent)
         {
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
             // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
+            MutableTreeNode node = elementFinder.retrieveFirstElementOut(mouseRect, selectionModel);
             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
 
             if (mouseEvent.isControlDown() || mouseEvent.isShiftDown())
@@ -203,7 +213,7 @@ public class SceneController
             if (!mouseEvent.isControlDown() && !mouseEvent.isShiftDown())
             {
                 Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
-                MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
+                MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
 
                 if (node instanceof GXElement)
                 {
@@ -215,18 +225,20 @@ public class SceneController
                     {
                         DebugTools.PrintDebug("Connecting entry");
 
+                        selectionModel.clearSelection();
+                        selectionModel.addSelectedElement(gxElement);
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
 
                         if (mouseEvent.getButton() == MouseEvent.BUTTON1)
                         {
                             connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
+                            connectionModel.setDesiredPos(mouseRect.getCenterX(), mouseRect.getCenterY());
                         }
                         else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
                         {
                             script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
                         }
                     }
-
                 }
                 else if (node != null)
                 {
@@ -289,6 +301,9 @@ public class SceneController
                                                    onDragged,
                                                    connectionModel.getEndIndex());
                         }
+
+                        connectionModel.setDesiring(true);
+                        selectionModel.clearDragElement();
                     }
                 }
             }
@@ -314,21 +329,21 @@ public class SceneController
         }
 
         @Override
-        public void mouseDragged(MouseEvent mouseEvent)
+        public void mouseDragged(MouseEvent ev)
         {
-            Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
+            Rect2D mouseRect = createMouseRec(ev, 4 );
 
             // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect, selectionModel);
+            MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
 
             // If connecting
             if (selectionModel.isSelectionStateEquals(SelectionModel.SelectionState.CONNECTING))
             {
                 // Create new bigger mouse rect
-                mouseRect = createMouseRec(mouseEvent, 6);
+                mouseRect = createMouseRec(ev, 6);
 
                 // If mouse is dragging toward another element
-                if (node != null && node instanceof GXElement && selectionModel.contains(node))
+                if (node != null && node instanceof GXElement)
                 {
                     GXElement onDragged = (GXElement) node;
                     selectionModel.setOnDragElement(onDragged);
@@ -356,19 +371,21 @@ public class SceneController
                     else
                     {
                         connectionModel.setDesiring(true);
-                        connectionModel.setDesiredPos(mouseEvent.getX(), mouseEvent.getY());
+                        selectionModel.setActionValid(true);
+                        connectionModel.setDesiredPos(getXinScene(ev), getYinScene(ev));
                     }
                 }
                 else
                 {
                     connectionModel.setDesiring(true);
-                    connectionModel.setDesiredPos(mouseEvent.getX(), mouseEvent.getY());
+                    selectionModel.setActionValid(true);
+                    connectionModel.setDesiredPos(getXinScene(ev), getYinScene(ev));
                 }
             }
             else
             {
-                double translateX = sceneModel.computeHeightInScene(lastMouseX - mouseEvent.getX());
-                double translateY = sceneModel.computeHeightInScene(lastMouseY - mouseEvent.getY());
+                double translateX = sceneModel.computeHeightInScene(lastMouseX - ev.getX());
+                double translateY = sceneModel.computeHeightInScene(lastMouseY - ev.getY());
                 Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
                 if (selectionModel.hasSelectedElements())
                 {
@@ -394,8 +411,8 @@ public class SceneController
                 }
             }
 
-            lastMouseX = mouseEvent.getX();
-            lastMouseY = mouseEvent.getY();
+            lastMouseX = ev.getX();
+            lastMouseY = ev.getY();
 
             script.callObservers();
         }
@@ -433,19 +450,16 @@ public class SceneController
         @Override
         public void dragGestureRecognized(DragGestureEvent dragGestureEvent)
         {
-            System.out.println("Dragged gesture");
         }
 
         @Override
         public void dragEnter(DragSourceDragEvent dragSourceDragEvent)
         {
-            System.out.println("Entered");
         }
 
         @Override
         public void dragOver(DragSourceDragEvent dragSourceDragEvent)
         {
-            System.out.println("Drag over");
         }
 
         @Override

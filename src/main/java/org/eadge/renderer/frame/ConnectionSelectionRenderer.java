@@ -29,11 +29,19 @@ public class ConnectionSelectionRenderer
      */
     private Color invalidLineColor;
 
+    /**
+     * Keeps the color of the desiring line
+     */
+    private Color desiringLineColor;
 
 
-    public ConnectionSelectionRenderer(ElementRenderer elementRenderer, Color validLineColor, Color invalidLineColor)
+    public ConnectionSelectionRenderer(ElementRenderer elementRenderer,
+                                       Color desiringLineColor,
+                                       Color validLineColor,
+                                       Color invalidLineColor)
     {
         this.elementRenderer = elementRenderer;
+        this.desiringLineColor = desiringLineColor;
         this.validLineColor = validLineColor;
         this.invalidLineColor = invalidLineColor;
     }
@@ -68,6 +76,11 @@ public class ConnectionSelectionRenderer
             // If no element is on drag
             if (connectionModel.isDesiring())
             {
+                endX = (int) connectionModel.getDesiredX();
+                endY = (int) connectionModel.getDesiredY();
+            }
+            else
+            {
                 boolean isEndInput    = connectionModel.isEndInput();
                 int     endIndexEntry = connectionModel.getEndIndex();
 
@@ -77,16 +90,15 @@ public class ConnectionSelectionRenderer
                                                                 onDragElement,
                                                                 isEndInput) + onDragElement.getY());
             }
-            else
-            {
-                endX = (int) connectionModel.getDesiredX();
-                endY = (int) connectionModel.getDesiredY();
-            }
 
             // Draw line using different line color
             boolean actionValid = selectionModel.isActionValid();
 
-            if (actionValid)
+            if (connectionModel.isDesiring())
+            {
+                g.setColor(desiringLineColor);
+            }
+            else if (actionValid)
             {
                 g.setColor(validLineColor);
             }

@@ -418,8 +418,8 @@ public class ElementsController
                 selectionModel.setSelectionPath(pathForLocation);
 
                 // Update the on dragg element
-                selectionModel.setOnDragElement((MutableTreeNode)((pathForLocation == null) ? script.getLayeredScript().getRoot()
-                                                                                            : pathForLocation.getLastPathComponent()));
+//                selectionModel.setOnDragElement((MutableTreeNode)((pathForLocation == null) ? script.getLayeredScript().getRoot()
+//                                                                                            : pathForLocation.getLastPathComponent()));
 
                 // Update selection
                 selectionModel.callObservers();
