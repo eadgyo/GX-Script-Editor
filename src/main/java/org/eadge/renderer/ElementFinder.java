@@ -169,7 +169,7 @@ public class ElementFinder
         }
         else if (mutableTreeNodes.iterator().hasNext())
         {
-            return mutableTreeNodes.iterator().next();
+            return retrieveFirstElementOut(mouseRect, selectionModel);
         }
         return null;
     }

@@ -50,6 +50,11 @@ public class SelectionModel extends DefaultTreeSelectionModel
      */
     private boolean isActionValid = true;
 
+    /**
+     * Store if there is a new selection
+     */
+    private boolean newSelection = false;
+
     public void addSelectedElement(MutableTreeNode node)
     {
         selectedElements.add(node);
@@ -253,5 +258,15 @@ public class SelectionModel extends DefaultTreeSelectionModel
     {
         this.selectionState = SelectionState.NONE;
         this.selectedElements.clear();
+    }
+
+    public boolean isNewSelection()
+    {
+        return newSelection;
+    }
+
+    public void setNewSelection(boolean newSelection)
+    {
+        this.newSelection = newSelection;
     }
 }

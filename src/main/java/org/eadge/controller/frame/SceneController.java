@@ -159,7 +159,6 @@ public class SceneController
 
             // Get the selected element
             MutableTreeNode node = elementFinder.retrieveFirstElementOut(mouseRect, selectionModel);
-            selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
 
             if (mouseEvent.isControlDown() || mouseEvent.isShiftDown())
             {
@@ -186,13 +185,14 @@ public class SceneController
 
                     selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
                 }
-                else
+                else if (!selectionModel.isNewSelection())
                 {
-                    selectionModel.setSelectedElements(node);
-
                     DebugTools.PrintDebug("Selecting node");
+                    selectionModel.setSelectedElements(node);
                 }
             }
+
+            selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
 
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
@@ -228,7 +228,8 @@ public class SceneController
                         DebugTools.PrintDebug("Connecting entry");
 
                         selectionModel.clearSelection();
-                        selectionModel.addSelectedElement(gxElement);
+                        selectionModel.setSelectedElements(gxElement);
+                        selectionModel.setNewSelection(true);
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
 
                         if (mouseEvent.getButton() == MouseEvent.BUTTON1)
@@ -245,17 +246,16 @@ public class SceneController
                     {
                         // Check if it's selecting one node
                         Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
-                        if (!selectionModel.containsOne(nodes))
-                            selectionModel.clearSelection();
-                        selectionModel.addSelectedElement(gxElement);
+                        selectionModel.setNewSelection(!selectionModel.containsOne(nodes));
+                        selectionModel.setSelectedElements(gxElement);
                     }
                 }
                 else if (node != null)
                 {
                     // Check if it's selecting one node
                     Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
-                    if (!selectionModel.containsOne(nodes))
-                        selectionModel.clearSelection();
+                    selectionModel.setNewSelection(!selectionModel.containsOne(nodes));
+                    selectionModel.setSelectedElements(node);
                 }
                 else
                 {
@@ -315,6 +315,7 @@ public class SceneController
                     }
                 }
                 connectionModel.setDesiring(true);
+                selectionModel.setNewSelection(false);
                 selectionModel.clearDragElement();
             }
 

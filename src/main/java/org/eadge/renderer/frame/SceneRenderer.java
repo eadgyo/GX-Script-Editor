@@ -71,6 +71,7 @@ public class SceneRenderer
 
         // Paint connection
         paintConnectionSelection(g, selectionModel);
+        paintConnections(g, unselectedElements);
 
         //drawDebug(g, sceneModel);
 
@@ -156,6 +157,14 @@ public class SceneRenderer
         for (GXElement gxElement : entities)
         {
             elementRenderer.paint(g, gxElement);
+        }
+    }
+
+    private void paintConnections(Graphics2D g, Collection<GXElement> entities)
+    {
+        // Draw all elements
+        for (GXElement gxElement : entities)
+        {
             connectionRenderer.paint(g, gxElement);
         }
     }
