@@ -83,6 +83,7 @@ public class EditController
             {
                 m.script.removeNode(selectedElement);
             }
+            m.selectionModel.clearSelection();
         }
     }
 

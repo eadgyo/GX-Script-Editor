@@ -122,6 +122,7 @@ public class ElementsController
         {
             MutableTreeNode selectedNode = elementsView.getSelectedNode();
             script.removeNode(selectedNode);
+            selectionModel.clearSelection();
         }
     }
 

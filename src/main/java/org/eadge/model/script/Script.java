@@ -204,12 +204,14 @@ public class Script extends Observable
         if (isInput)
         {
             // Remove input
-            gxElement.unlinkAsInput(entryIndex);
+            if (gxElement.isInputUsed(entryIndex))
+                gxElement.unlinkAsInput(entryIndex);
         }
         else
         {
             // Remove all output entities
-            gxElement.unlinkAsOutput(entryIndex);
+            if (gxElement.isOutputUsed(entryIndex))
+                gxElement.unlinkAsOutput(entryIndex);
         }
 
         callObservers();

@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class ElementFinder
 {
-    private Collection<MutableTreeNode> elements;
+    private Set<MutableTreeNode> elements;
 
     public ElementFinder()
     {
@@ -55,7 +55,7 @@ public class ElementFinder
         elements.remove(node);
     }
 
-    public void setElements(Collection<MutableTreeNode> elements)
+    public void setElements(Set<MutableTreeNode> elements)
     {
         this.elements = elements;
     }

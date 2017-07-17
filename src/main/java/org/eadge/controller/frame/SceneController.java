@@ -157,28 +157,31 @@ public class SceneController
         {
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
-            // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElementOut(mouseRect, selectionModel);
-
             if (mouseEvent.isControlDown() || mouseEvent.isShiftDown())
             {
+                // Get the selected element
+                MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
+
                 if (node != null)
                 {
                     // Si element déjà selectionné
                     if (selectionModel.contains(node))
                     {
                         // Deselectionne
-                        selectionModel.addSelectedElement(node);
+                        selectionModel.removeSelectedElement(node);
                     }
                     else
                     {
                         // Ajoute à la selection
-                        selectionModel.removeSelectedElement(node);
+                        selectionModel.addSelectedElement(node);
                     }
                 }
             }
             else
             {
+                // Get the selected element
+                MutableTreeNode node = elementFinder.retrieveFirstElementOut(mouseRect, selectionModel);
+
                 if (node == null)
                 {
                     DebugTools.PrintDebug("Translating Scene");
@@ -237,7 +240,7 @@ public class SceneController
                             connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
                             connectionModel.setDesiredPos(mouseRect.getCenterX(), mouseRect.getCenterY());
                         }
-                        else if (mouseEvent.getButton() == MouseEvent.BUTTON2)
+                        else if (mouseEvent.getButton() == MouseEvent.BUTTON3)
                         {
                             script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
                         }
@@ -324,6 +327,7 @@ public class SceneController
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
 
+            selectionModel.updateSelectionPaths();
             script.callObservers();
         }
 

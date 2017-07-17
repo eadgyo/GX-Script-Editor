@@ -4,6 +4,8 @@ import org.eadge.model.global.project.SelectionObservable;
 
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.util.*;
 
 /**
@@ -90,8 +92,38 @@ public class SelectionModel extends DefaultTreeSelectionModel
     {
         this.selectedElements.clear();
         this.selectedElements.addAll(selectedElements);
-
     }
+
+    public void updateSelectionPaths()
+    {
+        TreePath treePaths[] = new TreePath[selectedElements.size()];
+        int i = 0;
+        for (MutableTreeNode selectedElement : selectedElements)
+        {
+            TreePath path = getPath(selectedElement);
+            treePaths[i] = path;
+            i++;
+        }
+        setSelectionPaths(treePaths);
+    }
+
+    public static TreePath getPath(TreeNode treeNode)
+    {
+        List<Object> nodes = new ArrayList<Object>();
+        if (treeNode != null)
+        {
+            nodes.add(treeNode);
+            treeNode = treeNode.getParent();
+            while (treeNode != null)
+            {
+                nodes.add(0, treeNode);
+                treeNode = treeNode.getParent();
+            }
+        }
+
+        return nodes.isEmpty() ? null : new TreePath(nodes.toArray());
+    }
+
 
     /**
      * Get not selected element from the given list
