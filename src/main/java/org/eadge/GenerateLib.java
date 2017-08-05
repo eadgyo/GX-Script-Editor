@@ -31,7 +31,6 @@ public class GenerateLib
         
         EGXGroup numberGroup = new EGXGroup("Nombre");
         numberGroup.add(new IntGXEntity());
-        numberGroup.add(new ModifyBoolGXEntity());
         numberGroup.add(new RealGXEntity());
         numberGroup.add(new BetweenNumbersGXEntity());
         numberGroup.add(new EqualGXEntity());

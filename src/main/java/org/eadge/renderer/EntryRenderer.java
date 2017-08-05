@@ -62,7 +62,7 @@ public class EntryRenderer
                         rectSize);
 
             // Draw text
-            String text = gxElement.getInputName(inputIndex);
+            String text = gxElement.getInputDetail(inputIndex);
             int textHeight = g.getFontMetrics().getHeight();
 
             int textX = sizeBetween + rectSize * 2;
@@ -92,7 +92,7 @@ public class EntryRenderer
                         rectSize,
                         rectSize);
 
-            String text = gxElement.getOutputName(outputIndex);
+            String text = gxElement.getOutputDetail(outputIndex);
             int textHeight = g.getFontMetrics().getHeight();
             int textWidth = g.getFontMetrics().stringWidth(text);
 

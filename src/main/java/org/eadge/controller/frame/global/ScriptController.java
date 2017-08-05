@@ -11,6 +11,7 @@ import org.eadge.view.MyFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -45,10 +46,28 @@ public class ScriptController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            m.testsModel.validateAll(m.rawGXScript);
+            m.rawGXScript.updateEntities();
+            int i = m.testsModel.validateAll(m.rawGXScript);
+            try
+            {
+                m.testsModel.getTestStream().flush();
+                m.testsModel.getTestStream().write(ConstantsView.COMPILATION_START_MESSAGE.getBytes());
+                m.testsModel.getTestStream().write("\n".getBytes());
+                if (i != 0)
+                {
+                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_ECHEC + i + ConstantsView.ERREUR).getBytes());
+                }
+                else
+                {
+                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_SUCCESS).getBytes());
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-
 
     public class RunScriptAction extends AbstractAction
     {

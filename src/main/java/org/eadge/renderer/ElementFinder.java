@@ -4,6 +4,8 @@ import org.eadge.model.global.SelectionModel;
 import org.eadge.model.script.GXLayer;
 
 import javax.swing.tree.MutableTreeNode;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +15,13 @@ import java.util.Set;
  *
  * Select elements using MyGroupsOfElements square
  */
-public class ElementFinder
+public class ElementFinder implements Serializable
 {
-    private Set<MutableTreeNode> elements;
+    private ArrayList<MutableTreeNode> elements;
 
     public ElementFinder()
     {
-        this.elements = new HashSet<>();
+        this.elements = new ArrayList<>();
     }
 
     /**
@@ -55,14 +57,14 @@ public class ElementFinder
         elements.remove(node);
     }
 
-    public void setElements(Set<MutableTreeNode> elements)
+    public void setElements(ArrayList<MutableTreeNode> elements)
     {
         this.elements = elements;
     }
 
     public void setElementsFromRoot(GXLayer root)
     {
-        elements = new HashSet<>();
+        elements = new ArrayList<>();
         addElementRec(root, elements);
     }
 

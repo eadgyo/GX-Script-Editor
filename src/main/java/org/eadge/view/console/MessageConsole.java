@@ -110,7 +110,7 @@ public class MessageConsole
      *  The text displayed in the Document can be color coded to indicate
      *  the output source.
      */
-    class ConsoleOutputStream extends ByteArrayOutputStream
+    public class ConsoleOutputStream extends ByteArrayOutputStream
     {
         private final String EOL = System.getProperty("line.separator");
         private SimpleAttributeSet attributes;
@@ -237,7 +237,7 @@ public class MessageConsole
 
             if (printStream != null)
             {
-                printStream.print(line);
+                printStream.println(line);
             }
 
             buffer.setLength(0);

@@ -1,12 +1,11 @@
 package org.eadge.model.frame;
 
 import org.eadge.gxscript.data.compile.script.RawGXScript;
-import org.eadge.gxscript.tools.check.GXValidator;
+import org.eadge.gxscript.tools.check.ValidatorModel;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 /**
@@ -16,15 +15,20 @@ import java.util.ArrayList;
  */
 public class TestsModel extends AbstractListModel<TestsModel.Test>
 {
-    private PrintStream testStream = new PrintStream(new StringOutputString());
+    private OutputStream testStream;
+
+    private boolean         isScriptIndependent = false;
+    private boolean         canExportCompiled   = false;
+    private ArrayList<Test> tests               = new ArrayList<>();
 
     public TestsModel()
     {
     }
 
-    private boolean isScriptIndependent = false;
-    private boolean canExportCompiled   = false;
-    private ArrayList<Test> tests = new ArrayList<>();
+    public void setTestStream(OutputStream testStream)
+    {
+        this.testStream = testStream;
+    }
 
     /**
      * Check if the script needs inputs
@@ -50,9 +54,9 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
         this.canExportCompiled = canExportCompiled;
     }
 
-    public void addTest(String name, GXValidator gxValidator)
+    public void addTest(String name, ValidatorModel validatorModel)
     {
-        tests.add(new Test(name, gxValidator));
+        tests.add(new Test(name, validatorModel));
         int testIndex = tests.size() - 1;
         this.fireIntervalAdded(tests.get(testIndex), testIndex, testIndex);
     }
@@ -104,12 +108,21 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
      * Performs all tests
      * @param rawGXScript tested script
      */
-    public void validateAll(RawGXScript rawGXScript)
+    public int validateAll(RawGXScript rawGXScript)
     {
+        int error = 0;
         for (int testIndex = 0; testIndex < tests.size(); testIndex++)
         {
             validate(testIndex, rawGXScript);
+            if (!getResult(testIndex))
+                error++;
         }
+        return error;
+    }
+
+    public boolean getResult(int i)
+    {
+        return getElementAt(i).result;
     }
 
     /**
@@ -123,7 +136,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
         this.fireContentsChanged(tests.get(testIndex), testIndex, testIndex);
     }
 
-    public PrintStream getTestStream()
+    public OutputStream getTestStream()
     {
         return testStream;
     }
@@ -158,25 +171,25 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
     {
         boolean result;
         String name;
-        GXValidator gxValidator;
+        ValidatorModel validatorModel;
 
-        Test(String name, GXValidator gxValidator)
+        Test(String name, ValidatorModel validatorModel)
         {
             this.name = name;
-            this.gxValidator = gxValidator;
+            this.validatorModel = validatorModel;
             this.result = false;
         }
 
         void validate(RawGXScript rawGXScript)
         {
-            result = gxValidator.validate(rawGXScript);
+            result = validatorModel.validate(rawGXScript);
         }
 
         @Override
         public String toString()
         {
             String res = result? "[ PASSED ]" : "[ FAILED ]";
-            return result + "   " + name;
+            return res + "   " + name;
         }
     }
 }

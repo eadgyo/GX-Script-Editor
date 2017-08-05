@@ -6,7 +6,7 @@ import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.model.Models;
-import org.eadge.model.script.Script;
+import org.eadge.model.script.SavedScript;
 import org.eadge.utils.AdvIOM;
 import org.eadge.utils.Converter;
 import org.eadge.view.MenuView;
@@ -51,8 +51,6 @@ public class FileController
         menuView.importElementsItem.setAction(a.importElementsAction);
     }
 
-
-
     public class NewFileAction extends AbstractAction
     {
         public NewFileAction()
@@ -73,6 +71,8 @@ public class FileController
             if (n == JOptionPane.OK_OPTION)
             {
                 m.script.clear();
+                m.sceneModel.resetCamera();
+                m.script.callObservers();
             }
         }
     }
@@ -92,8 +92,8 @@ public class FileController
 
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
-                File file = frame.chooseFile.getSelectedFile();
-                Script importedScript = AdvIOM.getAdv().loadScript(file.getPath());
+                File        file           = frame.chooseFile.getSelectedFile();
+                SavedScript importedScript = AdvIOM.getAdv().loadScript(file.getPath());
 
                 if (importedScript == null)
                 {
@@ -101,7 +101,10 @@ public class FileController
                     return;
                 }
 
-                m.script.set(importedScript);
+
+                m.script.set(importedScript.script);
+                m.sceneModel.set(importedScript.x, importedScript.y, importedScript.scale);
+                m.script.callObservers();
             }
         }
     }
@@ -125,12 +128,14 @@ public class FileController
                 {
                     File file = frame.chooseFile.getSelectedFile();
                     m.fileModel.setScriptPath(file.getPath());
-                    AdvIOM.getAdv().saveScript(m.script, m.fileModel.getScriptPath());
+                    SavedScript savedScript = new SavedScript(m.script, m.sceneModel);
+                    AdvIOM.getAdv().saveScript(savedScript, m.fileModel.getScriptPath());
                 }
             }
             else
             {
-                AdvIOM.getAdv().saveScript(m.script, m.fileModel.getScriptPath());
+                SavedScript savedScript = new SavedScript(m.script, m.sceneModel);
+                AdvIOM.getAdv().saveScript(savedScript, m.fileModel.getScriptPath());
             }
         }
     }
@@ -152,7 +157,8 @@ public class FileController
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = frame.chooseFile.getSelectedFile();
-                AdvIOM.getAdv().saveScript(m.script, file.getPath());
+                SavedScript savedScript = new SavedScript(m.script, m.sceneModel);
+                AdvIOM.getAdv().saveScript(savedScript, file.getPath());
             }
         }
     }

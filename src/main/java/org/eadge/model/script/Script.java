@@ -8,6 +8,8 @@ import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.renderer.ElementFinder;
 
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Observable;
 
@@ -16,7 +18,7 @@ import java.util.Observable;
  *
  * Holds Raw GXScript data
  */
-public class Script extends Observable
+public class Script extends Observable implements Serializable
 {
     /**
      * Raw GXScript
@@ -95,19 +97,6 @@ public class Script extends Observable
     }
 
     /**
-     * Remove GXElement from script
-     *
-     * @param element removed GXElement
-     */
-    public void removeEntity(GXElement element)
-    {
-        rawGXScript.removeEntity(element);
-        layeredScript.removeNodeFromParent(element);
-
-        callObservers();
-    }
-
-    /**
      * Remove node
      *
      * @param removed node
@@ -119,7 +108,7 @@ public class Script extends Observable
         if (removed instanceof GXLayer)
             removeLayer((GXLayer) removed);
         else
-            removeEntity((GXElement) removed);
+            ((GXElement) removed).removeEntity(this);
     }
 
     /**
@@ -227,7 +216,8 @@ public class Script extends Observable
     public void set(Script script)
     {
         rawGXScript = script.rawGXScript;
-        layeredScript = script.layeredScript;
+        layeredScript.setRoot((TreeNode) script.layeredScript.getRoot());
+        elementFinder.setElementsFromRoot((GXLayer) script.layeredScript.getRoot());
     }
 
     public CompiledGXScript getCompiledRawGXScript()

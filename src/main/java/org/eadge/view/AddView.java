@@ -31,7 +31,7 @@ public class AddView extends JPanel
 
         final Dimension d = new Dimension(200, 300);
         this.setPreferredSize(d);
-        this.setMinimumSize(d);
+        //this.setMinimumSize(d);
     }
 
     public class AddListPanel extends JPanel

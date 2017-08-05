@@ -4,6 +4,7 @@ import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.tools.check.GXValidator;
 import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.gxscript.tools.io.IOGXManager;
+import org.eadge.model.script.SavedScript;
 import org.eadge.model.script.Script;
 
 /**
@@ -11,14 +12,14 @@ import org.eadge.model.script.Script;
  */
 public class AdvIOM extends IOGXManager
 {
-    public void saveScript(Script script, String path)
+    public void saveScript(SavedScript script, String path)
     {
         saveObject(script, path);
     }
 
-    public Script loadScript(String path)
+    public SavedScript loadScript(String path)
     {
-        return (Script) getObject(path);
+        return (SavedScript) getObject(path);
     }
 
     public CompiledGXScript loadCompiledOrScript(String path)
@@ -28,7 +29,8 @@ public class AdvIOM extends IOGXManager
         if (compiledGXScript == null)
         {
             // Try loading script
-            Script script = loadScript(path);
+            SavedScript savedScript = loadScript(path);
+            Script script = savedScript.script;
 
             if (script != null)
             {

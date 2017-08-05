@@ -209,9 +209,6 @@ public class SceneController
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
 
-            sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(lastMouseX);
-            sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(lastMouseY);
-
             connectionModel.setDesiring(true);
 
             // Check if it's selecting an entry
@@ -275,7 +272,7 @@ public class SceneController
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
             // Get the selected element
-            MutableTreeNode node = elementFinder.retrieveFirstElement(mouseRect);
+            MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
 
             // If connecting
             if (selectionModel.isSelectionStateEquals(SelectionModel.SelectionState.CONNECTING))
@@ -305,7 +302,6 @@ public class SceneController
                                                                      onDragged,
                                                                      connectionModel.isEndInput(),
                                                                      connectionModel.getEndIndex());
-
                         if (isValid)
                         {
                             script.connectEntities(selected,
@@ -441,11 +437,6 @@ public class SceneController
         @Override
         public void mouseWheelMoved(MouseWheelEvent e)
         {
-
-            sceneModel.DEBUG_POINT_X = sceneModel.computeXInScene(e.getX());
-            sceneModel.DEBUG_POINT_Y = sceneModel.computeYInScene(e.getY());
-
-
             float FACTOR = 2;
             double factor;
             int wheelRotation = e.getWheelRotation();

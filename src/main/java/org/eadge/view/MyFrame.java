@@ -84,6 +84,8 @@ public class MyFrame extends JFrame
 
         elementsView = new ElementsView(this);
         JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, addView, elementsView);
+        leftPane.setContinuousLayout(true);
+        leftPane.setResizeWeight(0.7);
 
         // --> right part
         // -- --> top part
@@ -94,14 +96,17 @@ public class MyFrame extends JFrame
         testsView = new TestsView();
 
         JPanel bottomRightPane = new JPanel(new CardLayout());
-        bottomRightPane.add(consoleView, ConstantsView.TAB_CONSOLE);
+        //bottomRightPane.add(consoleView, ConstantsView.TAB_CONSOLE);
         bottomRightPane.add(testsView, ConstantsView.TAB_TESTS);
 
         // --> Finalize
         JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sceneView, bottomRightPane);
+        rightPane.setContinuousLayout(true);
+        rightPane.setResizeWeight(0.5);
 
         // Finalize
         JSplitPane mainPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPane, rightPane);
+        rightPane.setResizeWeight(0.7);
 
         add(buttonsView);
         add(mainPane);

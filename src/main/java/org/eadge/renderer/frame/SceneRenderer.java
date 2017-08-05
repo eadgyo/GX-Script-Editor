@@ -80,13 +80,6 @@ public class SceneRenderer
 
     }
 
-    private void drawDebug(Graphics2D g, SceneModel sceneModel)
-    {
-        g.setColor(Color.RED);
-        int x = (int) sceneModel.DEBUG_POINT_X;
-        int y = (int) sceneModel.DEBUG_POINT_Y;
-        g.fillOval(x - 3, y - 3, 6, 6);
-    }
 
     private AffineTransform prepareScene(Graphics2D g, int width, int height, SceneModel sceneModel)
     {

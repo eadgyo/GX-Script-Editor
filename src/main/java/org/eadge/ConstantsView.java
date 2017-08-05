@@ -88,4 +88,18 @@ public interface ConstantsView
     String MESSAGE_INVALID_FILE = "Le fichier n'est pas lisible";
 
     String INPUT_ASK_GROUP_NAME = "Nom du groupe pour y insérer le script:";
+
+    String VALIDATE_ENTITIES_PRESENCE = "Entitées présentes";
+    String VALIDATE_INPUT = "Entrées valides";
+    String VALIDATE_LINKS = "Connections valides";
+    String VALIDATE_INTERDEPENDANCE = "Pas d'interderpendance";
+    String VALIDATE_IMBRICATIONS = "Structure valide";
+    String VALIDATE_PARAMETERS = "Parametres valides";
+
+    String VALIDATE_CODE = "Code valide";
+
+    String COMPILATION_START_MESSAGE = "Début Compilation...";
+    String COMPILATION_SUCCESS = "Compilation réussie";
+    String COMPILATION_ECHEC = "Compilation échouée: ";
+    String ERREUR = " erreurs";
 }

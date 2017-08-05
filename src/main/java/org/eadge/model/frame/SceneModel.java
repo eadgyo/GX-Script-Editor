@@ -15,11 +15,6 @@ public class SceneModel
 {
     private double translateX;
     private double translateY;
-
-    public double DEBUG_POINT_X = 0;
-    public double DEBUG_POINT_Y = 0;
-
-
     private double scale = 1;
 
     private ElementFinder elementFinder;
@@ -222,5 +217,18 @@ public class SceneModel
     public void translateY(double y)
     {
         translateY += y;
+    }
+
+    public void resetCamera()
+    {
+        translateX = 0;
+        translateY = 0;
+    }
+
+    public void set(double translateX, double translateY, double scale)
+    {
+        this.translateX = translateX;
+        this.translateY = translateY;
+        this.scale = scale;
     }
 }

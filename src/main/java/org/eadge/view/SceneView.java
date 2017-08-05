@@ -24,7 +24,7 @@ public class SceneView extends JPanel
         Dimension dimension = new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH,
                                             ConstantsView.PREFERRED_DRAW_SIZE_HEIGHT);
         setPreferredSize(dimension);
-        setMinimumSize(dimension);
+//        setMinimumSize(dimension);
     }
 
     public SceneModel getSceneModel()

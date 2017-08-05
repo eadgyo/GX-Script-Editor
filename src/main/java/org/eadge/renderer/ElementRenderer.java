@@ -41,7 +41,7 @@ public class ElementRenderer
      */
     private Color textNameColor;
 
-    private final double ELEMENT_WIDTH = 200;
+    private final double ELEMENT_WIDTH = 250;
 
     public ElementRenderer(int textHeight,
                            int textPadding,

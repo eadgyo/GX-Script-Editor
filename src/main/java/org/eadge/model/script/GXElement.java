@@ -89,9 +89,18 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         return entity.getInputName(inputIndex);
     }
 
+    public String getInputDetail(int inputIndex) {
+        return entity.getInputName(inputIndex) + " (" + entity.getInputClass(inputIndex).getSimpleName() + ")";
+    }
+
     public String getOutputName(int outputIndex)
     {
         return entity.getOutputName(outputIndex);
+    }
+
+    public String getOutputDetail(int outputIndex)
+    {
+        return entity.getOutputName(outputIndex) + " (" + entity.getOutputClass(outputIndex).getSimpleName() + ")";
     }
 
     public GXEntity getInputEntity(int inputIndex)
@@ -545,6 +554,28 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public boolean equals(Object o)
     {
-        return super.equals(o) && ((GXElement) o).getEntity() == this.entity;
+        return o == this;
     }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (entity != null ? entity.hashCode() : 0);
+        return result;
+    }
+
+    /**
+     * Remove GXElement from script
+     *
+     * @param script
+     */
+    public void removeEntity(Script script)
+    {
+        script.rawGXScript.removeEntity(this);
+        script.layeredScript.removeNodeFromParent(this);
+
+        script.callObservers();
+    }
+
 }
