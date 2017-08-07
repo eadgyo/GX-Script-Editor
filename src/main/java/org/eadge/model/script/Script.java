@@ -167,7 +167,7 @@ public class Script extends Observable implements Serializable
 
     public void connectEntities(GXElement onOutputEntity, int outputIndex, GXElement onInputEntity, int inputIndex)
     {
-        onInputEntity.addLinkInput(inputIndex, outputIndex, onOutputEntity);
+        onInputEntity.linkAsInput(inputIndex, outputIndex, onOutputEntity);
 
         callObservers();
     }

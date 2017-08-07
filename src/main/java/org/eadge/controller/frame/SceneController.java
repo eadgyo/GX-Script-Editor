@@ -1,6 +1,5 @@
 package org.eadge.controller.frame;
 
-import org.eadge.DebugTools;
 import org.eadge.controller.Actions;
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.global.ConnectionModel;
@@ -184,13 +183,10 @@ public class SceneController
 
                 if (node == null)
                 {
-                    DebugTools.PrintDebug("Translating Scene");
-
                     selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
                 }
                 else if (!selectionModel.isNewSelection())
                 {
-                    DebugTools.PrintDebug("Selecting node");
                     selectionModel.setSelectedElements(node);
                 }
             }
@@ -225,21 +221,24 @@ public class SceneController
                     EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
                     if (entryIndex.entryIndex != -1)
                     {
-                        DebugTools.PrintDebug("Connecting entry");
-
                         selectionModel.clearSelection();
                         selectionModel.setSelectedElements(gxElement);
                         selectionModel.setNewSelection(true);
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
 
+                        // Selecting entry
                         if (mouseEvent.getButton() == MouseEvent.BUTTON1)
                         {
                             connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
                             connectionModel.setDesiredPos(mouseRect.getCenterX(), mouseRect.getCenterY());
                         }
-                        else if (mouseEvent.getButton() == MouseEvent.BUTTON3)
+                        else
                         {
-                            script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            if (mouseEvent.getButton() == MouseEvent.BUTTON3)
+                            {
+                                script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            }
+                            selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
                         }
                     }
                     else
@@ -296,23 +295,27 @@ public class SceneController
 
                         GXElement selected = (GXElement) selectionModel.getFirstSelectedElement();
 
-                        // Check if MyGroupsOfElements connection can be made
-                        boolean isValid = selected.canConnectOnEntry(connectionModel.isStartInput(),
-                                                                     connectionModel.getStartIndex(),
-                                                                     onDragged,
-                                                                     connectionModel.isEndInput(),
-                                                                     connectionModel.getEndIndex());
-                        if (isValid)
+                        if (mouseEvent.getButton() == MouseEvent.BUTTON1)
                         {
-                            script.connectEntities(selected,
-                                                   connectionModel.isStartInput(),
-                                                   connectionModel.getStartIndex(),
-                                                   onDragged,
-                                                   connectionModel.getEndIndex());
-                        }
 
+                            // Check if MyGroupsOfElements connection can be made
+                            boolean isValid = selected.canConnectOnEntry(connectionModel.isStartInput(),
+                                                                         connectionModel.getStartIndex(),
+                                                                         onDragged,
+                                                                         connectionModel.isEndInput(),
+                                                                         connectionModel.getEndIndex());
+                            if (isValid)
+                            {
+                                script.connectEntities(selected,
+                                                       connectionModel.isStartInput(),
+                                                       connectionModel.getStartIndex(),
+                                                       onDragged,
+                                                       connectionModel.getEndIndex());
+                            }
+                        }
                     }
                 }
+
                 connectionModel.setDesiring(true);
                 selectionModel.setNewSelection(false);
                 selectionModel.clearDragElement();
@@ -400,8 +403,6 @@ public class SceneController
                 Set<MutableTreeNode> nodes = elementFinder.retrieveElements(mouseRect);
                 if (selectionModel.hasSelectedElements())
                 {
-                    DebugTools.PrintDebug("Dragging selected elements");
-
                     selectionModel.setSelectionState(SelectionModel.SelectionState.MOVING);
                     // Move all selected elements
                     Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
@@ -413,9 +414,8 @@ public class SceneController
                 }
                 else
                 {
-                    //DebugTools.PrintDebug("Translating Scene");
-
                     selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
+
                     // Translate the scene
                     sceneModel.translateX(-translateX);
                     sceneModel.translateY(-translateY);
