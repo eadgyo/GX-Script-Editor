@@ -90,7 +90,30 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     }
 
     public String getInputDetail(int inputIndex) {
-        return entity.getInputName(inputIndex) + " (" + entity.getInputClass(inputIndex).getSimpleName() + ")";
+
+        String inputDetail = "";
+        if (isInputOption(inputIndex) && !entity.isInputUsed(inputIndex))
+        {
+            inputDetail += "(" + getOptionValue(inputIndex).toString() + ") ";
+        }
+
+        inputDetail += entity.getInputName(inputIndex) + " (" + entity.getInputClass(inputIndex).getSimpleName() + ")";
+        return inputDetail;
+    }
+
+    public Object getOptionValue(int inputIndex)
+    {
+        return entity.getOptionValue(inputIndex);
+    }
+
+    public void setOptionValue(int inputIndex, Object object)
+    {
+        entity.setOptionValue(inputIndex, object);
+    }
+
+    public boolean isInputOption(int inputIndex)
+    {
+        return entity.isOptionInput(inputIndex);
     }
 
     public String getOutputName(int outputIndex)

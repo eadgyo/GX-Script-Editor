@@ -45,6 +45,8 @@ public class SceneController
     private ElementFinder elementFinder;
     private EntryFinder entryFinder;
 
+
+
     public SceneController(Script script,
                            MyFrame myFrame,
                            SelectionModel selectionModel,
@@ -237,6 +239,15 @@ public class SceneController
                             if (mouseEvent.getButton() == MouseEvent.BUTTON3)
                             {
                                 script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            }
+                            if (mouseEvent.getButton() == MouseEvent.BUTTON2 && entryIndex.isInput)
+                            {
+                                String optionValue = JOptionPane.showInputDialog("Option value", gxElement.getOptionValue(entryIndex
+                                                                                                                   .entryIndex));
+                                if (!optionValue.equals(""))
+                                {
+                                    gxElement.setOptionValue(entryIndex.entryIndex, optionValue);
+                                }
                             }
                             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
                         }

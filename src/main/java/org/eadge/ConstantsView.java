@@ -80,6 +80,7 @@ public interface ConstantsView
 
 
     String MESSAGE_CONFIRM_NEW_FILE = "Le script existant sera détruit, êtes vous sûr";
+    String NAME_DIALOG_OPTION = "Input Option";
 
     int PREFERRED_DRAW_SIZE_WIDTH = 600;
     int PREFERRED_DRAW_SIZE_HEIGHT = 480;
