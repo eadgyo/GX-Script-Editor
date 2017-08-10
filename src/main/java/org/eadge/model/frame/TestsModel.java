@@ -66,7 +66,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
      * @param testIndex index of the test result
      * @param result test result
      */
-    public void setTestResult(int testIndex, boolean result)
+    public void setTestResult(int testIndex, int result)
     {
         tests.get(testIndex).result = result;
         this.fireContentsChanged(tests.get(testIndex), testIndex, testIndex);
@@ -77,7 +77,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
      * @param name name of the tests
      * @param result test result
      */
-    public void setTestResult(String name, boolean result)
+    public void setTestResult(String name, int result)
     {
         // Search for the corresponding test
         int testIndex = getTestIndex(name);
@@ -114,13 +114,20 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
         for (int testIndex = 0; testIndex < tests.size(); testIndex++)
         {
             validate(testIndex, rawGXScript);
-            if (!getResult(testIndex))
+            if (getResult(testIndex) != 1)
+            {
                 error++;
+                testIndex++;
+                for (;testIndex < tests.size(); testIndex++)
+                {
+                    tests.get(testIndex).result = 2;
+                }
+            }
         }
         return error;
     }
 
-    public boolean getResult(int i)
+    public int getResult(int i)
     {
         return getElementAt(i).result;
     }
@@ -169,7 +176,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
 
     class Test
     {
-        boolean result;
+        int result;
         String name;
         ValidatorModel validatorModel;
 
@@ -177,18 +184,31 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
         {
             this.name = name;
             this.validatorModel = validatorModel;
-            this.result = false;
+            this.result = 0;
         }
 
         void validate(RawGXScript rawGXScript)
         {
-            result = validatorModel.validate(rawGXScript);
+            result = validatorModel.validate(rawGXScript) ? 1 : 0;
         }
 
         @Override
         public String toString()
         {
-            String res = result? "[ PASSED ]" : "[ FAILED ]";
+            String res;
+
+            if (result == 0)
+            {
+                res = "[ FAILED ]";
+            }
+            else if (result == 1)
+            {
+                res = "[ PASSED ]";
+            }
+            else
+            {
+                res = "[       ]";
+            }
             return res + "   " + name;
         }
     }

@@ -384,7 +384,7 @@ public class ElementsController
                             (insertedLayer, selectedElement))
                     {
                         script.detachNode(selectedElement);
-                        script.addNode(selectedElement, insertedLayer);
+                        script.attachNode(selectedElement, insertedLayer);
                     }
                 }
             }

@@ -246,6 +246,16 @@ public class Script extends Observable implements Serializable
         }
     }
 
+    public void attachNode(MutableTreeNode mutableTreeNode, MutableTreeNode parent)
+    {
+        layeredScript.insertNodeInto(mutableTreeNode, parent, 0);
+    }
+
+    public void attachNode(MutableTreeNode mutableTreeNode, MutableTreeNode parent, int index)
+    {
+        layeredScript.insertNodeInto(mutableTreeNode, parent, index);
+    }
+
     public void addNodes(Collection<MutableTreeNode> savedElements, MutableTreeNode parent)
     {
         for (MutableTreeNode savedElement : savedElements)

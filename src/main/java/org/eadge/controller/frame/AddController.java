@@ -88,8 +88,6 @@ public class AddController
 
                 // Set addView as the source object
                 transferHandler.exportAsDrag(addView, mouseEvent, TransferHandler.COPY);
-
-                System.out.println("Export as drag");
             }
         }
 

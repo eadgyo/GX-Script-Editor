@@ -360,7 +360,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
 
     public void linkAsInput(int inputIndex, int entityOutput, GXEntity entity)
     {
-        this.entity.linkAsInput(inputIndex, entityOutput, entity);
+        DefaultGXEntity.linkAsInput(inputIndex, this, entityOutput, entity);
     }
 
     public void unlinkAsInput(int inputIndex)
