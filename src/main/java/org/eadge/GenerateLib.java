@@ -1,5 +1,14 @@
 package org.eadge;
 
+import org.eadge.gxscript.data.entity.classic.entity.control.AssertGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.control.ExceptionGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.displayer.PrintGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.conditionals.IfGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.conditionals.SwitchGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.loops.DoWhileGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.loops.ForEachGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.loops.ForGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.loops.WhileGXEntity;
 import org.eadge.gxscript.data.entity.classic.entity.types.EqualGXEntity;
 import org.eadge.gxscript.data.entity.classic.entity.types.bool.BoolGXEntity;
 import org.eadge.gxscript.data.entity.classic.entity.types.bool.ModifyBoolGXEntity;
@@ -43,6 +52,32 @@ public class GenerateLib
         numberGroup.add(new NegNumberGXEntity());
         numberGroup.add(new SubNumbersGXEntity());
         egx.add(numberGroup);
+
+
+        EGXGroup controlGroup = new EGXGroup("Control");
+        controlGroup.add(new AssertGXEntity());
+        controlGroup.add(new ExceptionGXEntity());
+        egx.add(controlGroup);
+
+        EGXGroup displayerGroup = new EGXGroup("Display");
+        displayerGroup.add(new PrintGXEntity());
+        egx.add(displayerGroup);
+
+        EGXGroup printGroup = new EGXGroup("Print");
+        printGroup.add(new PrintGXEntity());
+        egx.add(printGroup);
+
+        EGXGroup conditionalsGroup = new EGXGroup("Conditionals");
+        conditionalsGroup.add(new IfGXEntity());
+        conditionalsGroup.add(new SwitchGXEntity());
+        egx.add(conditionalsGroup);
+
+        EGXGroup loopsGroup = new EGXGroup("Loops Group");
+        loopsGroup.add(new DoWhileGXEntity());
+        loopsGroup.add(new ForEachGXEntity());
+        loopsGroup.add(new ForGXEntity());
+        loopsGroup.add(new WhileGXEntity());
+        egx.add(loopsGroup);
 
         IOGXManager.getInstance().createFolder("EGX");
         IOGXManager.getInstance().saveEGX("EGX/classic.egx", egx);

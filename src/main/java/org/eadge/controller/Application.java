@@ -2,6 +2,8 @@ package org.eadge.controller;
 
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
+import org.eadge.gxscript.data.entity.classic.entity.displayer.PrintGXEntity;
+import org.eadge.gxscript.data.entity.classic.entity.imbrication.loops.ForGXEntity;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.model.Models;
 import org.eadge.model.frame.AddListModel;
@@ -11,6 +13,7 @@ import org.eadge.model.global.ConnectionModel;
 import org.eadge.model.global.CopyModel;
 import org.eadge.model.global.SelectionModel;
 import org.eadge.model.global.project.FileModel;
+import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 import org.eadge.model.script.GXLayerModel;
 import org.eadge.model.script.Script;
@@ -59,7 +62,7 @@ public class Application
 
         loadDefault();
 
-        test1();
+        test2();
 
         myFrame.pack();
         myFrame.setVisible(true);
@@ -117,6 +120,27 @@ public class Application
 
         // Add one element
         m.script.addEntity(m.addListModel.getSelectedElement().deepClone(), layer);
+    }
+
+    private void test2()
+    {
+        MutableTreeNode root          = (MutableTreeNode) m.script.getLayeredScript().getRoot();
+        ForGXEntity     forEntity     = new ForGXEntity();
+        PrintGXEntity   printGXEntity = new PrintGXEntity();
+
+        GXElement forElement = new GXElement(forEntity);
+        GXElement printElement = new GXElement(printGXEntity);
+
+        printElement.linkAsInput(PrintGXEntity.NEXT_INPUT_INDEX, ForGXEntity.DO_OUTPUT_INDEX, forElement);
+        printElement.linkAsInput(PrintGXEntity.SOURCE_INPUT_INDEX, ForGXEntity.INDEX_FOR_OUTPUT_INDEX, forElement);
+
+
+        forElement.computeSize(myFrame.elementRenderer);
+        printElement.computeSize(myFrame.elementRenderer);
+
+        m.script.addEntity(forElement, root);
+        m.script.addEntity(printElement, root);
+
     }
 
     private void createControllers()

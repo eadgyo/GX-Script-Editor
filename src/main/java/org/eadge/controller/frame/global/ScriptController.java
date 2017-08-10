@@ -81,7 +81,7 @@ public class ScriptController
         public void actionPerformed(ActionEvent actionEvent)
         {
             GXCompiler compiler = new GXCompiler();
-            CompiledGXScript compile = compiler.compile(m.rawGXScript);
+            CompiledGXScript compile = compiler.compile(m.script.getRawGXScriptPure());
 
             GXRunner runner = new GXRunner();
             runner.run(compile);

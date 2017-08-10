@@ -4,6 +4,7 @@ package org.eadge.model.script;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
+import org.eadge.gxscript.data.entity.model.def.DefaultGXEntity;
 import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.renderer.ElementFinder;
 
@@ -11,6 +12,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Observable;
 
 /**
@@ -223,7 +225,32 @@ public class Script extends Observable implements Serializable
     public CompiledGXScript getCompiledRawGXScript()
     {
         GXCompiler gxCompiler = new GXCompiler();
-        return gxCompiler.compile(rawGXScript);
+        return gxCompiler.compile(getRawGXScriptPure());
+    }
+
+    public RawGXScript getRawGXScriptPure()
+    {
+        RawGXScript pureScript = new RawGXScript();
+        Collection<GXEntity> entities = this.rawGXScript.getEntities();
+        HashMap<GXEntity, GXEntity>  mapReplacement = new HashMap<>();
+        for (GXEntity entity : entities)
+        {
+            DefaultGXEntity source = ((GXElement) entity).getEntity();
+            DefaultGXEntity copy = (DefaultGXEntity) source.clone();
+            pureScript.addEntity(copy);
+
+            mapReplacement.put(entity, copy);
+        }
+
+        entities = pureScript.getEntities();
+        for (GXEntity entity : entities)
+        {
+            DefaultGXEntity gxEntity = (DefaultGXEntity) entity;
+            gxEntity.replaceEntities(mapReplacement);
+        }
+
+        pureScript.updateEntities();
+        return pureScript;
     }
 
     public void removeNodes(Collection<MutableTreeNode> selectedElements)
