@@ -634,16 +634,23 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public boolean equals(Object o)
     {
-        if (o instanceof GXElement)
-            return this == o;
-        else
-            return this.entity == o;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        GXElement element = (GXElement) o;
+
+        if (entity != null ? !entity.equals(element.entity) : element.entity != null) return false;
+        return parent != null ? parent.equals(element.parent) : element.parent == null;
     }
 
     @Override
     public int hashCode()
     {
-        return entity.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + (entity != null ? entity.hashCode() : 0);
+        result = 31 * result + (parent != null ? parent.hashCode() : 0);
+        return result;
     }
 
     /**

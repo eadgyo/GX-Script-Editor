@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -237,7 +238,7 @@ public class ElementsController
 
             // Add the element to the scene
             GXLayer selectedLayer = elementsView.getSelectedLayer();
-            GXElement cloned    = (GXElement) element.clone();
+            GXElement cloned    = (GXElement) element.deepClone();
 
             double elementX = myFrame.sceneView.getSceneModel().computeXInScene(0);
             double elementY = myFrame.sceneView.getSceneModel().computeYInScene(0);
@@ -339,7 +340,6 @@ public class ElementsController
 
     private class MouseElementsListener implements MouseListener
     {
-
         @Override
         public void mouseClicked(MouseEvent mouseEvent)
         {
@@ -363,8 +363,6 @@ public class ElementsController
             selectionModel.callObservers();
         }
 
-
-
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
         {
@@ -376,7 +374,7 @@ public class ElementsController
                 GXLayer insertedLayer = elementsView.getSelectedLayer();
 
                 // Get the last saved path and move to this
-                Collection<MutableTreeNode> selectedElements = selectionModel.getSelectedElements();
+                Collection<MutableTreeNode> selectedElements = new ArrayList<>(selectionModel.getSelectedElements());
                 for (MutableTreeNode selectedElement : selectedElements)
                 {
                     // If is not trying to move on parent in child node

@@ -40,7 +40,7 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
     }
 
     @Override
-    public Object clone()
+    public GXLayer clone()
     {
         GXLayer clone = (GXLayer) super.clone();
         clone.backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), backgroundColor.getAlpha());
@@ -102,7 +102,7 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
             }
             else if (child instanceof GXElement)
             {
-                entities.add(((GXElement) child).getEntity());
+                entities.add(((GXElement) child));
             }
         }
     }

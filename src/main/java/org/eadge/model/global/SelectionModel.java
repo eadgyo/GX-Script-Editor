@@ -13,6 +13,7 @@ import java.util.*;
  *
  * Holds selected elements and on dragged elements
  */
+
 public class SelectionModel extends DefaultTreeSelectionModel
 {
     public enum SelectionState
@@ -80,8 +81,6 @@ public class SelectionModel extends DefaultTreeSelectionModel
     {
         return selectedElements.isEmpty() ? null : selectedElements.iterator().next();
     }
-
-
 
     public Collection<MutableTreeNode> getSelectedElements()
     {

@@ -176,6 +176,7 @@ public class SceneController
                     {
                         // Ajoute à la selection
                         selectionModel.addSelectedElement(node);
+                        selectionModel.updateSelectionPaths();
                     }
                 }
             }

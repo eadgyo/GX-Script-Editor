@@ -4,8 +4,8 @@ import org.eadge.gxscript.data.entity.model.base.GXEntity;
 import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.util.*;
 
 /**
@@ -18,9 +18,15 @@ public class Copy
     public static Set<MutableTreeNode> copyElements(Collection<MutableTreeNode> copiedElements)
     {
         Set<GXEntity> entities = retrieveGXEntities(copiedElements);
-        Map<GXEntity, GXEntity> replacementMap = createReplacementMap(entities);
-        Set<MutableTreeNode> newElements = copyAllElements(copiedElements);
-        replaceGXEntities(replacementMap, newElements);
+        Map<GXEntity, GXEntity> entityMap = createReplacementMap(entities);
+        Map<MutableTreeNode, MutableTreeNode> layersMap = copyAllElements(copiedElements);
+
+        HashSet<MutableTreeNode> newElements = new HashSet<>();
+        for (GXEntity gxEntity : entityMap.values())
+            newElements.add((MutableTreeNode) gxEntity);
+        newElements.addAll(layersMap.values());
+
+        replaceGXEntities(entityMap, layersMap, newElements);
         return newElements;
     }
 
@@ -34,6 +40,10 @@ public class Copy
             {
                 ((GXLayer) copiedElement).fillWithGXEntities(entities);
             }
+            else if (copiedElement instanceof GXElement)
+            {
+                entities.add((GXEntity) copiedElement);
+            }
         }
         return entities;
     }
@@ -44,37 +54,47 @@ public class Copy
         Map<GXEntity, GXEntity> replacementMap = new HashMap<>();
         for (GXEntity entity : entities)
         {
-            GXEntity clone = (GXEntity) entity.clone();
+            GXEntity clone = ((GXElement) entity).deepClone();
             replacementMap.put(entity, clone);
         }
         return replacementMap;
     }
 
-    private static Set<MutableTreeNode> copyAllElements(Collection<MutableTreeNode> copiedElements)
+    private static Map<MutableTreeNode, MutableTreeNode> copyAllElements(Collection<MutableTreeNode> copiedElements)
     {
-        Set<MutableTreeNode> newElements = new HashSet<>();
+        Map<MutableTreeNode, MutableTreeNode> replacementLayers = new HashMap<>();
 
         for (MutableTreeNode toBeCopiedElement : copiedElements)
         {
-            MutableTreeNode copiedElement = (MutableTreeNode) ((DefaultMutableTreeNode) toBeCopiedElement).clone();
-            newElements.add(copiedElement);
+            if (toBeCopiedElement instanceof GXLayer)
+            {
+                GXLayer layer = (GXLayer) toBeCopiedElement;
+                GXLayer clone   = layer.clone();
+                replacementLayers.put(toBeCopiedElement, clone);
+            }
         }
 
-        return newElements;
+        return replacementLayers;
     }
 
-    private static void replaceGXEntities(Map<GXEntity, GXEntity> replacementMap, Set<MutableTreeNode> newElements)
+    private static void replaceGXEntities(Map<GXEntity, GXEntity> entityMap, Map<MutableTreeNode, MutableTreeNode>
+            layersMap, Set<MutableTreeNode> newElements)
     {
         for (MutableTreeNode savedElement : newElements)
         {
+            TreeNode parent = savedElement.getParent();
+            MutableTreeNode replacedParent = layersMap.get(parent);
+            savedElement.setParent(replacedParent);
+
             if (savedElement instanceof GXLayer)
             {
-                ((GXLayer) savedElement).replaceChildren(replacementMap);
+                ((GXLayer) savedElement).replaceChildren(entityMap);
             }
             else if (savedElement instanceof GXElement)
             {
-                ((GXElement) savedElement).replaceEntity(replacementMap);
+                ((GXElement) savedElement).replaceEntities(entityMap);
             }
+
         }
     }
 

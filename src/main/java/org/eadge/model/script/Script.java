@@ -124,9 +124,9 @@ public class Script extends Observable implements Serializable
             return;
 
         int numberOfChildren = gxLayer.getChildCount();
-        for (int childIndex = 0; childIndex < numberOfChildren; childIndex++)
+        while (gxLayer.getChildCount() != 0)
         {
-            MutableTreeNode childAt = (MutableTreeNode) gxLayer.getChildAt(childIndex);
+            MutableTreeNode childAt = (MutableTreeNode) gxLayer.getChildAt(0);
             removeNode(childAt);
         }
         layeredScript.removeNodeFromParent(gxLayer);
