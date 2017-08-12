@@ -11,7 +11,8 @@ import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -57,8 +58,8 @@ public class SceneRenderer
     {
         AffineTransform transform = this.prepareScene(g, width, height, sceneModel);
 
-        Collection<GXElement> unselectedElements = new HashSet<>();
-        Collection<GXLayer> unselectedLayers = new HashSet<>();
+        List<GXElement> unselectedElements = new LinkedList<>();
+        List<GXLayer> unselectedLayers = new LinkedList<>();
 
         // Retrieve unselected layers and elements
         findUnselectedLayersAndElements(inSceneNodes, selectionModel, unselectedElements, unselectedLayers);
@@ -101,8 +102,8 @@ public class SceneRenderer
 
     private void findUnselectedLayersAndElements(Collection<MutableTreeNode> inSceneNodes,
                                                  SelectionModel selectionModel,
-                                                 Collection<GXElement> unselectedElements,
-                                                 Collection<GXLayer> unselectedLayers)
+                                                 List<GXElement> unselectedElements,
+                                                 List<GXLayer> unselectedLayers)
     {
         for (MutableTreeNode node : inSceneNodes)
         {
@@ -110,11 +111,11 @@ public class SceneRenderer
             {
                 if (node instanceof GXLayer)
                 {
-                    unselectedLayers.add((GXLayer) node);
+                    unselectedLayers.add(0, (GXLayer) node);
                 }
                 else
                 {
-                    unselectedElements.add((GXElement) node);
+                    unselectedElements.add(0, (GXElement) node);
                 }
             }
         }
