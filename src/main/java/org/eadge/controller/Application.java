@@ -140,7 +140,6 @@ public class Application
 
         m.script.addEntity(forElement, root);
         m.script.addEntity(printElement, root);
-
     }
 
     private void createControllers()

@@ -3,6 +3,7 @@ package org.eadge.controller.frame.global;
 import org.eadge.ConstantsView;
 import org.eadge.controller.Actions;
 import org.eadge.gxscript.data.compile.script.CompiledGXScript;
+import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.gxscript.tools.compile.GXCompiler;
 import org.eadge.gxscript.tools.run.GXRunner;
 import org.eadge.model.Models;
@@ -46,16 +47,16 @@ public class ScriptController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            m.rawGXScript.updateEntities();
-            int i = m.testsModel.validateAll(m.rawGXScript);
+            int i = m.testsModel.validateAll(m.script.getRawGXScriptPure());
             try
             {
                 m.testsModel.getTestStream().flush();
                 m.testsModel.getTestStream().write(ConstantsView.COMPILATION_START_MESSAGE.getBytes());
                 m.testsModel.getTestStream().write("\n".getBytes());
-                if (i != 0)
+                if (i != -1)
                 {
-                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_ECHEC + i + ConstantsView.ERREUR).getBytes());
+                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_ECHEC + 1 + ConstantsView.ERREUR)
+                                                               .getBytes());
                 }
                 else
                 {
@@ -80,11 +81,24 @@ public class ScriptController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-            GXCompiler compiler = new GXCompiler();
-            CompiledGXScript compile = compiler.compile(m.script.getRawGXScriptPure());
 
-            GXRunner runner = new GXRunner();
-            runner.run(compile);
+            RawGXScript rawGXScriptPure = m.script.getRawGXScriptPure();
+            int i = m.testsModel.validateAll(rawGXScriptPure);
+
+            if (i != -1)
+            {
+                JOptionPane.showMessageDialog(myFrame, ConstantsView.INVALIDATE_SCRIPT + ": " + m.testsModel
+                        .getElementAt(i).getName());
+            }
+            else
+            {
+                GXCompiler compiler = new GXCompiler();
+                m.script.getRawGXScript().updateEntities();
+                CompiledGXScript compile = compiler.compile(rawGXScriptPure);
+
+                GXRunner runner = new GXRunner();
+                runner.run(compile);
+            }
         }
     }
 

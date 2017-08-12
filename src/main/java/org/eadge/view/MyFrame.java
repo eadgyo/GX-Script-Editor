@@ -95,12 +95,13 @@ public class MyFrame extends JFrame
         consoleView = new ConsoleView();
         testsView = new TestsView();
 
-        JPanel bottomRightPane = new JPanel(new CardLayout());
-        //bottomRightPane.add(consoleView, ConstantsView.TAB_CONSOLE);
-        bottomRightPane.add(testsView, ConstantsView.TAB_TESTS);
+//        tabbedPane.add(consoleView, ConstantsView.TAB_CONSOLE);
+//        tabbedPane.add(testsView, ConstantsView.TAB_TESTS);
+        JSplitPane tabbedPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, consoleView, testsView);
+        tabbedPane.setResizeWeight(0.7);
 
         // --> Finalize
-        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sceneView, bottomRightPane);
+        JSplitPane rightPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sceneView, tabbedPane);
         rightPane.setContinuousLayout(true);
         rightPane.setResizeWeight(0.5);
 

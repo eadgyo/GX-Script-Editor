@@ -110,21 +110,21 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
      */
     public int validateAll(RawGXScript rawGXScript)
     {
-        int error = 0;
         for (int testIndex = 0; testIndex < tests.size(); testIndex++)
         {
             validate(testIndex, rawGXScript);
             if (getResult(testIndex) != 1)
             {
-                error++;
+                int errorIndex = testIndex;
                 testIndex++;
                 for (;testIndex < tests.size(); testIndex++)
                 {
                     tests.get(testIndex).result = 2;
                 }
+                return errorIndex;
             }
         }
-        return error;
+        return -1;
     }
 
     public int getResult(int i)
@@ -174,7 +174,7 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
         }
     }
 
-    class Test
+    public class Test
     {
         int result;
         String name;
@@ -210,6 +210,11 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
                 res = "[       ]";
             }
             return res + "   " + name;
+        }
+
+        public String getName()
+        {
+            return name;
         }
     }
 }

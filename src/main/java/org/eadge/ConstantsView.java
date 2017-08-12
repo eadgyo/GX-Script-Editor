@@ -100,7 +100,8 @@ public interface ConstantsView
     String VALIDATE_CODE = "Code valide";
 
     String COMPILATION_START_MESSAGE = "Début Compilation...";
-    String COMPILATION_SUCCESS = "Compilation réussie";
-    String COMPILATION_ECHEC = "Compilation échouée: ";
-    String ERREUR = " erreurs";
+    String COMPILATION_SUCCESS       = "Compilation réussie";
+    String COMPILATION_ECHEC         = "Compilation échouée: ";
+    String ERREUR                    = " erreurs";
+    String INVALIDATE_SCRIPT         = "Corriger le script";
 }

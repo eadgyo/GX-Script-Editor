@@ -6,7 +6,10 @@ import org.eadge.gxscript.data.compile.script.address.FuncDataAddresses;
 import org.eadge.gxscript.data.compile.script.address.OutputAddresses;
 import org.eadge.gxscript.data.compile.script.func.Func;
 import org.eadge.gxscript.data.entity.model.base.GXEntity;
+import org.eadge.gxscript.data.entity.model.base.StartImbricationGXEntity;
 import org.eadge.gxscript.data.entity.model.def.DefaultGXEntity;
+import org.eadge.gxscript.data.entity.model.script.InputScriptGXEntity;
+import org.eadge.gxscript.data.entity.model.script.OutputScriptGXEntity;
 import org.eadge.gxscript.tools.check.GXLiaisonChecker;
 import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
@@ -166,6 +169,42 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         return entity.hasInputsUsed();
     }
 
+    @Override
+    public boolean isImbrication()
+    {
+        return entity.isImbrication();
+    }
+
+    @Override
+    public boolean isScriptInput()
+    {
+        return entity.isScriptInput();
+    }
+
+    @Override
+    public StartImbricationGXEntity getStartImbricationEntity()
+    {
+        return entity.getStartImbricationEntity();
+    }
+
+    @Override
+    public InputScriptGXEntity getScriptInputEntity()
+    {
+        return entity.getScriptInputEntity();
+    }
+
+    @Override
+    public boolean isScriptOutput()
+    {
+        return entity.isScriptOutput();
+    }
+
+    @Override
+    public OutputScriptGXEntity getScriptOutputEntity()
+    {
+        return entity.getScriptOutputEntity();
+    }
+
     public boolean isInputUsed(int index)
     {
         return entity.isInputUsed(index);
@@ -315,7 +354,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
 
     public void clearLinkedInput(int inputIndex)
     {
-        entity.clearLinkedInput(inputIndex);
+        this.unlinkAsInput(inputIndex);
     }
 
     public void removeInputEntry(int inputIndex)
@@ -345,7 +384,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
 
     public void clearLinkedOutputs(int outputIndex)
     {
-        entity.clearLinkedOutputs(outputIndex);
+        DefaultGXEntity.clearLinkedOutputs(this, outputIndex);
     }
 
     public void removeOutputEntry(int outputIndex)
@@ -358,14 +397,20 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         return entity.isVariableOutput(outputIndex);
     }
 
-    public void linkAsInput(int inputIndex, int entityOutput, GXEntity entity)
+    public void linkAsInput(int inputIndex, int entityOutput, GXEntity gxEntity)
     {
-        DefaultGXEntity.linkAsInput(inputIndex, this, entityOutput, entity);
+        DefaultGXEntity.linkAsInput(inputIndex, this, entityOutput, gxEntity);
     }
 
     public void unlinkAsInput(int inputIndex)
     {
-        entity.unlinkAsInput(inputIndex);
+        DefaultGXEntity.unlinkAsInput(this, inputIndex);
+    }
+
+    @Override
+    public void clearInputs()
+    {
+        DefaultGXEntity.clearInputs(this);
     }
 
     public void addLinkInput(int inputIndex, int outputEntityIndex, GXEntity entity)
@@ -400,17 +445,29 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
 
     public void linkAsOutput(int outputIndex, int entityInput, GXEntity entity)
     {
-        this.entity.linkAsOutput(outputIndex, entityInput, entity);
+        entity.linkAsInput(entityInput, outputIndex, this);
     }
 
     public void unlinkAsOutput(int outputIndex, GXEntity entity)
     {
-        this.entity.unlinkAsOutput(outputIndex, entity);
+        DefaultGXEntity.unlinkAsOutput(this, outputIndex, entity);
+    }
+
+    @Override
+    public void clearOutputs()
+    {
+        DefaultGXEntity.clearOutputs(this);
+    }
+
+    @Override
+    public void clearLinks()
+    {
+        DefaultGXEntity.clearLinks(this);
     }
 
     public void unlinkAsOutput(int outputIndex)
     {
-        entity.unlinkAsOutput(outputIndex);
+        DefaultGXEntity.unlinkAsOutput(this, outputIndex);
     }
 
     public void pushEntityCode(ArrayList<Func> calledFunctions,
@@ -577,15 +634,16 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     @Override
     public boolean equals(Object o)
     {
-        return o == this;
+        if (o instanceof GXElement)
+            return this == o;
+        else
+            return this.entity == o;
     }
 
     @Override
     public int hashCode()
     {
-        int result = super.hashCode();
-        result = 31 * result + (entity != null ? entity.hashCode() : 0);
-        return result;
+        return entity.hashCode();
     }
 
     /**

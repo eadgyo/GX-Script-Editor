@@ -237,7 +237,7 @@ public class MessageConsole
 
             if (printStream != null)
             {
-                printStream.println(line);
+                printStream.print(line);
             }
 
             buffer.setLength(0);

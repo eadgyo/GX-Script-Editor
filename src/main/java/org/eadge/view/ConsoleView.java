@@ -1,9 +1,11 @@
 package org.eadge.view;
 
+import org.eadge.ConstantsView;
 import org.eadge.view.console.MessageConsole;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintStream;
 
 /**
  * Created by eadgyo on 15/02/17.
@@ -17,11 +19,14 @@ public class ConsoleView extends JPanel
 
     public ConsoleView()
     {
-        JScrollPane jScrollPane = new JScrollPane(consoleText);
+        JTabbedPane jTabbedPane = new JTabbedPane();
+        this.setLayout(new BorderLayout());
         consoleText = new JTextArea();
+        JScrollPane jScrollPane = new JScrollPane(consoleText);
         messageConsole = new MessageConsole(consoleText);
-        messageConsole.redirectOut(Color.black, System.out);
+        messageConsole.redirectOut(Color.black, new PrintStream(System.out));
         messageConsole.setMessageLines(100);
-        add(jScrollPane);
+        jTabbedPane.add(jScrollPane, ConstantsView.TAB_CONSOLE);
+        add(jTabbedPane);
     }
 }

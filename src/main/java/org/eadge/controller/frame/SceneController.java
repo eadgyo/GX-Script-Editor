@@ -1,6 +1,7 @@
 package org.eadge.controller.frame;
 
 import org.eadge.controller.Actions;
+import org.eadge.gxscript.data.utils.ObjectConverter;
 import org.eadge.model.frame.SceneModel;
 import org.eadge.model.global.ConnectionModel;
 import org.eadge.model.global.MyTransferableElement;
@@ -246,7 +247,10 @@ public class SceneController
                                                                                                                    .entryIndex));
                                 if (!optionValue.equals(""))
                                 {
-                                    gxElement.setOptionValue(entryIndex.entryIndex, optionValue);
+                                    Object convert = ObjectConverter.convert(optionValue,
+                                                                             gxElement.getInputClass(entryIndex
+                                                                                                             .entryIndex));
+                                    gxElement.setOptionValue(entryIndex.entryIndex, convert);
                                 }
                             }
                             selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
