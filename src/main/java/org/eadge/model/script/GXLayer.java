@@ -7,6 +7,7 @@ import org.eadge.utils.AColor;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
@@ -45,45 +46,42 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         GXLayer clone = (GXLayer) super.clone();
         clone.backgroundColor = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), backgroundColor.getAlpha());
         //noinspection unchecked
-        clone.children = children;
+        clone.children = new Vector(children);
         return clone;
     }
 
     /**
      * Replace children, after creating gxEntity clone. You need to copy all entities first.
-     * @param gxEntityMap used to replace entities (do use for node)
+     * @param replacementMap used to replace entities (do use for node)
      */
-    public void replaceChildren(Map<GXEntity, GXEntity> gxEntityMap)
+    public void replaceChildren(Map<MutableTreeNode, MutableTreeNode> replacementMap)
     {
-        Vector oldChildren = this.children;
-        this.children = new Vector<MutableTreeNode>();
-        for (Object child : children)
+        for (int i = 0; i < getChildCount(); i++)
         {
+            TreeNode child = getChildAt(i);
+            MutableTreeNode treeNode = replacementMap.get(child);
+            treeNode.setParent(this);
             if (child instanceof GXLayer)
             {
-                // Copy the element
-                GXLayer childLayer = (GXLayer) child;
-                GXLayer clone      = (GXLayer) childLayer.clone();
+                // Get replacementNode
+                GXLayer layer = (GXLayer) treeNode;
 
-                // Replace entities
-                clone.replaceChildren(gxEntityMap);
+                // Replace child at the given index
+                setChildAt(i, layer);
 
-                // Add this element
-                //noinspection unchecked
-                this.children.add(clone);
+                // Replace children for this layer
+                layer.replaceChildren(replacementMap);
             }
             else if (child instanceof GXElement)
             {
-                // Copy the element
-                GXElement childElement = (GXElement) child;
-                GXElement clone      = (GXElement) childElement.clone();
+                // Get replacementNode
+                GXElement element = (GXElement) treeNode;
+
+                // Replace child at the given index
+                setChildAt(i, element);
 
                 // Replace entities
-                clone.replaceEntity(gxEntityMap);
-
-                // Add this element
-                //noinspection unchecked
-                this.children.add(clone);
+                element.replaceEntities(replacementMap);
             }
         }
     }
@@ -105,6 +103,11 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
                 entities.add(((GXElement) child));
             }
         }
+    }
+
+    public void setChildAt(int i, MutableTreeNode mutableTreeNode)
+    {
+        this.children.set(i, mutableTreeNode);
     }
 
     public void setX(double x)
@@ -320,5 +323,14 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
     public String toString()
     {
         return name;
+    }
+
+    @Override
+    public void setUserObject(Object o)
+    {
+        if (o instanceof String)
+        {
+            name = (String) o;
+        }
     }
 }

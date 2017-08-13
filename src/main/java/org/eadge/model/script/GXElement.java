@@ -13,6 +13,7 @@ import org.eadge.gxscript.data.entity.model.script.OutputScriptGXEntity;
 import org.eadge.gxscript.tools.check.GXLiaisonChecker;
 import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
+import org.eadge.renderer.Rect2DInter;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -26,7 +27,7 @@ import java.util.Map;
  *
  * Holds entity and graphics for element representation
  */
-public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTreeNode
+public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTreeNode, Rect2DInter
 {
     private DefaultGXEntity entity;
     private MutableTreeNode parent = null;
@@ -579,12 +580,6 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     }
 
     @Override
-    public void setUserObject(Object o)
-    {
-
-    }
-
-    @Override
     public void removeFromParent()
     {
         parent.remove(this);
@@ -620,7 +615,7 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         }
     }
 
-    public void replaceEntities(Map<GXEntity, GXEntity> replacementMap)
+    public void replaceEntities(Map replacementMap)
     {
         this.entity.replaceEntities(replacementMap);
     }
@@ -666,4 +661,12 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         script.callObservers();
     }
 
+    @Override
+    public void setUserObject(Object o)
+    {
+        if (o instanceof String)
+        {
+            entity.setName((String) o);
+        }
+    }
 }

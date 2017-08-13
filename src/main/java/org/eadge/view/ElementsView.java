@@ -41,6 +41,7 @@ public class ElementsView extends JPanel
         elementsTree.setShowsRootHandles(true);
         elementsTree.setRootVisible(false);
         elementsTree.setCellRenderer(new LayerCellRenderer());
+        elementsTree.setEditable(true);
         scrollPane = new JScrollPane(elementsTree);
         add(scrollPane, BorderLayout.CENTER);
 

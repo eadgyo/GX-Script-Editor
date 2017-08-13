@@ -6,6 +6,7 @@ import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.model.script.GXElement;
 import org.eadge.renderer.ElementRenderer;
 import org.eadge.renderer.Rect2D;
+import org.eadge.renderer.Rect2DInter;
 
 import javax.swing.tree.MutableTreeNode;
 import java.awt.*;
@@ -28,7 +29,7 @@ public class GTools
 
         // Init with first element
         MutableTreeNode next = iterator.next();
-        Rect2D rect2D = (Rect2D) next;
+        Rect2DInter rect2D = (Rect2DInter) next;
         leftX = rect2D.getX();
         leftY = rect2D.getY();
         rightX = rect2D.getX() + rect2D.getWidth();
@@ -38,7 +39,7 @@ public class GTools
         while (iterator.hasNext())
         {
             next = iterator.next();
-            rect2D = (Rect2D) next;
+            rect2D = (Rect2DInter) next;
             leftX = rect2D.getX();
             leftY = rect2D.getY();
             rightX = rect2D.getX() + rect2D.getWidth();
@@ -52,7 +53,7 @@ public class GTools
     {
         for (MutableTreeNode node : nodes)
         {
-            Rect2D rect2d = (Rect2D) node;
+            Rect2DInter rect2d = (Rect2DInter) node;
             rect2d.translate(x, y);
         }
     }
@@ -86,7 +87,7 @@ public class GTools
         }
     }
 
-    public static void drawRect2D(Graphics2D g, Rect2D rect2D)
+    public static void drawRect2D(Graphics2D g, Rect2DInter rect2D)
     {
         int x = (int) rect2D.getX();
         int y = (int) rect2D.getY();
@@ -95,7 +96,7 @@ public class GTools
         g.fillRect(x, y, width, height);
     }
 
-    public static void drawRect2D(Graphics2D g, Rect2D rect2D, Color color)
+    public static void drawRect2D(Graphics2D g, Rect2DInter rect2D, Color color)
     {
         g.setColor(color);
         drawRect2D(g, rect2D);

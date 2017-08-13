@@ -23,10 +23,12 @@ import java.util.Collection;
 public class EditController
 {
     private Models m;
+    private MyFrame frame;
 
     public EditController(MyFrame frame, Models m, Actions a)
     {
         this.m = m;
+        this.frame = frame;
 
         MenuView menuView = frame.menuView;
         ElementsView elementsView = frame.elementsView;
@@ -137,8 +139,8 @@ public class EditController
             Collection<MutableTreeNode> copiedElements = Copy.copyElements(m.copyModel.getSavedElements());
 
             // Get left of screen
-            double leftX = m.sceneModel.computeXInScene(0);
-            double leftY = m.sceneModel.computeYInScene(0);
+            double leftX = m.sceneModel.computeXInScene(frame.sceneView.getWidth()/2);
+            double leftY = m.sceneModel.computeYInScene(frame.sceneView.getHeight()/2);
 
             // Move rect containing all elements to left of screen
             GTools.moveElementsTo(leftX, leftY, copiedElements);
@@ -147,7 +149,7 @@ public class EditController
             MutableTreeNode parent = m.getFirstSelectedLayerOrRoot();
 
             // Add elements
-            m.script.addNodes(copiedElements, parent);
+            m.script.addNodesRec(copiedElements, parent);
         }
     }
     public class UndoAction extends AbstractAction

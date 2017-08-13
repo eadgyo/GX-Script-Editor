@@ -5,7 +5,6 @@ import org.eadge.model.script.GXElement;
 import org.eadge.model.script.GXLayer;
 
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.util.*;
 
 /**
@@ -17,17 +16,8 @@ public class Copy
 {
     public static Set<MutableTreeNode> copyElements(Collection<MutableTreeNode> copiedElements)
     {
-        Set<GXEntity> entities = retrieveGXEntities(copiedElements);
-        Map<GXEntity, GXEntity> entityMap = createReplacementMap(entities);
-        Map<MutableTreeNode, MutableTreeNode> layersMap = copyAllElements(copiedElements);
-
-        HashSet<MutableTreeNode> newElements = new HashSet<>();
-        for (GXEntity gxEntity : entityMap.values())
-            newElements.add((MutableTreeNode) gxEntity);
-        newElements.addAll(layersMap.values());
-
-        replaceGXEntities(entityMap, layersMap, newElements);
-        return newElements;
+        Map<MutableTreeNode, MutableTreeNode> entityMap = createReplacementMap(copiedElements);
+        return replaceNodes(entityMap, copiedElements);
     }
 
     private static Set<GXEntity> retrieveGXEntities(Collection<MutableTreeNode> copiedElements)
@@ -48,54 +38,60 @@ public class Copy
         return entities;
     }
 
-    private static Map<GXEntity, GXEntity> createReplacementMap(Collection<GXEntity> entities)
+    private static Map<MutableTreeNode, MutableTreeNode> createReplacementMap(Collection<MutableTreeNode>
+                                                                                      copiedElements)
     {
+        List<MutableTreeNode> copyCopiedElements = new LinkedList<>(copiedElements);
+
         // Copy all elements and create replacement map
-        Map<GXEntity, GXEntity> replacementMap = new HashMap<>();
-        for (GXEntity entity : entities)
+        Map<MutableTreeNode, MutableTreeNode> replacementMap = new HashMap<>();
+        for (int i = 0; i < copyCopiedElements.size(); i++)
         {
-            GXEntity clone = ((GXElement) entity).deepClone();
-            replacementMap.put(entity, clone);
+            MutableTreeNode treeNode = copyCopiedElements.get(i);
+            if (treeNode instanceof GXElement)
+            {
+                GXElement clone = ((GXElement) treeNode).deepClone();
+                replacementMap.put(treeNode, clone);
+            }
+            else if (treeNode instanceof GXLayer)
+            {
+                GXLayer clone= ((GXLayer) treeNode).clone();
+                replacementMap.put(treeNode, clone);
+
+                for (int childIndex = 0; childIndex < clone.getChildCount(); childIndex++)
+                {
+                    copyCopiedElements.add((MutableTreeNode) clone.getChildAt(childIndex));
+                }
+            }
         }
         return replacementMap;
     }
 
-    private static Map<MutableTreeNode, MutableTreeNode> copyAllElements(Collection<MutableTreeNode> copiedElements)
+    public static Set<MutableTreeNode> replaceNodes(Map<MutableTreeNode, MutableTreeNode> replacementMap,
+                                       Collection<MutableTreeNode> copiedElements)
     {
-        Map<MutableTreeNode, MutableTreeNode> replacementLayers = new HashMap<>();
+        Set<MutableTreeNode> hierarchy = new HashSet<>();
 
-        for (MutableTreeNode toBeCopiedElement : copiedElements)
+        for (MutableTreeNode copiedElement : copiedElements)
         {
-            if (toBeCopiedElement instanceof GXLayer)
-            {
-                GXLayer layer = (GXLayer) toBeCopiedElement;
-                GXLayer clone   = layer.clone();
-                replacementLayers.put(toBeCopiedElement, clone);
-            }
-        }
+            MutableTreeNode treeNode = replacementMap.get(copiedElement);
+            MutableTreeNode replacedParent = replacementMap.get(treeNode.getParent());
+            treeNode.setParent(replacedParent);
 
-        return replacementLayers;
+            if (treeNode instanceof GXLayer)
+            {
+                ((GXLayer) treeNode).replaceChildren(replacementMap);
+            }
+            else if (treeNode instanceof GXElement)
+            {
+                ((GXElement) treeNode).replaceEntities(replacementMap);
+            }
+
+            hierarchy.add(treeNode);
+        }
+        return hierarchy;
     }
 
-    private static void replaceGXEntities(Map<GXEntity, GXEntity> entityMap, Map<MutableTreeNode, MutableTreeNode>
-            layersMap, Set<MutableTreeNode> newElements)
-    {
-        for (MutableTreeNode savedElement : newElements)
-        {
-            TreeNode parent = savedElement.getParent();
-            MutableTreeNode replacedParent = layersMap.get(parent);
-            savedElement.setParent(replacedParent);
 
-            if (savedElement instanceof GXLayer)
-            {
-                ((GXLayer) savedElement).replaceChildren(entityMap);
-            }
-            else if (savedElement instanceof GXElement)
-            {
-                ((GXElement) savedElement).replaceEntities(entityMap);
-            }
-
-        }
-    }
 
 }

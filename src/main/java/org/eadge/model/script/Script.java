@@ -65,8 +65,18 @@ public class Script extends Observable implements Serializable
      */
     public void addEntity(GXElement element, MutableTreeNode parent, int index)
     {
-        rawGXScript.addEntity(element);
         layeredScript.insertNodeInto(element, parent, index);
+        addEntity(element);
+    }
+
+    /**
+     * Add GXElement to the scene in the corresponding layer without changing parent
+     *
+     * @param element added GXElement
+     */
+    public void addEntity(GXElement element)
+    {
+        rawGXScript.addEntity(element);
         elementFinder.addElement(element);
 
         callObservers();
@@ -93,6 +103,17 @@ public class Script extends Observable implements Serializable
     public void addLayer(GXLayer gxLayer, MutableTreeNode parent, int index)
     {
         layeredScript.insertNodeInto(gxLayer, parent, index);
+        addLayer(gxLayer);
+        callObservers();
+    }
+
+    /**
+     * Add GXLayer to the scene in parent GXLayer without changing parent
+     *
+     * @param gxLayer added GXLayer
+     */
+    public void addLayer(GXLayer gxLayer)
+    {
         elementFinder.addElement(gxLayer);
 
         callObservers();
@@ -273,6 +294,42 @@ public class Script extends Observable implements Serializable
         }
     }
 
+    public void addNodeRec(MutableTreeNode mutableTreeNode, MutableTreeNode parent)
+    {
+        if (mutableTreeNode instanceof GXLayer)
+        {
+            GXLayer layer = (GXLayer) mutableTreeNode;
+            addLayer(layer, parent);
+
+            for (int childIndex = 0; childIndex < layer.getChildCount(); childIndex++)
+            {
+                addNodeRec((MutableTreeNode) layer.getChildAt(childIndex));
+            }
+        }
+        else if (mutableTreeNode instanceof GXElement)
+        {
+            addEntity((GXElement) mutableTreeNode, parent);
+        }
+    }
+
+    public void addNodeRec(MutableTreeNode mutableTreeNode)
+    {
+        if (mutableTreeNode instanceof GXLayer)
+        {
+            GXLayer layer = (GXLayer) mutableTreeNode;
+            addLayer(layer);
+
+            for (int childIndex = 0; childIndex < layer.getChildCount(); childIndex++)
+            {
+                addNodeRec((MutableTreeNode) layer.getChildAt(childIndex));
+            }
+        }
+        else if (mutableTreeNode instanceof GXElement)
+        {
+            addEntity((GXElement) mutableTreeNode);
+        }
+    }
+
     public void attachNode(MutableTreeNode mutableTreeNode, MutableTreeNode parent)
     {
         layeredScript.insertNodeInto(mutableTreeNode, parent, 0);
@@ -288,6 +345,14 @@ public class Script extends Observable implements Serializable
         for (MutableTreeNode savedElement : savedElements)
         {
             addNode(savedElement, parent);
+        }
+    }
+
+    public void addNodesRec(Collection<MutableTreeNode> savedElements, MutableTreeNode parent)
+    {
+        for (MutableTreeNode savedElement : savedElements)
+        {
+            addNodeRec(savedElement, parent);
         }
     }
 }

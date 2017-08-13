@@ -15,6 +15,7 @@ public class Actions
     public  ElementsController.HideLayerAction     hideLayerAction;
     public  ElementsController.RemoveNodeAction    removeNodeAction;
     public  ElementsController.AddLayerAction      addLayerAction;
+    public  ElementsController.UpdateNameAction    updateNameAction;
 
     public AddController.ActionGroupChange actionGroupChange;
 

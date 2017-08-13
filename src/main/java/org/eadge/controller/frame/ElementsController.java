@@ -11,6 +11,8 @@ import org.eadge.view.ElementsView;
 import org.eadge.view.MyFrame;
 
 import javax.swing.*;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.MutableTreeNode;
@@ -59,6 +61,10 @@ public class ElementsController
         a.removeNodeAction    = new RemoveNodeAction();
         a.hideLayerAction     = new HideLayerAction();
         a.propertyLayerAction = new PropertyLayerAction();
+        a.updateNameAction    = new UpdateNameAction();
+
+        // Add tree model listener
+        script.getLayeredScript().addTreeModelListener(a.updateNameAction);
 
         elementsView.addLayerButton.setAction(a.addLayerAction);
         elementsView.removeLayerButton.setAction(a.removeNodeAction);
@@ -366,8 +372,6 @@ public class ElementsController
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
         {
-
-
             if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
             {
                 // Get the inserted GXLayer
@@ -459,4 +463,32 @@ public class ElementsController
 
         return mutableTreeNodes;
     }
+
+    public class UpdateNameAction implements TreeModelListener
+    {
+        @Override
+        public void treeNodesChanged(TreeModelEvent e)
+        {
+            script.callObservers();
+        }
+
+        @Override
+        public void treeNodesInserted(TreeModelEvent treeModelEvent)
+        {
+
+        }
+
+        @Override
+        public void treeNodesRemoved(TreeModelEvent treeModelEvent)
+        {
+
+        }
+
+        @Override
+        public void treeStructureChanged(TreeModelEvent treeModelEvent)
+        {
+
+        }
+    }
+
 }
