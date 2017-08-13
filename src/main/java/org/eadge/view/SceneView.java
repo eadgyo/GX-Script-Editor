@@ -19,6 +19,7 @@ public class SceneView extends JPanel
     private SceneRenderer sceneRenderer;
     private SelectionModel selectionModel;
 
+
     public SceneView()
     {
         Dimension dimension = new Dimension(ConstantsView.PREFERRED_DRAW_SIZE_WIDTH,

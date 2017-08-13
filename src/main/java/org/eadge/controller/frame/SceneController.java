@@ -159,7 +159,7 @@ public class SceneController
         {
             Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
 
-            if (mouseEvent.isControlDown() || mouseEvent.isShiftDown())
+            if (mouseEvent.getButton() == MouseEvent.BUTTON1 && mouseEvent.isShiftDown())
             {
                 // Get the selected element
                 MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
@@ -179,6 +179,56 @@ public class SceneController
                         selectionModel.updateSelectionPaths();
                     }
                 }
+            }
+            else if (mouseEvent.getButton() == MouseEvent.BUTTON3)
+            {
+                // Try to get selected element
+                if (!selectionModel.hasSelectedElements())
+                {
+                    MutableTreeNode node = elementFinder.retrieveFirstElementOut(mouseRect, selectionModel);
+
+                    if (node == null)
+                    {
+                        selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
+                    }
+                    else if (!selectionModel.isNewSelection())
+                    {
+                        selectionModel.setSelectedElements(node);
+                    }
+                }
+
+                MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
+
+                if (node instanceof GXElement)
+                {
+                    GXElement gxElement = (GXElement) node;
+                    // Check if it's connecting on entry
+                    EntryFinder.EntryResult entryIndex = entryFinder.getEntryIndex(gxElement, mouseRect);
+
+                    if (entryIndex.entryIndex != -1 && entryIndex.isInput)
+                    {
+                        String optionValue = JOptionPane.showInputDialog("Option value",
+                                                                         gxElement.getOptionValue(entryIndex
+                                                                                                          .entryIndex));
+                        if (optionValue != null)
+                        {
+                            Object convert = ObjectConverter.convert(optionValue,
+                                                                     gxElement.getInputClass(entryIndex
+                                                                                                     .entryIndex));
+                            gxElement.setOptionValue(entryIndex.entryIndex, convert);
+                        }
+                    }
+                    else
+                    {
+                        myFrame.popupMenu.show(myFrame.sceneView, mouseEvent.getX(), mouseEvent.getY());
+                    }
+                }
+                else
+                {
+                    // Display popup menu
+                    myFrame.popupMenu.show(myFrame.sceneView, mouseEvent.getX(), mouseEvent.getY());
+                }
+
             }
             else
             {
@@ -200,6 +250,8 @@ public class SceneController
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
 
+
+
             script.callObservers();
         }
 
@@ -212,7 +264,7 @@ public class SceneController
             connectionModel.setDesiring(true);
 
             // Check if it's selecting an entry
-            if (!mouseEvent.isControlDown() && !mouseEvent.isShiftDown())
+            if (!mouseEvent.isShiftDown() && mouseEvent.getButton() == MouseEvent.BUTTON1)
             {
                 Rect2D mouseRect = createMouseRec(mouseEvent, 4 );
                 MutableTreeNode node = elementFinder.retrieveFirstElementIn(mouseRect, selectionModel);
@@ -231,31 +283,17 @@ public class SceneController
                         selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
 
                         // Selecting entry
-                        if (mouseEvent.getButton() == MouseEvent.BUTTON1)
+                        if (mouseEvent.isControlDown())
+                        {
+                            script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
+                            selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
+                        }
+                        else
                         {
                             connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
                             connectionModel.setDesiredPos(mouseRect.getCenterX(), mouseRect.getCenterY());
                         }
-                        else
-                        {
-                            if (mouseEvent.getButton() == MouseEvent.BUTTON3)
-                            {
-                                script.disconnectEntityOnEntry(gxElement, entryIndex.isInput, entryIndex.entryIndex);
-                            }
-                            if (mouseEvent.getButton() == MouseEvent.BUTTON2 && entryIndex.isInput)
-                            {
-                                String optionValue = JOptionPane.showInputDialog("Option value", gxElement.getOptionValue(entryIndex
-                                                                                                                   .entryIndex));
-                                if (!optionValue.equals(""))
-                                {
-                                    Object convert = ObjectConverter.convert(optionValue,
-                                                                             gxElement.getInputClass(entryIndex
-                                                                                                             .entryIndex));
-                                    gxElement.setOptionValue(entryIndex.entryIndex, convert);
-                                }
-                            }
-                            selectionModel.setSelectionState(SelectionModel.SelectionState.NONE);
-                        }
+
                     }
                     else
                     {

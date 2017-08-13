@@ -8,28 +8,28 @@ public interface ConstantsView
     String MAIN_WINDOW_TITLE = "test.java";
     String PROPERTIES_DIALOG_TITLE = "Propriétés";
 
-    String NAME_RUN_SCRIPT = "Lancement";
+    String NAME_RUN_SCRIPT = "Lancer script";
     String DESC_RUN_SCRIPT = "Lancement du script";
 
-    String NAME_VALIDATE_SCRIPT = "Valider";
+    String NAME_VALIDATE_SCRIPT = "Valider script";
     String DESC_VALIDATE_SCRIPT = "Validation du script";
 
     String NAME_LOAD_FUNCTION = "Charger fonction";
     String DESC_LOAD_FUNCTION = "Charge une fonction pour être ajoutée à notre script";
 
-    String NAME_ADD_ELEMENT = "+ élement";
+    String NAME_ADD_ELEMENT = "Ajouter élement";
     String DESC_ADD_ELEMENT = "Ajout d'un élément au script";
 
-    String NAME_DEL_ELEMENT = "- élément";
+    String NAME_DEL_ELEMENT = "Supprimer élément";
     String DESC_DEL_ELEMENT = "Supprimer les éléments sélectionnés";
 
-    String NAME_COPY = "Copie";
+    String NAME_COPY = "Copier";
     String DESC_COPY = "Copie des éléments sélectionnés";
 
     String NAME_PASTE = "Coller";
     String DESC_PASTE = "Coller les éléments copiés";
 
-    String NAME_CUT = "Cut";
+    String NAME_CUT = "Couper";
     String DESC_CUT = "Coupe les éléments sélectionnés";
 
     String NAME_UNDO = "Revenir en arrière";
@@ -38,7 +38,7 @@ public interface ConstantsView
     String NAME_REDO = "Annuler revenir en arrière";
     String DESC_REDO = "Annule l'effet d'une annulation de l'action passée";
 
-    String NAME_ADD_LAYER = "+ couche";
+    String NAME_ADD_LAYER = "Ajouter couche";
     String DESC_ADD_LAYER = "Ajout d'une nouvelle couche";
 
     String NAME_REMOVE_NODE = "Supprimer";

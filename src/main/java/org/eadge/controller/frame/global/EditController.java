@@ -42,7 +42,10 @@ public class EditController
         a.redoAction = new RedoAction();
 
         menuView.addElementItem.setAction(a.addElementAction);
-        menuView.removeElementItem.setAction(a.removeElementAction);
+        menuView.removeElementItem.setAction(a.removeNodeAction);
+        menuView.propertyLayerItem.setAction(a.propertyLayerAction);
+        menuView.addLayerItem.setAction(a.addLayerAction);
+        menuView.propertyLayerItem.setAction(a.propertyLayerAction);
         menuView.copyItem.setAction(a.copyAction);
         menuView.cutItem.setAction(a.cutAction);
         menuView.pasteItem.setAction(a.pasteAction);
@@ -65,7 +68,16 @@ public class EditController
         {
             GXElement selectedElement = m.addListModel.getSelectedElement().deepClone();
             MutableTreeNode firstSelectedElement = m.getFirstSelectedLayerOrRoot();
+
+            // Get left of screen
+            double leftX = getLeftX(actionEvent.getSource());
+            double leftY = getLeftY(actionEvent.getSource());
+
+            // Move rect containing all elements to left of screen
+            GTools.moveElementsTo(leftX, leftY, selectedElement);
+
             m.script.addEntity(selectedElement, firstSelectedElement);
+            m.script.callObservers();
         }
     }
 
@@ -86,6 +98,7 @@ public class EditController
                 m.script.removeNode(selectedElement);
             }
             m.selectionModel.clearSelection();
+            m.script.callObservers();
         }
     }
 
@@ -122,8 +135,39 @@ public class EditController
 
             // And remove all nodes
             m.script.removeNodes(selectedElements);
+            m.selectionModel.clearSelection();
+            m.script.callObservers();
         }
     }
+
+    public double getLeftX(Object source)
+    {
+        if (source instanceof JComponent && ((JComponent) source).getParent() instanceof MyFrame.PopupMenuSaver &&
+                ((MyFrame.PopupMenuSaver) ((JComponent) source).getParent()).isUseCoordinate())
+        {
+            MyFrame.PopupMenuSaver popupMenu = (MyFrame.PopupMenuSaver) ((JComponent) source).getParent();
+            return m.sceneModel.computeXInScene(popupMenu.getLastX());
+        }
+        else
+        {
+            return m.sceneModel.computeXInScene(frame.sceneView.getWidth()/2);
+        }
+    }
+
+    public double getLeftY(Object source)
+    {
+        if (source instanceof JComponent && ((JComponent) source).getParent() instanceof MyFrame.PopupMenuSaver &&
+                ((MyFrame.PopupMenuSaver) ((JComponent) source).getParent()).isUseCoordinate())
+        {
+            MyFrame.PopupMenuSaver popupMenu = (MyFrame.PopupMenuSaver) ((JComponent) source).getParent();
+            return m.sceneModel.computeYInScene(popupMenu.getLastY());
+        }
+        else
+        {
+            return m.sceneModel.computeYInScene(frame.sceneView.getHeight()/2);
+        }
+    }
+
     public class PasteAction extends AbstractAction
     {
         public PasteAction()
@@ -139,8 +183,8 @@ public class EditController
             Collection<MutableTreeNode> copiedElements = Copy.copyElements(m.copyModel.getSavedElements());
 
             // Get left of screen
-            double leftX = m.sceneModel.computeXInScene(frame.sceneView.getWidth()/2);
-            double leftY = m.sceneModel.computeYInScene(frame.sceneView.getHeight()/2);
+            double leftX = getLeftX(actionEvent.getSource());
+            double leftY = getLeftY(actionEvent.getSource());
 
             // Move rect containing all elements to left of screen
             GTools.moveElementsTo(leftX, leftY, copiedElements);
@@ -150,6 +194,7 @@ public class EditController
 
             // Add elements
             m.script.addNodesRec(copiedElements, parent);
+            m.script.callObservers();
         }
     }
     public class UndoAction extends AbstractAction

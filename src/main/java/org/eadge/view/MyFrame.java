@@ -55,6 +55,18 @@ public class MyFrame extends JFrame
     public ConsoleView consoleView;
     public TestsView testsView;
 
+    // Popup menu
+    public PopupMenuSaver popupMenu = new PopupMenuSaver();
+
+    public JMenuItem addElementItem    = new JMenuItem();
+    public JMenuItem addLayerItem      = new JMenuItem();
+    public JMenuItem removeElementItem = new JMenuItem();
+    public JMenuItem propertyLayerItem = new JMenuItem();
+    public JMenuItem copyItem          = new JMenuItem();
+    public JMenuItem pasteItem         = new JMenuItem();
+    public JMenuItem cutItem           = new JMenuItem();
+    public JMenuItem validateItem           = new JMenuItem();
+    public JMenuItem launchItem           = new JMenuItem();
 
     public MyFrame()
     {
@@ -64,6 +76,20 @@ public class MyFrame extends JFrame
         createMenu();
         createComponents();
         createRenderer();
+        createPopupMenu();
+    }
+
+    private void createPopupMenu()
+    {
+        popupMenu.add(addElementItem);
+        popupMenu.add(removeElementItem);
+        popupMenu.add(addLayerItem);
+        popupMenu.add(propertyLayerItem);
+        popupMenu.add(copyItem);
+        popupMenu.add(pasteItem);
+        popupMenu.add(cutItem);
+        popupMenu.add(validateItem);
+        popupMenu.add(launchItem);
     }
 
     private void createMenu()
@@ -118,4 +144,42 @@ public class MyFrame extends JFrame
         sceneView.setSceneRenderer(sceneRenderer);
     }
 
+    public class PopupMenuSaver extends JPopupMenu
+    {
+        private int lastX = 0;
+        private int lastY = 0;
+        private boolean useCoordinate = false;
+
+        @Override
+        public void show(Component component, int i, int i1)
+        {
+            super.show(component, i, i1);
+            lastX = i;
+            lastY = i1;
+            useCoordinate = true;
+        }
+
+        public boolean isUseCoordinate()
+        {
+            return useCoordinate;
+        }
+
+        public void show(Component component, int i, int i1, boolean useCoordinate)
+        {
+            super.show(component, i, i1);
+            lastX = i;
+            lastY = i1;
+            useCoordinate = false;
+        }
+
+        public int getLastX()
+        {
+            return lastX;
+        }
+
+        public int getLastY()
+        {
+            return lastY;
+        }
+    }
 }

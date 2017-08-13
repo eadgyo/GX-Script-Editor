@@ -58,6 +58,12 @@ public class GTools
         }
     }
 
+    public static void translateElements(double x, double y, MutableTreeNode node)
+    {
+        Rect2DInter rect2d = (Rect2DInter) node;
+        rect2d.translate(x, y);
+    }
+
     public static void moveElementsTo(double leftDestX, double leftDestY, Collection<MutableTreeNode> nodes)
     {
         // Create rect containing elements
@@ -69,6 +75,19 @@ public class GTools
 
         // Translate all nodes
         translateElements(translateX, translateY, nodes);
+    }
+
+    public static void moveElementsTo(double leftDestX, double leftDestY, MutableTreeNode node)
+    {
+        // Create rect containing elements
+        Rect2DInter rectFromNodes = (Rect2DInter) node;
+
+        // Compute translate vector
+        double translateX = leftDestX - rectFromNodes.getX();
+        double translateY = leftDestY - rectFromNodes.getY();
+
+        // Translate all nodes
+        translateElements(translateX, translateY, node);
     }
 
     /**

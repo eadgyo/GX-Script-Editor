@@ -130,6 +130,7 @@ public class ElementsController
             MutableTreeNode selectedNode = elementsView.getSelectedNode();
             script.removeNode(selectedNode);
             selectionModel.clearSelection();
+            script.callObservers();
         }
     }
 
@@ -361,8 +362,10 @@ public class ElementsController
                 // Set as root selection
                 selectionModel.setSelectedElements(new HashSet<MutableTreeNode>());
                 elementsView.elementsTree.clearSelection();
+                selectionModel.updateSelectionPaths();
             }
-            else {
+            else
+            {
                 selectionModel.setSelectedElements(getSelectedNodes());
             }
             // Update selection
@@ -372,23 +375,32 @@ public class ElementsController
         @Override
         public void mouseReleased(MouseEvent mouseEvent)
         {
-            if (selectionModel.hasSelectedElements() && mouseEvent.getSource() == elementsView.elementsTree)
+            if (mouseEvent.getSource() == elementsView.elementsTree)
             {
-                // Get the inserted GXLayer
-                GXLayer insertedLayer = elementsView.getSelectedLayer();
-
-                // Get the last saved path and move to this
-                Collection<MutableTreeNode> selectedElements = new ArrayList<>(selectionModel.getSelectedElements());
-                for (MutableTreeNode selectedElement : selectedElements)
+                if (mouseEvent.getButton() == MouseEvent.BUTTON3)
                 {
-                    // If is not trying to move on parent in child node
-                    if (!selectionModel.isParentOrEqual(selectedElement, insertedLayer) && selectionModel.isChanging
-                            (insertedLayer, selectedElement))
+                    myFrame.popupMenu.show(elementsView.elementsTree, mouseEvent.getX(), mouseEvent.getY(), false);
+                }
+                else if (selectionModel.hasSelectedElements())
+                {
+                    // Get the inserted GXLayer
+                    GXLayer insertedLayer = elementsView.getSelectedLayer();
+
+                    // Get the last saved path and move to this
+                    Collection<MutableTreeNode> selectedElements = new ArrayList<>(selectionModel.getSelectedElements());
+
+                    for (MutableTreeNode selectedElement : selectedElements)
                     {
-                        script.detachNode(selectedElement);
-                        script.attachNode(selectedElement, insertedLayer);
+                        // If is not trying to move on parent in child node
+                        if (!selectionModel.isParentOrEqual(selectedElement, insertedLayer) && selectionModel.isChanging
+                                (insertedLayer, selectedElement))
+                        {
+                            script.detachNode(selectedElement);
+                            script.attachNode(selectedElement, insertedLayer);
+                        }
                     }
                 }
+
             }
         }
 

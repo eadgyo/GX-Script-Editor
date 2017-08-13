@@ -56,7 +56,7 @@ public class ElementsView extends JPanel
 
         JPanel buttonsPaneBot = new JPanel();
         buttonsPaneBot.setLayout(new BoxLayout(buttonsPaneBot, BoxLayout.LINE_AXIS));
-        buttonsPaneBot.add(hideLayerButton);
+//        buttonsPaneBot.add(hideLayerButton);
         buttonsPaneBot.add(propertyLayerButton);
         buttonsPaneBot.add(removeLayerButton);
 

@@ -23,6 +23,8 @@ public class MenuView extends JMenuBar
     // --> Edit
     public JMenuItem addElementItem = new JMenuItem();
     public JMenuItem removeElementItem = new JMenuItem();
+    public JMenuItem addLayerItem = new JMenuItem();
+    public JMenuItem propertyLayerItem = new JMenuItem();
     public JMenuItem copyItem = new JMenuItem();
     public JMenuItem cutItem = new JMenuItem();
     public JMenuItem pasteItem = new JMenuItem();
@@ -52,11 +54,13 @@ public class MenuView extends JMenuBar
         add(editMenu);
         editMenu.add(addElementItem);
         editMenu.add(removeElementItem);
+        editMenu.add(addLayerItem);
+        editMenu.add(propertyLayerItem);
         editMenu.add(copyItem);
         editMenu.add(pasteItem);
         editMenu.add(cutItem);
-        editMenu.add(undoItem);
-        editMenu.add(redoItem);
+//        editMenu.add(undoItem);
+//        editMenu.add(redoItem);
 
         // --> Script menu
         JMenu scriptMenu = new JMenu(ConstantsView.MENU_SCRIPT);

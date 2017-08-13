@@ -657,8 +657,6 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     {
         script.rawGXScript.removeEntity(this);
         script.layeredScript.removeNodeFromParent(this);
-
-        script.callObservers();
     }
 
     @Override
