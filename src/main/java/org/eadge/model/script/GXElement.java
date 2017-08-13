@@ -155,6 +155,12 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
         return entity.getInputClass(index);
     }
 
+    @Override
+    public Class getOptionClass(int i)
+    {
+        return entity.getOptionClass(i);
+    }
+
     public Collection<Class> getAllInputClasses()
     {
         return entity.getAllInputClasses();

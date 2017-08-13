@@ -104,4 +104,6 @@ public interface ConstantsView
     String COMPILATION_ECHEC         = "Compilation échouée: ";
     String ERREUR                    = " erreurs";
     String INVALIDATE_SCRIPT         = "Corriger le script";
+    String INPUTS_SCRIPT_PRESENT     = "Le script est une fonction";
+    String INPUT_ASK_NAME = "Nom du script";
 }

@@ -41,7 +41,6 @@ public class CustomOutputStream extends OutputStream
     @Override
     public void flush() throws IOException
     {
-        textArea.append("\n");
         textArea.setCaretPosition(textArea.getDocument().getLength());
     }
 

@@ -2,17 +2,17 @@ package org.eadge.controller.frame.global;
 
 import org.eadge.ConstantsView;
 import org.eadge.controller.Actions;
-import org.eadge.gxscript.data.compile.script.CompiledGXScript;
+import org.eadge.gxscript.data.compile.script.DisplayCompiledGXScript;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
-import org.eadge.gxscript.tools.compile.GXCompiler;
+import org.eadge.gxscript.tools.compile.GXCompilerDisplay;
 import org.eadge.gxscript.tools.run.GXRunner;
 import org.eadge.model.Models;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
+import org.eadge.view.console.CustomOutputStream;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 /**
  * Created by eadgyo on 17/02/17.
@@ -47,26 +47,27 @@ public class ScriptController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
+            myFrame.consoleView.consoleText.setText("");
             int i = m.testsModel.validateAll(m.script.getRawGXScriptPure());
-            try
-            {
-                m.testsModel.getTestStream().flush();
-                m.testsModel.getTestStream().write(ConstantsView.COMPILATION_START_MESSAGE.getBytes());
-                m.testsModel.getTestStream().write("\n".getBytes());
-                if (i != -1)
-                {
-                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_ECHEC + 1 + ConstantsView.ERREUR)
-                                                               .getBytes());
-                }
-                else
-                {
-                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_SUCCESS).getBytes());
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+//            try
+//            {
+//                m.testsModel.getTestStream().flush();
+//                m.testsModel.getTestStream().write(ConstantsView.COMPILATION_START_MESSAGE.getBytes());
+//                m.testsModel.getTestStream().write("\n".getBytes());
+//                if (i != -1)
+//                {
+//                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_ECHEC + 1 + ConstantsView.ERREUR)
+//                                                               .getBytes());
+//                }
+//                else
+//                {
+//                    m.testsModel.getTestStream().write((ConstantsView.COMPILATION_SUCCESS).getBytes());
+//                }
+//            }
+//            catch (IOException e)
+//            {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -81,7 +82,6 @@ public class ScriptController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
-
             RawGXScript rawGXScriptPure = m.script.getRawGXScriptPure();
             int i = m.testsModel.validateAll(rawGXScriptPure);
 
@@ -90,13 +90,20 @@ public class ScriptController
                 JOptionPane.showMessageDialog(myFrame, ConstantsView.INVALIDATE_SCRIPT + ": " + m.testsModel
                         .getElementAt(i).getName());
             }
+            else if (rawGXScriptPure.containsInput())
+            {
+                JOptionPane.showMessageDialog(myFrame, ConstantsView.INPUTS_SCRIPT_PRESENT);
+            }
             else
             {
-                GXCompiler compiler = new GXCompiler();
+                GXCompilerDisplay compiler = new GXCompilerDisplay();
                 m.script.getRawGXScript().updateEntities();
-                CompiledGXScript compile = compiler.compile(rawGXScriptPure);
+                DisplayCompiledGXScript compile = compiler.compile(rawGXScriptPure);
 
-                GXRunner runner = new GXRunner();
+                GXRunner    runner     = new GXRunner();
+                CustomOutputStream testStream = (CustomOutputStream) m.testsModel.getTestStream();
+                testStream.clear();
+                myFrame.consoleView.consoleText.setText("");
                 runner.run(compile);
             }
         }

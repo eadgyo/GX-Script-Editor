@@ -190,6 +190,11 @@ public class Script extends Observable implements Serializable
 
     public void connectEntities(GXElement onOutputEntity, int outputIndex, GXElement onInputEntity, int inputIndex)
     {
+        if (onInputEntity.isInputUsed(inputIndex))
+        {
+            onInputEntity.unlinkAsInput(inputIndex);
+        }
+
         onInputEntity.linkAsInput(inputIndex, outputIndex, onOutputEntity);
 
         callObservers();

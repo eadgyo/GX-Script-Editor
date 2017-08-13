@@ -22,7 +22,7 @@ public class Converter
 
     public static GXElement compiledScriptToElement(CompiledGXScript compiledGXScript)
     {
-        return  entityToElement(compiledScriptToEntity(compiledGXScript));
+        return entityToElement(compiledScriptToEntity(compiledGXScript));
     }
 
     public static EGXGroup convertIfNeededToGXElements(EGXGroup egxGroup)

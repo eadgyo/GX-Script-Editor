@@ -19,6 +19,8 @@ import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.Bet
 import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.InferiorThanNumberGXEntity;
 import org.eadge.gxscript.data.entity.classic.entity.types.number.comparison.SuperiorThanNumberGXEntity;
 import org.eadge.gxscript.data.entity.classic.entity.types.number.operations.maths.*;
+import org.eadge.gxscript.data.entity.model.script.InputScriptGXEntity;
+import org.eadge.gxscript.data.entity.model.script.OutputScriptGXEntity;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.gxscript.tools.io.IOGXManager;
@@ -78,6 +80,11 @@ public class GenerateLib
         loopsGroup.add(new ForGXEntity());
         loopsGroup.add(new WhileGXEntity());
         egx.add(loopsGroup);
+
+        EGXGroup entriesGroup = new EGXGroup("Entries");
+        entriesGroup.add(new InputScriptGXEntity());
+        entriesGroup.add(new OutputScriptGXEntity());
+        egx.add(entriesGroup);
 
         IOGXManager.getInstance().createFolder("EGX");
         IOGXManager.getInstance().saveEGX("EGX/classic.egx", egx);

@@ -213,7 +213,7 @@ public class SceneController
                         if (optionValue != null)
                         {
                             Object convert = ObjectConverter.convert(optionValue,
-                                                                     gxElement.getInputClass(entryIndex
+                                                                     gxElement.getOptionClass(entryIndex
                                                                                                      .entryIndex));
                             gxElement.setOptionValue(entryIndex.entryIndex, convert);
                         }
@@ -280,8 +280,6 @@ public class SceneController
                         selectionModel.clearSelection();
                         selectionModel.setSelectedElements(gxElement);
                         selectionModel.setNewSelection(true);
-                        selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
-
                         // Selecting entry
                         if (mouseEvent.isControlDown())
                         {
@@ -290,6 +288,8 @@ public class SceneController
                         }
                         else
                         {
+                            selectionModel.setSelectionState(SelectionModel.SelectionState.CONNECTING);
+
                             connectionModel.setStartIndex(entryIndex.entryIndex, entryIndex.isInput);
                             connectionModel.setDesiredPos(mouseRect.getCenterX(), mouseRect.getCenterY());
                         }

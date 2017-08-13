@@ -121,9 +121,11 @@ public class TestsModel extends AbstractListModel<TestsModel.Test>
                 {
                     tests.get(testIndex).result = 2;
                 }
+                canExportCompiled = false;
                 return errorIndex;
             }
         }
+        canExportCompiled = true;
         return -1;
     }
 

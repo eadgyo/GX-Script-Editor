@@ -6,9 +6,11 @@ import org.eadge.gxscript.data.compile.script.CompiledGXScript;
 import org.eadge.gxscript.data.io.EGX;
 import org.eadge.gxscript.data.io.EGXGroup;
 import org.eadge.model.Models;
+import org.eadge.model.script.GXElement;
 import org.eadge.model.script.SavedScript;
 import org.eadge.utils.AdvIOM;
 import org.eadge.utils.Converter;
+import org.eadge.utils.GTools;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
 
@@ -174,6 +176,8 @@ public class FileController
         @Override
         public void actionPerformed(ActionEvent actionEvent)
         {
+            m.testsModel.validateAll(m.script.getRawGXScriptPure());
+
             // If tests show valid script
             if (!m.testsModel.isCanExportCompiled())
             {
@@ -219,15 +223,27 @@ public class FileController
                     return;
                 }
 
-                String groupName = JOptionPane.showInputDialog(this, ConstantsView.INPUT_ASK_GROUP_NAME);
+                String groupName = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_GROUP_NAME, "");
 
                 if (groupName == null || groupName.equals(""))
                 {
                     return;
                 }
 
+                String name = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_NAME, "");
+
+                if (groupName == null || groupName.equals(""))
+                {
+                    return;
+                }
+
+                EGX egx = new EGX();
                 EGXGroup egxGroup = new EGXGroup(groupName);
-                egxGroup.add(Converter.compiledScriptToElement(compiledGXScript));
+                GXElement element = Converter.compiledScriptToElement(compiledGXScript);
+                element.setName(name);
+                egxGroup.add(element);
+                egx.add(egxGroup);
+                GTools.applyRendererProperties(frame.elementRenderer, egx);
 
                 // Add to list of elements this compiled script
                 m.addListModel.addGroup(egxGroup);
