@@ -134,7 +134,6 @@ public class ElementsController
         }
     }
 
-
     public class HideLayerAction extends AbstractAction
     {
         public HideLayerAction()

@@ -5,7 +5,7 @@ import org.eadge.controller.Actions;
 import org.eadge.gxscript.data.compile.script.DisplayCompiledGXScript;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.gxscript.tools.compile.GXCompilerDisplay;
-import org.eadge.gxscript.tools.run.GXRunner;
+import org.eadge.gxscript.tools.run.GXRunnerDisplay;
 import org.eadge.model.Models;
 import org.eadge.view.MenuView;
 import org.eadge.view.MyFrame;
@@ -100,11 +100,11 @@ public class ScriptController
                 m.script.getRawGXScript().updateEntities();
                 DisplayCompiledGXScript compile = compiler.compile(rawGXScriptPure);
 
-                GXRunner    runner     = new GXRunner();
+                GXRunnerDisplay    runner     = new GXRunnerDisplay();
                 CustomOutputStream testStream = (CustomOutputStream) m.testsModel.getTestStream();
                 testStream.clear();
                 myFrame.consoleView.consoleText.setText("");
-                runner.run(compile);
+                runner.run(compile, testStream);
             }
         }
     }

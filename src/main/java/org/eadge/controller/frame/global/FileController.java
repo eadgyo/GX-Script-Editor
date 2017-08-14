@@ -188,10 +188,29 @@ public class FileController
             // Script can be saved
             int returnVal = frame.chooseFile.showSaveDialog(frame);
 
+            String groupName = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_GROUP_NAME, "");
+
+            if (groupName == null || groupName.equals(""))
+            {
+                return;
+            }
+
+            String name = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_NAME, "");
+
+            if (name == null || name.equals(""))
+            {
+                return;
+            }
+
+
+
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = frame.chooseFile.getSelectedFile();
-                AdvIOM.getAdv().saveCompiledGXScript(file.getPath(), m.script.getCompiledRawGXScript());
+                CompiledGXScript compiledRawGXScript = m.script.getCompiledRawGXScript();
+                compiledRawGXScript.setName(name);
+                compiledRawGXScript.setGroup(groupName);
+                AdvIOM.getAdv().saveCompiledGXScript(file.getPath(), compiledRawGXScript);
             }
         }
     }
@@ -223,30 +242,17 @@ public class FileController
                     return;
                 }
 
-                String groupName = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_GROUP_NAME, "");
-
-                if (groupName == null || groupName.equals(""))
-                {
-                    return;
-                }
-
-                String name = JOptionPane.showInputDialog(ConstantsView.INPUT_ASK_NAME, "");
-
-                if (groupName == null || groupName.equals(""))
-                {
-                    return;
-                }
-
                 EGX egx = new EGX();
-                EGXGroup egxGroup = new EGXGroup(groupName);
+                EGXGroup egxGroup = new EGXGroup(compiledGXScript.getGroup());
                 GXElement element = Converter.compiledScriptToElement(compiledGXScript);
-                element.setName(name);
+                element.setName(compiledGXScript.getName());
                 egxGroup.add(element);
                 egx.add(egxGroup);
                 GTools.applyRendererProperties(frame.elementRenderer, egx);
 
                 // Add to list of elements this compiled script
                 m.addListModel.addGroup(egxGroup);
+                frame.addView.groupList.updateUI();
             }
         }
     }
@@ -284,6 +290,7 @@ public class FileController
                 {
                     m.addListModel.addGroup(egxGroup);
                 }
+                frame.addView.groupList.updateUI();
             }
         }
     }

@@ -62,7 +62,7 @@ public class Application
 
         loadDefault();
 
-        test2();
+        //test2();
 
         myFrame.pack();
         myFrame.setVisible(true);
