@@ -32,6 +32,12 @@ public class GenerateLib
 {
     public static void main(String[] args)
     {
+        EGX egx = generateLib();
+        IOGXManager.getInstance().createFolder("EGX");
+        IOGXManager.getInstance().saveEGX("EGX/classic.egx", egx);
+    }
+
+    public static EGX generateLib() {
         EGX egx = new EGX();
 
         EGXGroup booleanGroup = new EGXGroup("Boolean");
@@ -39,8 +45,8 @@ public class GenerateLib
         booleanGroup.add(new ModifyBoolGXEntity());
         booleanGroup.add(new InvertBoolGXEntity());
         egx.add(booleanGroup);
-        
-        EGXGroup numberGroup = new EGXGroup("Nombre");
+
+        EGXGroup numberGroup = new EGXGroup("Number");
         numberGroup.add(new IntGXEntity());
         numberGroup.add(new RealGXEntity());
         numberGroup.add(new BetweenNumbersGXEntity());
@@ -86,7 +92,6 @@ public class GenerateLib
         entriesGroup.add(new OutputScriptGXEntity());
         egx.add(entriesGroup);
 
-        IOGXManager.getInstance().createFolder("EGX");
-        IOGXManager.getInstance().saveEGX("EGX/classic.egx", egx);
+        return egx;
     }
 }

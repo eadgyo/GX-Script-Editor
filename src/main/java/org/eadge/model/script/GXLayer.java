@@ -30,6 +30,10 @@ public class GXLayer extends DefaultMutableTreeNode implements Rect2DInter
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Color getBackgroundColor()
     {
         return backgroundColor;

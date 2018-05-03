@@ -93,7 +93,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.eadge.gxscript</mainClass>
+                            <mainClass>org.eadge.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

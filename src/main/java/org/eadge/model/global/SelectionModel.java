@@ -1,6 +1,7 @@
 package org.eadge.model.global;
 
 import org.eadge.model.global.project.SelectionObservable;
+import org.eadge.model.script.GXLayer;
 
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
@@ -91,6 +92,17 @@ public class SelectionModel extends DefaultTreeSelectionModel
     {
         this.selectedElements.clear();
         this.selectedElements.addAll(selectedElements);
+    }
+
+    public Collection<GXLayer> getSelectedLayers() {
+        HashSet<GXLayer> layers = new HashSet<>();
+        Collection<MutableTreeNode> selectedElements = getSelectedElements();
+        for (MutableTreeNode node : selectedElements) {
+            if (node instanceof GXLayer) {
+                layers.add((GXLayer) node);
+            }
+        }
+        return layers;
     }
 
     public void updateSelectionPaths()

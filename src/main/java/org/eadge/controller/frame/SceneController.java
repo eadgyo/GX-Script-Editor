@@ -250,8 +250,6 @@ public class SceneController
             lastMouseX = mouseEvent.getX();
             lastMouseY = mouseEvent.getY();
 
-
-
             script.callObservers();
         }
 

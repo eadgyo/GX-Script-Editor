@@ -1,5 +1,6 @@
 package org.eadge.controller;
 
+import org.eadge.GenerateLib;
 import org.eadge.controller.frame.*;
 import org.eadge.gxscript.data.compile.script.RawGXScript;
 import org.eadge.gxscript.data.entity.classic.entity.displayer.PrintGXEntity;
@@ -68,8 +69,17 @@ public class Application
         myFrame.setVisible(true);
     }
 
+    private void createDefault() {
+        EGX egx = GenerateLib.generateLib();
+        egx = Converter.convertIfNeededToGXElements(egx);
+        GTools.applyRendererProperties(myFrame.elementRenderer, egx);
+        m.addListModel.addGroups(egx);
+    }
+
     private void loadDefault()
     {
+        createDefault();
+
         AdvIOM instance = AdvIOM.getAdv();
         ArrayList<String> egxNames = instance.getAllFilesName("EGX", true);
         for (String egxName : egxNames)

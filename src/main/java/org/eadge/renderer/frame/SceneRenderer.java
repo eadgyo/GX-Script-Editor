@@ -54,8 +54,7 @@ public class SceneRenderer
      * @param sceneModel scene model
      * @param selectionModel selection model
      */
-    public void paint(Graphics2D g, int width, int height, Collection<MutableTreeNode> inSceneNodes, SceneModel sceneModel, SelectionModel selectionModel)
-    {
+    public void paint(Graphics2D g, int width, int height, Collection<MutableTreeNode> inSceneNodes, SceneModel sceneModel, SelectionModel selectionModel) {
         AffineTransform transform = this.prepareScene(g, width, height, sceneModel);
 
         List<GXElement> unselectedElements = new LinkedList<>();
@@ -76,11 +75,13 @@ public class SceneRenderer
 
         //drawDebug(g, sceneModel);
 
+        paintLayersName(g, unselectedLayers);
+        paintLayersName(g, selectionModel.getSelectedLayers());
+
         // Reset graphics settings
         g.setTransform(transform);
 
     }
-
 
     private AffineTransform prepareScene(Graphics2D g, int width, int height, SceneModel sceneModel)
     {
@@ -143,6 +144,23 @@ public class SceneRenderer
             g.setColor(Color.BLACK);
             g.drawRect((int) layer.getX(), (int) layer.getY(), (int) layer.getWidth(), (int) layer.getHeight());
         }
+    }
+
+    private void paintLayersName(Graphics2D g, Collection<GXLayer> layers) {
+        g.setColor(Color.BLACK);
+        Font font = g.getFont();
+        g.setFont(new Font("TimesRoman", Font.BOLD, 16));
+        // Draw layers
+        for (GXLayer layer : layers)
+        {
+            int nameWidth  = g.getFontMetrics().stringWidth(layer.getName());
+            int fontHeight = g.getFontMetrics().getHeight();
+
+            g.drawString(layer.getName(),
+                    (float) (layer.getX() + layer.getWidth() * 0.5f - nameWidth * 0.5f),
+                    (float) (layer.getY() - fontHeight * 0.5f));
+        }
+        g.setFont(font);
     }
 
     private void paintElements(Graphics2D g, Collection<GXElement> entities)

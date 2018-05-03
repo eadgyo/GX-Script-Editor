@@ -17,10 +17,7 @@ import org.eadge.renderer.Rect2DInter;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by eadgyo on 19/02/17.
@@ -210,6 +207,11 @@ public class GXElement extends Rect2D implements Cloneable, GXEntity, MutableTre
     public OutputScriptGXEntity getScriptOutputEntity()
     {
         return entity.getScriptOutputEntity();
+    }
+
+    @Override
+    public void treatNameAdding(List<String> list) {
+        entity.treatNameAdding(list);
     }
 
     public boolean isInputUsed(int index)
