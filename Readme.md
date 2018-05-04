@@ -9,18 +9,18 @@ This editor is made to create [GX-Script](https://github.com/eadgyo/GX-Script).
 (3) Panel where script will be created  
 (4) Console output  
 (5) Entities compilation order  
-(6) Tests results  
+(6) Tests result  
 
 ## Creating GX-Script
 ![box](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/box.PNG)
 
-Select entities and add them to the script panel (3). 
+Select entities and add them to the script panel (3), with add element button. 
 Use green and blue rectangle to link them. You can also define default input by clicking on the input green rectangle ![GX-Script](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/greenbox.PNG). The value to the right is the default value that will be used if no input is set.
 
 ### Example
 In this section we will create a simple multiplication script:  
 ![Multiplication failed](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/multiply_failed.PNG)
-As you can see, when validating or launching the script, tests failed. We are missing mandatory input entities.
+As you can see, when validating or launching the script, tests failed. We are missing mandatory input entries.
 
 By adding two entities as input, and clicking on green rectangles, we can define input numbers (5 and 2.0 here). When launching the script, tests are all passed and we have the expected result: 10.0.
 ![Multiplication failed](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/multiply_valid.PNG)
@@ -29,7 +29,7 @@ By adding two entities as input, and clicking on green rectangles, we can define
 
 ## Launching
 Click edit button and Launch your script. Output will be displayed in the Console output.  
-You can also validate your script before launching, validation results will be displayed in (6) panel.  
+You can also validate your script before launching, validation result will be displayed in (6) panel.  
 ![Console output](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/egx_example_cons.PNG)  
 ![Passing test](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/validation_failed.PNG)
 
@@ -41,7 +41,7 @@ This is for example the result on our script panel (3):
 By selecting a layer, you can move every entities inside the layer.  
 
 ## Importing script inside other script
-You can create your own GX-Entities in java, described [here]() . Or create GX-Script from GX-Script-Editor.
+You can create your own GX-Entities in java, described [here](https://github.com/eadgyo/GX-Script#creating-a-visual-entity) . Or create GX-Script from GX-Script-Editor.
 This last option will be described here:
 
 ### Creating Entities
@@ -49,6 +49,7 @@ We will create a GX-Entity adding one from the input. Add Parameter input and ou
 ![Adding one](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/function.PNG)  
 Export your script by clicking on ```File/Export entity```. Choose the name, and group of your entity.  
 
+### Import created entities
 Create a new script ```File/New script```  
 Import your script entity ```File/Import script```  
 The entity will be added to his group (here the group is operation).  
