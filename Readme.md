@@ -29,7 +29,7 @@ By adding two entities as input, and clicking on green rectangles, we can define
 
 ## Launching
 Click edit button and Launch your script. Output will be displayed in the Console output.  
-You can also validate your script before launching, validation results will be displayed in (6) panel.
+You can also validate your script before launching, validation results will be displayed in (6) panel.  
 ![Console output](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/egx_example_cons.PNG)  
 ![Passing test](https://raw.githubusercontent.com/eadgyo/GX-Script-Editor/master/img/validation_failed.PNG)
 
